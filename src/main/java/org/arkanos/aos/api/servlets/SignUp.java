@@ -78,6 +78,11 @@ public class SignUp extends HttpServlet {
 		String last_name = Database.sanitizeString(request.getParameter("last_name"));
 		String email = Database.sanitizeString(request.getParameter("email"));
 		String hashed_password = Database.sanitizeString(request.getParameter("hashed_password"));
+		
+		if (!User.isLegalUsername(user_name)) {
+			response.sendError(400, "Username is not valid.");
+		}
+		
 		if (User.exists(user_name)) {
 			response.setStatus(200);
 			writer.print("{[");
