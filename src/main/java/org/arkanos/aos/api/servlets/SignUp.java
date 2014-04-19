@@ -83,6 +83,14 @@ public class SignUp extends HttpServlet {
 			response.sendError(400, "Username is not valid.");
 		}
 		
+		if ((user_name.length() < 1) ||
+			(first_name.length() < 1) ||
+			(last_name.length() < 1) ||
+			(email.length() < 3) ||
+			(hashed_password.length() < 1)) {
+			response.sendError(400, "All fields are mandatory.");
+		}
+		
 		if (User.exists(user_name)) {
 			response.setStatus(200);
 			writer.print("{[");
