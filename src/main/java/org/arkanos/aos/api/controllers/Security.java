@@ -39,13 +39,15 @@ public class Security {
 		}
 	}
 	
-	static private HashMap<String, TokenInfo>	all_tokens	= null;
+	public static final String					TOKEN_COOKIE_NAME	= "aos-token";
+	
+	static private HashMap<String, TokenInfo>	all_tokens			= null;
 	
 	static public boolean authenticateToken(HttpServletRequest request, HttpServletResponse response)
 					throws IOException {
 		TokenInfo token_info = null;
 		for (Cookie c : request.getCookies()) {
-			if (c.getName().compareTo("aos-token") == 0) {
+			if (c.getName().compareTo(Security.TOKEN_COOKIE_NAME) == 0) {
 				token_info = Security.getTokens().get(c.getValue());
 			}
 		}

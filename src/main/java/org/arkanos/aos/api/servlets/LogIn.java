@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -46,7 +47,12 @@ public class LogIn extends HttpServlet {
 			}
 			else {
 				if (User.credentialsMatch(user_name, hashed_password)) {
-					Security.createToken(user_name);
+					String token = Security.createToken(user_name);
+					Cookie c = null;
+					if (token != null) {
+						c = new Cookie(Security.TOKEN_COOKIE_NAME, token);
+					}
+					response.addCookie(c);
 					response.setStatus(201);
 					return;
 				}
