@@ -86,9 +86,16 @@ public class Security {
 		return Security.all_tokens;
 	}
 	
-	static public String getUsernameFromToken(String token) {
-		TokenInfo token_info = Security.getTokens().get(token);
-		if (token_info != null) return token_info.username;
-		return null;
+	static public void invalidateToken(HttpServletRequest request)
+					throws IOException {
+		TokenInfo token_info = null;
+		for (Cookie c : request.getCookies()) {
+			if (c.getName().compareTo(Security.TOKEN_COOKIE_NAME) == 0) {
+				token_info = Security.getTokens().get(c.getValue());
+			}
+		}
+		if (token_info != null) {
+			token_info.expiration = System.currentTimeMillis();
+		}
 	}
 }
