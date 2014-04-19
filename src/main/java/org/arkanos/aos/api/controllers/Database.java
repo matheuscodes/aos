@@ -94,6 +94,7 @@ public class Database {
 	}
 	
 	static public String sanitizeString(String s) {
+		if (s == null) return null;
 		//TODO Sanitize weird/dangerous chars, SQL injection, etc.
 		return s;
 	}
