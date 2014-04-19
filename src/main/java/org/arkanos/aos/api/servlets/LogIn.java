@@ -50,6 +50,10 @@ public class LogIn extends HttpServlet {
 					response.setStatus(201);
 					return;
 				}
+				else {
+					response.sendError(403, "Credentials do not match.");
+					return;
+				}
 			}
 		}
 		response.setStatus(200);

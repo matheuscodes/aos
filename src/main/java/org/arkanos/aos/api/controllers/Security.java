@@ -50,16 +50,13 @@ public class Security {
 			}
 		}
 		if (token_info != null) {
-			if (token_info.expiration < System.currentTimeMillis()) {
-				response.sendError(403, "Token has expired.");
+			if (token_info.expiration < System.currentTimeMillis())
 				return false;
-			}
-			return true;
+			else
+				return true;
 		}
-		else {
-			response.sendError(403, "Token is not valid.");
+		else
 			return false;
-		}
 	}
 	
 	/**
