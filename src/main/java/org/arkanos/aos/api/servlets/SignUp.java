@@ -91,17 +91,17 @@ public class SignUp extends HttpServlet {
 			(last_name.length() < 1) ||
 			(email.length() < 3) ||
 			(hashed_password.length() < 1)) {
-			response.sendError(400, "All fields are mandatory.");
+			response.sendError(400, "All fields are mandatory, no field empty or short.");
 			return;
 		}
 		
 		if (User.exists(user_name)) {
 			response.setStatus(200);
-			writer.print("{[");
+			writer.print("[");
 			for (String s : this.createSuggestions(user_name, first_name, last_name, email)) {
 				writer.print("\"" + s + "\",");
 			}
-			writer.print("\"\"]}");
+			writer.print("\"\"]");
 		}
 		else {
 			if (User.create(user_name, first_name, last_name, email, hashed_password)) {
