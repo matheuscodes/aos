@@ -29,14 +29,48 @@ import org.arkanos.aos.api.controllers.Database;
  */
 public class User {
 	
+	static final private String	field_user_name			= "user_name";
+	static final private String	field_first_name		= "first_name";
+	static final private String	field_last_name			= "last_name";
+	static final private String	field_email				= "email";
+	static final private String	field_hashed_password	= "hashed_password";
+	
 	static public boolean create(String user_name, String first_name, String last_name, String email, String hashed_password) {
-		return Database.execute("INSERT INTO user(user_name,first_name,last_name,email,hashed_password) VALUES " +
-								"('" + user_name + "','" + first_name + "','" + last_name + "','" + email + "','" + hashed_password + "');");
+		return Database.execute("INSERT INTO user(" +
+								User.field_user_name + "," + User.field_first_name + "," +
+								User.field_last_name + "," + User.field_email + "," +
+								User.field_hashed_password + ") VALUES " +
+								"('" + user_name + "','" + first_name + "','" +
+								last_name + "','" + email + "','" + hashed_password + "');");
+	}
+	
+	/**
+	 * @param user_name
+	 * @param hashed_password
+	 * @return
+	 */
+	public static boolean credentialsMatch(String user_name, String hashed_password) {
+		try {
+			ResultSet rs = Database.query("SELECT " + User.field_hashed_password + " FROM user WHERE " +
+											User.field_user_name + " = '" + user_name + "';");
+			rs.next();
+			String pass = rs.getString(User.field_hashed_password);
+			if ((pass != null) && (pass.compareTo(hashed_password) == 0))
+				return true;
+			else
+				return false;
+		}
+		catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return false;
 	}
 	
 	static public boolean exists(String user_name) {
 		try {
-			ResultSet rs = Database.query("SELECT COUNT(*) FROM user WHERE user_name='" + user_name + "';");
+			ResultSet rs = Database.query("SELECT COUNT(*) FROM user WHERE " +
+											User.field_user_name + " = '" + user_name + "';");
 			rs.next();
 			if (rs.getInt(1) > 0)
 				return true;
