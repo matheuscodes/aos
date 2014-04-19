@@ -79,8 +79,11 @@ public class SignUp extends HttpServlet {
 		String email = Database.sanitizeString(request.getParameter("email"));
 		String hashed_password = Database.sanitizeString(request.getParameter("hashed_password"));
 		
+		//TODO add check for bots to avoid DB-Filler/Spammer.
+		
 		if (!User.isLegalUsername(user_name)) {
 			response.sendError(400, "Username is not valid.");
+			return;
 		}
 		
 		if ((user_name.length() < 1) ||
@@ -89,6 +92,7 @@ public class SignUp extends HttpServlet {
 			(email.length() < 3) ||
 			(hashed_password.length() < 1)) {
 			response.sendError(400, "All fields are mandatory.");
+			return;
 		}
 		
 		if (User.exists(user_name)) {
@@ -107,6 +111,7 @@ public class SignUp extends HttpServlet {
 			}
 			else {
 				response.sendError(500, "User creation has failed.");
+				return;
 			}
 		}
 	}
