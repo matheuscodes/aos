@@ -46,9 +46,11 @@ public class Security {
 	static public boolean authenticateToken(HttpServletRequest request, HttpServletResponse response)
 					throws IOException {
 		TokenInfo token_info = null;
-		for (Cookie c : request.getCookies()) {
-			if (c.getName().compareTo(Security.TOKEN_COOKIE_NAME) == 0) {
-				token_info = Security.getTokens().get(c.getValue());
+		if (request.getCookies() != null) {
+			for (Cookie c : request.getCookies()) {
+				if (c.getName().compareTo(Security.TOKEN_COOKIE_NAME) == 0) {
+					token_info = Security.getTokens().get(c.getValue());
+				}
 			}
 		}
 		if (token_info != null) {
