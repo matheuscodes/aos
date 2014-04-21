@@ -40,7 +40,7 @@ public class LogIn extends HttpServlet {
 		
 		HTTP.setUpDefaultHeaders(response);
 		
-		if (!Security.authenticateToken(request, response)) {
+		if (Security.authenticateToken(request) == null) {
 			if ((user_name == null) || (hashed_password == null)) {
 				response.sendError(400, "User name and password are required.");
 				return;

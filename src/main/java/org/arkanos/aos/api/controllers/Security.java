@@ -21,7 +21,6 @@ import java.util.HashMap;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 /**
  * @author arkanos
@@ -29,13 +28,32 @@ import javax.servlet.http.HttpServletResponse;
  */
 public class Security {
 	
-	private class TokenInfo {
-		String	token;
-		long	expiration;
-		String	username;
+	public class TokenInfo {
+		private final String	token;
+		private long			expiration;
+		private final String	user_name;
 		
-		TokenInfo(String token) {
+		TokenInfo(String token, String user_name) {
 			this.token = token;
+			this.user_name = user_name;
+			/** Expires in one day. */
+			this.expiration = System.currentTimeMillis() + (1000 * 60 * 60 * 24);
+		}
+		
+		public long getExpiration() {
+			return this.expiration;
+		}
+		
+		public String getToken() {
+			return this.token;
+		}
+		
+		public String getUsername() {
+			return this.user_name;
+		}
+		
+		public void setExpiration(long when) {
+			this.expiration = when;
 		}
 	}
 	
@@ -43,7 +61,7 @@ public class Security {
 	
 	static private HashMap<String, TokenInfo>	all_tokens			= null;
 	
-	static public boolean authenticateToken(HttpServletRequest request, HttpServletResponse response)
+	static public TokenInfo authenticateToken(HttpServletRequest request)
 					throws IOException {
 		TokenInfo token_info = null;
 		if (request.getCookies() != null) {
@@ -54,31 +72,28 @@ public class Security {
 			}
 		}
 		if (token_info != null) {
-			if (token_info.expiration < System.currentTimeMillis())
-				return false;
+			if (token_info.getExpiration() < System.currentTimeMillis())
+				return null;
 			else
-				return true;
+				return token_info;
 		}
 		else
-			return false;
+			return null;
 	}
 	
 	/**
 	 * @param user_name
 	 * @return
 	 */
-	public static String createToken(String user_name) {
+	static public String createToken(String user_name) {
 		//TODO find a way of going around this.
 		Security builder = new Security();
-		TokenInfo info = builder.new TokenInfo(user_name + "_" + Math.random());
-		//TODO use token as security insurance.
-		info.username = user_name;
-		/** Expires in one day. */
-		info.expiration = System.currentTimeMillis() + (1000 * 60 * 60 * 24);
+		TokenInfo info = builder.new TokenInfo(user_name + "_" + Math.random(),
+												user_name);
 		
-		Security.getTokens().put(info.token, info);
+		Security.getTokens().put(info.getToken(), info);
 		
-		return info.token;
+		return info.getToken();
 	}
 	
 	static private HashMap<String, TokenInfo> getTokens() {
@@ -97,7 +112,7 @@ public class Security {
 			}
 		}
 		if (token_info != null) {
-			token_info.expiration = System.currentTimeMillis();
+			token_info.setExpiration(System.currentTimeMillis());
 		}
 	}
 }
