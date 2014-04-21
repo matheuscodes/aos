@@ -67,7 +67,17 @@ public class Security {
 		if (request.getCookies() != null) {
 			for (Cookie c : request.getCookies()) {
 				if (c.getName().compareTo(Security.TOKEN_COOKIE_NAME) == 0) {
-					token_info = Security.getTokens().get(c.getValue());
+					TokenInfo temp_info = Security.getTokens().get(c.getValue());
+					if ((temp_info != null) && (token_info != null)) {
+						if (temp_info.getExpiration() > token_info.getExpiration()) {
+							token_info = temp_info;
+						}
+					}
+					else {
+						if (token_info == null) {
+							token_info = temp_info;
+						}
+					}
 				}
 			}
 		}
@@ -109,10 +119,11 @@ public class Security {
 		for (Cookie c : request.getCookies()) {
 			if (c.getName().compareTo(Security.TOKEN_COOKIE_NAME) == 0) {
 				token_info = Security.getTokens().get(c.getValue());
+				if (token_info != null) {
+					token_info.setExpiration(System.currentTimeMillis());
+				}
 			}
 		}
-		if (token_info != null) {
-			token_info.setExpiration(System.currentTimeMillis());
-		}
+		
 	}
 }
