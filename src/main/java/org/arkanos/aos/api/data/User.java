@@ -53,12 +53,13 @@ public class User {
 		try {
 			ResultSet rs = Database.query("SELECT " + User.FIELD_HASHED_PASSWORD + " FROM user WHERE " +
 											User.FIELD_USER_NAME + " = '" + user_name + "';");
-			rs.next();
-			String pass = rs.getString(User.FIELD_HASHED_PASSWORD);
-			if ((pass != null) && (pass.compareTo(hashed_password) == 0))
-				return true;
-			else
-				return false;
+			if (rs.next()) {
+				String pass = rs.getString(User.FIELD_HASHED_PASSWORD);
+				if ((pass != null) && (pass.compareTo(hashed_password) == 0))
+					return true;
+				else
+					return false;
+			}
 		}
 		catch (SQLException e) {
 			// TODO Auto-generated catch block
