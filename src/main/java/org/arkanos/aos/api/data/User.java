@@ -88,7 +88,7 @@ public class User {
 	 * @param s
 	 * @return
 	 */
-	public static boolean isLegalUsername(String s) {
+	static public boolean isLegalUsername(String s) {
 		for (char c : s.toCharArray()) {
 			if ((c > 'z') || (c < 'a')) {
 				if ((c < '0') || (c > '9')) {
