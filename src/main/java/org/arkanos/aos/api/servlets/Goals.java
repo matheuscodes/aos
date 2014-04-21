@@ -15,7 +15,7 @@ import org.arkanos.aos.api.data.Goal;
 /**
  * Servlet implementation class Goals
  */
-@WebServlet("goals")
+@WebServlet("/goals")
 public class Goals extends HttpServlet {
 	private static final long	serialVersionUID	= 1L;
 	
