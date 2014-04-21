@@ -29,17 +29,17 @@ import org.arkanos.aos.api.controllers.Database;
  */
 public class User {
 	
-	static final private String	field_user_name			= "user_name";
-	static final private String	field_first_name		= "first_name";
-	static final private String	field_last_name			= "last_name";
-	static final private String	field_email				= "email";
-	static final private String	field_hashed_password	= "hashed_password";
+	static final private String	FIELD_USER_NAME			= "user_name";
+	static final private String	FIELD_FIRST_NAME		= "first_name";
+	static final private String	FIELD_LAST_NAME			= "last_name";
+	static final private String	FIELD_EMAIL				= "email";
+	static final private String	FIELD_HASHED_PASSWORD	= "hashed_password";
 	
 	static public boolean create(String user_name, String first_name, String last_name, String email, String hashed_password) {
 		return Database.execute("INSERT INTO user(" +
-								User.field_user_name + "," + User.field_first_name + "," +
-								User.field_last_name + "," + User.field_email + "," +
-								User.field_hashed_password + ") VALUES " +
+								User.FIELD_USER_NAME + "," + User.FIELD_FIRST_NAME + "," +
+								User.FIELD_LAST_NAME + "," + User.FIELD_EMAIL + "," +
+								User.FIELD_HASHED_PASSWORD + ") VALUES " +
 								"('" + user_name + "','" + first_name + "','" +
 								last_name + "','" + email + "','" + hashed_password + "');");
 	}
@@ -51,10 +51,10 @@ public class User {
 	 */
 	public static boolean credentialsMatch(String user_name, String hashed_password) {
 		try {
-			ResultSet rs = Database.query("SELECT " + User.field_hashed_password + " FROM user WHERE " +
-											User.field_user_name + " = '" + user_name + "';");
+			ResultSet rs = Database.query("SELECT " + User.FIELD_HASHED_PASSWORD + " FROM user WHERE " +
+											User.FIELD_USER_NAME + " = '" + user_name + "';");
 			rs.next();
-			String pass = rs.getString(User.field_hashed_password);
+			String pass = rs.getString(User.FIELD_HASHED_PASSWORD);
 			if ((pass != null) && (pass.compareTo(hashed_password) == 0))
 				return true;
 			else
@@ -70,7 +70,7 @@ public class User {
 	static public boolean exists(String user_name) {
 		try {
 			ResultSet rs = Database.query("SELECT COUNT(*) FROM user WHERE " +
-											User.field_user_name + " = '" + user_name + "';");
+											User.FIELD_USER_NAME + " = '" + user_name + "';");
 			rs.next();
 			if (rs.getInt(1) > 0)
 				return true;
@@ -88,8 +88,8 @@ public class User {
 	 * @param s
 	 * @return
 	 */
-	static public boolean isLegalUsername(String s) {
-		for (char c : s.toCharArray()) {
+	static public boolean isLegalUsername(String user_name) {
+		for (char c : user_name.toCharArray()) {
 			if ((c > 'z') || (c < 'a')) {
 				if ((c < '0') || (c > '9')) {
 					if ((c != '_') && (c != '-') && (c != '.')) return false;
