@@ -80,9 +80,9 @@ public class Goal {
 	
 	@Override
 	public String toString() {
-		return "{" + Goal.FIELD_ID + ":" + this.id + "," +
-				Goal.FIELD_TITLE + ":\"" + this.title + "\"," +
-				Goal.FIELD_TIME_PLANNED + ":" + this.time_planned + "," +
-				Goal.FIELD_DESCRIPTION + ":\"" + this.description + "\"}";
+		return "{\"" + Goal.FIELD_ID + "\":" + this.id + ",\"" +
+				Goal.FIELD_TITLE + "\":\"" + this.title + "\",\"" +
+				Goal.FIELD_TIME_PLANNED + "\":" + this.time_planned + ",\"" +
+				Goal.FIELD_DESCRIPTION + "\":\"" + this.description + "\"}";
 	}
 }

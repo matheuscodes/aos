@@ -38,15 +38,16 @@ public class Goals extends HttpServlet {
 			return;
 		}
 		HTTP.setUpDefaultHeaders(response);
-		
-		String goals = "[";
+		response.setContentType("application/x-json");
+		System.out.println("Hey!");
+		String goals = "{\"success\":true,\"goals\":[";
 		String user_name = token.getUsername();
 		
 		for (Goal g : Goal.getUserGoals(user_name)) {
 			goals += g + ",";
 		}
 		goals = goals.substring(0, goals.lastIndexOf(","));
-		goals += "]";
+		goals += "]}";
 		response.setStatus(200);
 		response.getWriter().print(goals);
 	}
