@@ -1,2 +1,9 @@
+*~
 /target
-/src/main/webapp/.gitignore
+/src/main/webapp/app.js
+/src/main/webapp/app.json
+/src/main/webapp/cache.appcache
+/src/main/webapp/deltas
+/src/main/webapp/index.html
+/src/main/webapp/resources
+/src/main/webapp/app-src
