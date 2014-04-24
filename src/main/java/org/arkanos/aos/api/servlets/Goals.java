@@ -39,7 +39,6 @@ public class Goals extends HttpServlet {
 		}
 		HTTP.setUpDefaultHeaders(response);
 		response.setContentType("application/x-json");
-		System.out.println("Hey!");
 		String goals = "{\"success\":true,\"goals\":[";
 		String user_name = token.getUsername();
 		
