@@ -34,7 +34,7 @@ public class Goals extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		Security.TokenInfo token = Security.authenticateToken(request);
 		if (token == null) {
-			response.sendError(403, "Token is not valid.");
+			response.sendError(403, "Token is not valid or not found.");
 			return;
 		}
 		HTTP.setUpDefaultHeaders(response);
