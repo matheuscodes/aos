@@ -41,12 +41,15 @@ public class Goals extends HttpServlet {
 		response.setContentType("application/x-json");
 		String goals = "{\"success\":true,\"goals\":[";
 		String user_name = token.getUsername();
-		
+		int count = 0;
 		for (Goal g : Goal.getUserGoals(user_name)) {
 			goals += g + ",";
+			count++;
 		}
-		goals = goals.substring(0, goals.lastIndexOf(","));
-		goals += "]}";
+		if (count > 0) {
+			goals = goals.substring(0, goals.lastIndexOf(","));
+		}
+		goals += "],\"count\":" + count + "}";
 		response.setStatus(200);
 		response.getWriter().print(goals);
 	}
