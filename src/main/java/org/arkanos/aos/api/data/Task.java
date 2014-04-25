@@ -138,6 +138,7 @@ public class Task {
 	public String toString() {
 		DecimalFormat df = new DecimalFormat();
 		df.setMaximumFractionDigits(1);
+		df.setGroupingUsed(false);
 		String result = "{\"";
 		result += Task.FIELD_ID + "\":" + this.id + ",\"";
 		result += Task.FIELD_TITLE + "\":\"" + this.title + "\",\"";

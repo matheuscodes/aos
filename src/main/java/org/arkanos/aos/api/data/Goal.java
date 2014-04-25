@@ -117,6 +117,7 @@ public class Goal {
 	public String toString() {
 		DecimalFormat df = new DecimalFormat();
 		df.setMaximumFractionDigits(1);
+		df.setGroupingUsed(false);
 		String result = "{\"";
 		result += Goal.FIELD_ID + "\":" + this.id + ",\"";
 		result += Goal.FIELD_TITLE + "\":\"" + this.title + "\",\"";
