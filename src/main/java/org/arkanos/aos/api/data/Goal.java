@@ -50,7 +50,7 @@ public class Goal {
 										rs.getString(Goal.FIELD_TITLE),
 										rs.getInt(Goal.FIELD_TIME_PLANNED),
 										rs.getString(Goal.FIELD_DESCRIPTION));
-				//TODO optmize?
+				//TODO optimize?
 				ResultSet newrs = Database.query("SELECT AVG(help.progress) AS completion, SUM(help.spent) AS total_time_spent FROM ("
 													+ "SELECT IF(SUM((w." + Work.FIELD_RESULT + ")/(t." + Task.FIELD_TARGET + "-t." + Task.FIELD_INITIAL + ")) IS NULL, 0, SUM((w." + Work.FIELD_RESULT + ")/(t." + Task.FIELD_TARGET + "-t." + Task.FIELD_INITIAL + "))) AS progress, "
 													+ "SUM(" + Work.FIELD_TIME_SPENT + ") AS spent FROM goal g "
@@ -75,13 +75,31 @@ public class Goal {
 		return null;
 	}
 	
+	static public boolean isUserGoal(String user_name, int goal_id) {
+		try {
+			ResultSet rs = Database.query("SELECT COUNT(*) AS goal_count FROM " + Goal.TABLE_NAME
+											+ " WHERE " + Goal.FIELD_ID + " = " + goal_id + " AND "
+											+ Goal.FIELD_USER_NAME + " = \"" + user_name + "\";");
+			if (rs.next())
+				return (rs.getInt("goal_count") > 0);
+			else
+				return false;
+		}
+		catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return false;
+	}
+	
 	private final int		id;
 	private final int		time_planned;
 	private final String	title;
-	private final String	description;
 	
+	private final String	description;
 	/* Volatile data */
 	private float			completion			= 0;
+	
 	private int				total_time_spent	= 0;
 	
 	public Goal(int id, String title, int time_planned, String description) {
