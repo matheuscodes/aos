@@ -30,21 +30,67 @@ import org.arkanos.aos.api.controllers.Database;
  * 
  */
 public class Task {
-	static final String	TABLE_NAME				= "task";
-	static final String	FIELD_ID				= "id";
-	static final String	FIELD_GOAL_ID			= "goal_id";
-	static final String	FIELD_TARGET			= "target";
-	static final String	FIELD_INITIAL			= "initial";
-	static final String	FIELD_TITLE				= "title";
-	static final String	EXTRA_GOAL_TITLE		= "goal_title";
-	static final String	EXTRA_COMPLETION		= "completion";
-	static final String	EXTRA_CURRENT			= "current";
-	static final String	EXTRA_TOTAL_TIME_SPENT	= "total_time_spent";
+	static public final String	TABLE_NAME				= "task";
+	static public final String	FIELD_ID				= "id";
+	static public final String	FIELD_GOAL_ID			= "goal_id";
+	static public final String	FIELD_TARGET			= "target";
+	static public final String	FIELD_INITIAL			= "initial";
+	static public final String	FIELD_NAME				= "name";
+	static public final String	EXTRA_GOAL_TITLE		= "goal_title";
+	static public final String	EXTRA_COMPLETION		= "completion";
+	static public final String	EXTRA_CURRENT			= "current";
+	static public final String	EXTRA_TOTAL_TIME_SPENT	= "total_time_spent";
+	
+	static public int createTask(int goal_id, String name, float initial, float target) {
+		// TODO Auto-generated constructor stub
+		boolean insertion = Database.execute("INSERT INTO " + Task.TABLE_NAME + " ("
+												+ Task.FIELD_NAME + ","
+												+ Task.FIELD_TARGET + ","
+												+ Task.FIELD_INITIAL + ","
+												+ Task.FIELD_GOAL_ID + ") "
+												+ "VALUES (\""
+												+ name + "\"," + target + ","
+												+ initial + "," + goal_id + ");");
+		if (insertion == true) {
+			try {
+				ResultSet rs = Database.query("SELECT MAX(" + Task.FIELD_ID + ") AS created_id"
+												+ " FROM " + Task.TABLE_NAME + " WHERE "
+												+ Task.FIELD_NAME + " = " + name + " AND "
+												+ Task.FIELD_TARGET + " = " + target + " AND "
+												+ Task.FIELD_INITIAL + " = " + initial + " AND "
+												+ Task.FIELD_GOAL_ID + " = " + goal_id + ";");
+				if (rs.next()) return rs.getInt("created_id");
+			}
+			catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		return -1;
+	}
+	
+	static public Task getTask(int id) {
+		try {
+			ResultSet rs = Database.query("SELECT * " + " FROM " + Task.TABLE_NAME + " WHERE "
+											+ Task.FIELD_ID + " = " + id + ";");
+			if (rs.next()) return new Task(rs.getInt(Task.FIELD_ID),
+											rs.getInt(Task.FIELD_GOAL_ID),
+											rs.getString(Task.FIELD_NAME),
+											rs.getFloat(Task.FIELD_INITIAL),
+											rs.getFloat(Task.FIELD_TARGET));
+		}
+		catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
+	}
 	
 	static public Vector<Task> getUserTasks(String user_name) {
 		try {
 			ResultSet rs = Database.query("SELECT t." + Task.FIELD_ID + " AS " + Task.FIELD_ID + ","
-											+ "t." + Task.FIELD_TITLE + " AS " + Task.FIELD_TITLE + ","
+											+ "t." + Task.FIELD_GOAL_ID + " AS " + Task.FIELD_GOAL_ID + ","
+											+ "t." + Task.FIELD_NAME + " AS " + Task.FIELD_NAME + ","
 											+ Task.FIELD_INITIAL + "," + Task.FIELD_TARGET + ","
 											+ "SUM((w." + Work.FIELD_RESULT + ")/(t." + Task.FIELD_TARGET + "-t." + Task.FIELD_INITIAL + ")) AS " + Task.EXTRA_COMPLETION + ","
 											+ "SUM(w." + Work.FIELD_TIME_SPENT + ") AS " + Task.EXTRA_TOTAL_TIME_SPENT + ","
@@ -58,7 +104,8 @@ public class Task {
 			Vector<Task> results = new Vector<Task>();
 			while (rs.next()) {
 				Task newone = new Task(rs.getInt(Task.FIELD_ID),
-										rs.getString(Task.FIELD_TITLE),
+										rs.getInt(Task.FIELD_GOAL_ID),
+										rs.getString(Task.FIELD_NAME),
 										rs.getFloat(Task.FIELD_INITIAL),
 										rs.getFloat(Task.FIELD_TARGET));
 				
@@ -80,15 +127,16 @@ public class Task {
 	}
 	
 	private final int		id;
-	
+	private final int		goal_id;
 	private final String	title;
 	private final float		initial;
 	private final float		target;
 	/* Dependent data */
 	private float			completion;
-	private float			current;
 	
+	private float			current;
 	private String			goal_title;
+	
 	private int				total_time_spent;
 	
 	/**
@@ -98,12 +146,20 @@ public class Task {
 	 * @param string2
 	 * @param int3
 	 */
-	public Task(int id, String title, float initial, float target) {
+	public Task(int id, int goal_id, String name, float initial, float target) {
 		// TODO Auto-generated constructor stub
 		this.id = id;
-		this.title = title;
+		this.goal_id = goal_id;
+		this.title = name;
 		this.initial = initial;
 		this.target = target;
+	}
+	
+	/**
+	 * @return
+	 */
+	public int getGoalID() {
+		return this.goal_id;
 	}
 	
 	/**
@@ -141,7 +197,8 @@ public class Task {
 		df.setGroupingUsed(false);
 		String result = "{\"";
 		result += Task.FIELD_ID + "\":" + this.id + ",\"";
-		result += Task.FIELD_TITLE + "\":\"" + this.title + "\",\"";
+		result += Task.FIELD_GOAL_ID + "\":" + this.goal_id + ",\"";
+		result += Task.FIELD_NAME + "\":\"" + this.title + "\",\"";
 		result += Task.FIELD_INITIAL + "\":" + df.format(this.initial) + ",\"";
 		result += Task.EXTRA_CURRENT + "\":" + df.format(this.current) + ",\"";
 		result += Task.EXTRA_TOTAL_TIME_SPENT + "\":" + df.format(this.total_time_spent / 60.0f) + ",\"";
