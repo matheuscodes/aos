@@ -55,7 +55,7 @@ public class Task {
 			try {
 				ResultSet rs = Database.query("SELECT MAX(" + Task.FIELD_ID + ") AS created_id"
 												+ " FROM " + Task.TABLE_NAME + " WHERE "
-												+ Task.FIELD_NAME + " = " + name + " AND "
+												+ Task.FIELD_NAME + " = \"" + name + "\" AND "
 												+ Task.FIELD_TARGET + " = " + target + " AND "
 												+ Task.FIELD_INITIAL + " = " + initial + " AND "
 												+ Task.FIELD_GOAL_ID + " = " + goal_id + ";");

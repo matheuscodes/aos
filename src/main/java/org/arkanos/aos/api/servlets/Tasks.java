@@ -99,7 +99,7 @@ public class Tasks extends HttpServlet {
 		HTTP.setUpDefaultHeaders(response);
 		
 		String URI = request.getRequestURI();
-		if (!URI.endsWith("/tasks") ^ !URI.endsWith("/tasks/")) {
+		if (!(URI.endsWith("/tasks") || !URI.endsWith("/tasks/"))) {
 			response.setHeader("Allow", "GET, PUT, DELETE");
 			response.sendError(405, "POST is not supported for a specific resource.");
 			return;
