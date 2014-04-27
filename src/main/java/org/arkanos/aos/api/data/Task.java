@@ -18,12 +18,17 @@
  */
 package org.arkanos.aos.api.data;
 
+import java.io.IOException;
+import java.io.Reader;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.DecimalFormat;
 import java.util.Vector;
 
 import org.arkanos.aos.api.controllers.Database;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 
 /**
  * @author arkanos
@@ -126,18 +131,51 @@ public class Task {
 		return null;
 	}
 	
-	private final int		id;
-	private final int		goal_id;
-	private final String	title;
-	private final float		initial;
-	private final float		target;
+	static public Task parseTask(Reader from) {
+		JSONParser jp = new JSONParser();
+		try {
+			//TODO send this shitty simple-JSON to fuck
+			JSONObject jo = (JSONObject) jp.parse(from);
+			String id = "" + jo.get(Task.FIELD_ID);
+			String goal_id = "" + jo.get(Task.FIELD_GOAL_ID);
+			String name = "" + jo.get(Task.FIELD_NAME);
+			String initial = "" + jo.get(Task.FIELD_INITIAL);
+			String target = "" + jo.get(Task.FIELD_TARGET);
+			Task newone = new Task(Integer.parseInt(id),
+									Integer.parseInt(goal_id),
+									name,
+									Float.parseFloat(initial),
+									Float.parseFloat(target));
+			newone.setGoalTitle("" + jo.get(Task.EXTRA_GOAL_TITLE));
+			newone.setCompletion(Float.parseFloat("" + jo.get(Task.EXTRA_COMPLETION)));
+			newone.setCurrent(Float.parseFloat("" + jo.get(Task.EXTRA_CURRENT)));
+			newone.setTotalTimeSpent((int) (Float.parseFloat("" + jo.get(Task.EXTRA_TOTAL_TIME_SPENT)) * 60));
+			return newone;
+		}
+		catch (ParseException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
+	private final int	id;
+	private final int	goal_id;
+	private String		name;
+	private float		initial;
+	private float		target;
+	
 	/* Dependent data */
-	private float			completion;
+	private float		completion;
+	private float		current;
 	
-	private float			current;
-	private String			goal_title;
+	private String		goal_title;
 	
-	private int				total_time_spent;
+	private int			total_time_spent;
 	
 	/**
 	 * @param int1
@@ -150,9 +188,14 @@ public class Task {
 		// TODO Auto-generated constructor stub
 		this.id = id;
 		this.goal_id = goal_id;
-		this.title = name;
+		this.name = name;
 		this.initial = initial;
 		this.target = target;
+	}
+	
+	public boolean delete() {
+		return Database.execute("DELETE FROM " + Task.TABLE_NAME
+								+ " WHERE " + Task.FIELD_ID + " = " + this.id + ";");
 	}
 	
 	/**
@@ -160,6 +203,19 @@ public class Task {
 	 */
 	public int getGoalID() {
 		return this.goal_id;
+	}
+	
+	public void replaceContent(Task to) {
+		/* NEVER
+		 * this.id = to.id;
+		 * this.goal_id = to.goal_id;
+		 */
+		this.goal_title = Database.sanitizeString(to.goal_title);
+		this.name = Database.sanitizeString(to.name);
+		this.initial = to.initial;
+		this.target = to.target;
+		this.current = to.current;
+		this.total_time_spent = to.total_time_spent;
 	}
 	
 	/**
@@ -184,6 +240,21 @@ public class Task {
 	}
 	
 	/**
+	 * @param i
+	 */
+	public void setInitial(float i) {
+		this.initial = i;
+	}
+	
+	public void setName(String n) {
+		this.name = n;
+	}
+	
+	public void setTarget(float t) {
+		this.target = t;
+	}
+	
+	/**
 	 * @param int1
 	 */
 	private void setTotalTimeSpent(int tts) {
@@ -198,7 +269,7 @@ public class Task {
 		String result = "{\"";
 		result += Task.FIELD_ID + "\":" + this.id + ",\"";
 		result += Task.FIELD_GOAL_ID + "\":" + this.goal_id + ",\"";
-		result += Task.FIELD_NAME + "\":\"" + this.title + "\",\"";
+		result += Task.FIELD_NAME + "\":\"" + this.name + "\",\"";
 		result += Task.FIELD_INITIAL + "\":" + df.format(this.initial) + ",\"";
 		result += Task.EXTRA_CURRENT + "\":" + df.format(this.current) + ",\"";
 		result += Task.EXTRA_TOTAL_TIME_SPENT + "\":" + df.format(this.total_time_spent / 60.0f) + ",\"";
@@ -206,6 +277,14 @@ public class Task {
 		result += Task.EXTRA_GOAL_TITLE + "\":\"" + this.goal_title + "\",\"";
 		result += Task.FIELD_TARGET + "\":" + this.target + "}";
 		return result;
+	}
+	
+	public boolean update() {
+		return Database.execute("UPDATE " + Task.TABLE_NAME + " SET "
+								+ Task.FIELD_NAME + " = \"" + this.name + "\","
+								+ Task.FIELD_INITIAL + " = " + this.initial + ","
+								+ Task.FIELD_TARGET + " = " + this.target
+								+ " WHERE " + Task.FIELD_ID + " = " + this.id + ";");
 	}
 	
 }

@@ -30,6 +30,57 @@ public class Tasks extends HttpServlet {
 	}
 	
 	/**
+	 * @see HttpServlet#doPut(HttpServletRequest request, HttpServletResponse response)
+	 */
+	@Override
+	protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		Security.TokenInfo token = Security.authenticateToken(request);
+		if (token == null) {
+			response.sendError(403, "Token is not valid or not found.");
+			return;
+		}
+		HTTP.setUpDefaultHeaders(response);
+		//TODO move to default headers
+		response.setContentType("application/x-json");
+		
+		String URI = request.getRequestURI();
+		if (URI.endsWith("/tasks") || URI.endsWith("/tasks/")) {
+			response.setHeader("Allow", "GET, POST");
+			response.sendError(405, "DELETE is not supported without a specific resource.");
+			return;
+		}
+		String resource = URI.substring(URI.lastIndexOf("/") + 1);
+		if (URI.endsWith("tasks/" + resource)) {
+			int id = Integer.parseInt(resource);
+			Task result = Task.getTask(id);
+			if (result != null) {
+				if (Goal.isUserGoal(token.getUsername(), result.getGoalID())) {
+					if (result.delete()) {
+						response.setStatus(204);
+						return;
+					}
+					else {
+						response.sendError(500, "Could not delete the task.");
+						return;
+					}
+				}
+				else {
+					response.sendError(403, "Task does not belong to user.");
+					return;
+				}
+			}
+			else {
+				response.sendError(404, "Task not found.");
+				return;
+			}
+		}
+		else {
+			response.sendError(400, "Task not properly identified.");
+			return;
+		}
+	}
+	
+	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	@Override
@@ -132,6 +183,74 @@ public class Tasks extends HttpServlet {
 		}
 		else {
 			response.sendError(403, "Goal selected does not belong to user.");
+		}
+	}
+	
+	/**
+	 * @see HttpServlet#doPut(HttpServletRequest request, HttpServletResponse response)
+	 */
+	@Override
+	protected void doPut(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		Security.TokenInfo token = Security.authenticateToken(request);
+		if (token == null) {
+			response.sendError(403, "Token is not valid or not found.");
+			return;
+		}
+		HTTP.setUpDefaultHeaders(response);
+		//TODO move to default headers
+		response.setContentType("application/x-json");
+		
+		String URI = request.getRequestURI();
+		if (URI.endsWith("/tasks") || URI.endsWith("/tasks/")) {
+			response.setHeader("Allow", "GET, POST");
+			response.sendError(405, "PUT is not supported without a specific resource.");
+			return;
+		}
+		String resource = URI.substring(URI.lastIndexOf("/") + 1);
+		if (URI.endsWith("tasks/" + resource)) {
+			int id = Integer.parseInt(resource);
+			Task result = Task.getTask(id);
+			if (result != null) {
+				if (Goal.isUserGoal(token.getUsername(), result.getGoalID())) {
+					try {
+						Task contents = Task.parseTask(request.getReader());
+						if (contents != null) {
+							result.replaceContent(contents);
+							if (result.update()) {
+								response.getWriter().print(result);
+								response.setStatus(200);
+								return;
+							}
+							else {
+								response.sendError(500, "Could not save the task.");
+								return;
+							}
+						}
+						else {
+							response.sendError(400, "Contents of the resquest could not be parsed.");
+							return;
+						}
+					}
+					catch (NumberFormatException e) {
+						//TODO auto
+						response.sendError(400, "Something was wrong with the numeric parameters.");
+						e.printStackTrace();
+					}
+					return;
+				}
+				else {
+					response.sendError(403, "Task does not belong to user.");
+					return;
+				}
+			}
+			else {
+				response.sendError(404, "Task not found, use POST on '/tasks' to create.");
+				return;
+			}
+		}
+		else {
+			response.sendError(400, "Task not properly identified.");
+			return;
 		}
 	}
 }
