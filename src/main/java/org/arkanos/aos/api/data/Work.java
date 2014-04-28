@@ -33,17 +33,36 @@ import org.json.simple.JSONObject;
  * 
  */
 public class Work {
-	static final String	DATEFORMAT			= "yyyy-MM-dd HH:mm:ss.0";
+	public static final String	DATEFORMAT			= "yyyy-MM-dd HH:mm:ss.0";
 	
-	static final String	TABLE_NAME			= "work";
-	static final String	FIELD_TASK_ID		= "task_id";
-	static final String	FIELD_RESULT		= "result";
-	static final String	FIELD_TIME_SPENT	= "time_spent";
-	static final String	FIELD_COMMENT		= "comment";
-	static final String	FIELD_START			= "start";
+	public static final String	TABLE_NAME			= "work";
+	public static final String	FIELD_TASK_ID		= "task_id";
+	public static final String	FIELD_RESULT		= "result";
+	public static final String	FIELD_TIME_SPENT	= "time_spent";
+	public static final String	FIELD_COMMENT		= "comment";
+	public static final String	FIELD_START			= "start";
 	
-	static final String	EXTRA_TASK_NAME		= "task_name";
-	static final String	EXTRA_GOAL_TITLE	= "goal_title";
+	public static final String	EXTRA_TASK_NAME		= "task_name";
+	public static final String	EXTRA_GOAL_TITLE	= "goal_title";
+	
+	static public boolean createWork(String start, int task_id, float result, String comment, int time_spent) {
+		// TODO Auto-generated constructor stub
+		return Database.execute("INSERT INTO " + Work.TABLE_NAME + " ("
+								+ Work.FIELD_TASK_ID + ","
+								+ Work.FIELD_RESULT + ","
+								+ Work.FIELD_TIME_SPENT + ","
+								+ Work.FIELD_COMMENT + ","
+								+ Work.FIELD_START + ") "
+								+ "VALUES (\""
+								+ task_id + "\"," + result + ","
+								+ time_spent + "," + comment + "," + start + ");");
+	}
+	
+	static public boolean deleteWork(int task_id, String start) {
+		return Database.execute("DELETE FROM " + Work.TABLE_NAME
+								+ " WHERE " + Work.FIELD_TASK_ID + " = " + task_id
+								+ " AND " + Work.FIELD_START + " = " + start + ";");
+	}
 	
 	static public Vector<Work> getUserWorklog(String user_name) {
 		try {
@@ -80,14 +99,15 @@ public class Work {
 	}
 	
 	private String			goal_title;
+	
 	private String			task_name;
 	
 	private final String	start;
 	
 	private final int		task_id;
-	
 	private final float		result;
 	private final String	comment;
+	
 	private final int		time_spent;
 	
 	/**
