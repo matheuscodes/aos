@@ -119,7 +119,7 @@ public class Goals extends HttpServlet {
 		HTTP.setUpDefaultHeaders(response);
 		
 		String URI = request.getRequestURI();
-		if (!(URI.endsWith("/goals") || !URI.endsWith("/goals/"))) {
+		if (!URI.endsWith("/goals") && !URI.endsWith("/goals/")) {
 			response.setHeader("Allow", "GET, PUT, DELETE");
 			response.sendError(405, "POST is not supported for a specific resource.");
 			return;
@@ -138,7 +138,7 @@ public class Goals extends HttpServlet {
 		Goal created = Goal.getGoal(token.getUsername(), id);
 		if (created != null) {
 			response.setHeader("Location", URI + id);
-			response.getWriter().print("{\"success\":true,\"goals\":[" + created + "]}");
+			response.getWriter().print("{\"success\":true}");
 			response.setStatus(201);
 			return;
 		}

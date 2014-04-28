@@ -172,7 +172,7 @@ public class Tasks extends HttpServlet {
 			Task created = Task.getTask(id);
 			if (created != null) {
 				response.setHeader("Location", URI + id);
-				response.getWriter().print("{\"success\":true,\"tasks\":[" + created + "]}");
+				response.getWriter().print("{\"success\":true}");
 				response.setStatus(201);
 				return;
 			}
