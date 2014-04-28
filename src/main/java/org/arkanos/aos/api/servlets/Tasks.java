@@ -102,7 +102,7 @@ public class Tasks extends HttpServlet {
 				Task result = Task.getTask(id);
 				if (result != null) {
 					if (Goal.isUserGoal(token.getUsername(), result.getGoalID())) {
-						response.getWriter().print(result);
+						response.getWriter().print("{\"success\":true,\"tasks\":[" + result + "]}");
 						response.setStatus(200);
 						return;
 					}
@@ -172,7 +172,7 @@ public class Tasks extends HttpServlet {
 			Task created = Task.getTask(id);
 			if (created != null) {
 				response.setHeader("Location", URI + id);
-				response.getWriter().print(created);
+				response.getWriter().print("{\"success\":true,\"tasks\":[" + created + "]}");
 				response.setStatus(201);
 				return;
 			}
@@ -217,7 +217,7 @@ public class Tasks extends HttpServlet {
 						if (contents != null) {
 							result.replaceContent(contents);
 							if (result.update()) {
-								response.getWriter().print(result);
+								response.getWriter().print("{\"success\":true,\"tasks\":[" + result + "]}");
 								response.setStatus(200);
 								return;
 							}

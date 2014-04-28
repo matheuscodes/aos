@@ -138,7 +138,7 @@ public class Goals extends HttpServlet {
 		Goal created = Goal.getGoal(token.getUsername(), id);
 		if (created != null) {
 			response.setHeader("Location", URI + id);
-			response.getWriter().print(created);
+			response.getWriter().print("{\"success\":true,\"goals\":[" + created + "]}");
 			response.setStatus(201);
 			return;
 		}
@@ -178,7 +178,7 @@ public class Goals extends HttpServlet {
 					if (contents != null) {
 						result.replaceContent(contents);
 						if (result.update()) {
-							response.getWriter().print(result);
+							response.getWriter().print("{\"success\":true,\"goals\":[" + result + "]}");
 							response.setStatus(200);
 							return;
 						}
