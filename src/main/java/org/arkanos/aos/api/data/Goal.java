@@ -61,7 +61,7 @@ public class Goal {
 												+ " FROM " + Goal.TABLE_NAME + " WHERE "
 												+ Goal.FIELD_TITLE + " = \"" + title + "\" AND "
 												+ Goal.FIELD_TIME_PLANNED + " = " + time_planned + " AND "
-												+ Goal.FIELD_DESCRIPTION + " = " + description + " AND "
+												+ Goal.FIELD_DESCRIPTION + " = \"" + description + "\" AND "
 												+ Goal.FIELD_USER_NAME + " = \"" + user_name + "\";");
 				if (rs.next()) return rs.getInt("created_id");
 			}
