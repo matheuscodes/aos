@@ -148,8 +148,8 @@ public class Work {
 			result += Work.FIELD_TASK_ID + "\":" + this.task_id + ",\"";
 			result += Work.FIELD_START + "\":\"" + this.start.substring(0, this.start.indexOf(".")) + "\",\"";
 			result += Work.FIELD_COMMENT + "\":\"" + JSONObject.escape(this.comment) + "\",\"";
-			result += Work.FIELD_RESULT + "\":" + df.format(this.result / 60.0f) + ",\"";
-			result += Work.FIELD_TIME_SPENT + "\":" + this.time_spent + ",\"";
+			result += Work.FIELD_RESULT + "\":" + this.result + ",\"";
+			result += Work.FIELD_TIME_SPENT + "\":" + df.format(this.time_spent / 60.0f) + ",\"";
 			result += Work.EXTRA_TASK_NAME + "\":\"" + this.task_name + "\",\"";
 			result += Work.EXTRA_GOAL_TITLE + "\":\"" + this.goal_title + "\"}";
 		}
