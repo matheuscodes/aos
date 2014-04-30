@@ -53,15 +53,15 @@ public class Work {
 								+ Work.FIELD_TIME_SPENT + ","
 								+ Work.FIELD_COMMENT + ","
 								+ Work.FIELD_START + ") "
-								+ "VALUES (\""
-								+ task_id + "\"," + result + ","
-								+ time_spent + "," + comment + "," + start + ");");
+								+ "VALUES ("
+								+ task_id + "," + result + ","
+								+ time_spent + ",\"" + comment + "\",\"" + start + "\");");
 	}
 	
 	static public boolean deleteWork(int task_id, String start) {
 		return Database.execute("DELETE FROM " + Work.TABLE_NAME
 								+ " WHERE " + Work.FIELD_TASK_ID + " = " + task_id
-								+ " AND " + Work.FIELD_START + " = " + start + ";");
+								+ " AND " + Work.FIELD_START + " = \"" + start + "\";");
 	}
 	
 	static public Vector<Work> getUserWorklog(String user_name) {

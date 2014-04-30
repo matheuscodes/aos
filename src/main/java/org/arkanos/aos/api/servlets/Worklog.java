@@ -152,8 +152,8 @@ public class Worklog extends HttpServlet {
 		String comment = Database.sanitizeString(request.getParameter(Work.FIELD_COMMENT));
 		float result = Float.parseFloat(request.getParameter(Work.FIELD_RESULT));
 		String start = Database.sanitizeString(request.getParameter(Work.FIELD_START));
-		
 		Task parent = Task.getTask(task_id);
+		
 		if (Goal.isUserGoal(token.getUsername(), parent.getGoalID())) {
 			boolean created = Work.createWork(start, task_id, result, comment, time_spent);
 			if (created) {
