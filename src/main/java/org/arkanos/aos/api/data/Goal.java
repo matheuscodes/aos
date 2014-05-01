@@ -135,6 +135,46 @@ public class Goal {
 		return null;
 	}
 	
+	static public Vector<Goal> getUserGoalsSnapshot(String user_name, String from, String to) {
+		try {
+			ResultSet rs = Database.query("SELECT * FROM " + Goal.TABLE_NAME + " WHERE "
+											+ Goal.FIELD_USER_NAME + " = \"" + user_name + "\";");
+			Vector<Goal> results = new Vector<Goal>();
+			while (rs.next()) {
+				Goal newone = new Goal(rs.getInt(Goal.FIELD_ID),
+										rs.getString(Goal.FIELD_TITLE),
+										rs.getInt(Goal.FIELD_TIME_PLANNED),
+										rs.getString(Goal.FIELD_DESCRIPTION),
+										user_name);
+				//TODO optimize?
+				ResultSet newrs = Database.query("SELECT AVG(help.progress) AS completion, SUM(help.spent) AS total_time_spent FROM ("
+													+ "SELECT IF(SUM((w." + Work.FIELD_RESULT + ")/(t." + Task.FIELD_TARGET + "-t." + Task.FIELD_INITIAL + ")) IS NULL, 0, SUM((w." + Work.FIELD_RESULT + ")/(t." + Task.FIELD_TARGET + "-t." + Task.FIELD_INITIAL + "))) AS progress, "
+													+ "SUM(" + Work.FIELD_TIME_SPENT + ") AS spent FROM goal g "
+													+ "LEFT JOIN " + Task.TABLE_NAME + " t on t." + Task.FIELD_GOAL_ID + " = g." + Goal.FIELD_ID + " "
+													+ "LEFT JOIN (SELECT * FROM " + Work.TABLE_NAME + " WHERE "
+													+ Work.FIELD_START + " >= \"" + from + "\" "
+													+ "AND " + Work.FIELD_START + " <= \"" + to + "\") "
+													+ " w ON t." + Task.FIELD_ID + " = w." + Work.FIELD_TASK_ID + " "
+													+ "WHERE g." + Goal.FIELD_ID + " = " + newone.getId() + " "
+													+ "AND g." + Goal.FIELD_USER_NAME + " = \"" + user_name + "\" "
+													+ "GROUP BY t." + Task.FIELD_ID + ",g." + Goal.FIELD_ID + ") help;");
+				if (newrs.next()) {
+					newone.setCompletion(newrs.getFloat("completion"));
+					newone.setTotalTimeSpent(newrs.getInt("total_time_spent"));
+				}
+				
+				results.add(newone);
+				
+			}
+			return results;
+		}
+		catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
 	static public boolean isUserGoal(String user_name, int goal_id) {
 		try {
 			ResultSet rs = Database.query("SELECT COUNT(*) AS goal_count FROM " + Goal.TABLE_NAME
@@ -214,8 +254,56 @@ public class Goal {
 								+ " AND " + Goal.FIELD_USER_NAME + " = \"" + this.user_name + "\";");
 	}
 	
+	/**
+	 * @return
+	 */
+	public float getCompletion() {
+		return this.completion;
+	}
+	
+	/**
+	 * @return
+	 */
+	public float getDedication() {
+		if (this.time_planned > 0)
+			return this.total_time_spent / this.time_planned;
+		else
+			return 1;
+	}
+	
 	private int getId() {
 		return this.id;
+	}
+	
+	/**
+	 * @return
+	 */
+	public int getID() {
+		return this.id;
+	}
+	
+	/**
+	 * @return
+	 */
+	public float getProductivity() {
+		if (this.getDedication() > 0)
+			return this.getCompletion() / this.getDedication();
+		else
+			return 0;
+	}
+	
+	/**
+	 * @return
+	 */
+	public String getTitle() {
+		return this.title;
+	}
+	
+	/**
+	 * @return
+	 */
+	public int getTotalTimeSpent() {
+		return this.total_time_spent;
 	}
 	
 	public void replaceContent(Goal to) {
