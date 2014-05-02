@@ -266,7 +266,7 @@ public class Goal {
 	 */
 	public float getDedication() {
 		if (this.time_planned > 0)
-			return this.total_time_spent / this.time_planned;
+			return this.total_time_spent / (float) this.time_planned;
 		else
 			return 1;
 	}
@@ -290,6 +290,13 @@ public class Goal {
 			return this.getCompletion() / this.getDedication();
 		else
 			return 0;
+	}
+	
+	/**
+	 * @return
+	 */
+	public int getTimePlanned() {
+		return this.time_planned;
 	}
 	
 	/**
