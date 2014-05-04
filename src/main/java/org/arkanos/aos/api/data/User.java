@@ -50,7 +50,7 @@ public class User {
 	 * @return
 	 */
 	public static boolean credentialsMatch(String user_name, String hashed_password) {
-		try {
+		try {//TODO use double quotes
 			ResultSet rs = Database.query("SELECT " + User.FIELD_HASHED_PASSWORD + " FROM user WHERE " +
 											User.FIELD_USER_NAME + " = '" + user_name + "';");
 			if (rs.next()) {
