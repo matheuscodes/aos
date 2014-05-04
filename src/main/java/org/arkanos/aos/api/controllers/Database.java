@@ -73,7 +73,7 @@ public class Database {
 		}
 		
 		try {
-			if (Database.link.isValid(1)) return;
+			if ((Database.link != null) && Database.link.isValid(1)) return;
 			Class.forName("com.mysql.jdbc.Driver").newInstance();
 			Database.link = DriverManager.getConnection("jdbc:mysql://" + Database.HOST + "/" + Database.DATABASE + "?user=" + Database.USER + "&password=" + Database.PASSWORD);
 		}
