@@ -39,7 +39,7 @@ public class Database {
 	
 	static public boolean execute(String q) {
 		try {
-			if ((Database.link == null) || Database.link.isValid(1)) {
+			if ((Database.link == null) || Database.link.isValid(1) || Database.link.isClosed()) {
 				Database.initialize();
 			}
 			Statement query = Database.link.createStatement();
@@ -73,7 +73,7 @@ public class Database {
 		}
 		
 		try {
-			if ((Database.link != null) && Database.link.isValid(1)) return;
+			if ((Database.link != null) && Database.link.isValid(1) && !Database.link.isClosed()) return;
 			Class.forName("com.mysql.jdbc.Driver").newInstance();
 			Database.link = DriverManager.getConnection("jdbc:mysql://" + Database.HOST + "/" + Database.DATABASE + "?user=" + Database.USER + "&password=" + Database.PASSWORD);
 		}
@@ -97,7 +97,7 @@ public class Database {
 	
 	static public ResultSet query(String q) {
 		try {
-			if ((Database.link == null) || Database.link.isValid(1)) {
+			if ((Database.link == null) || Database.link.isValid(1) || Database.link.isClosed()) {
 				Database.initialize();
 			}
 			Statement query = Database.link.createStatement();
