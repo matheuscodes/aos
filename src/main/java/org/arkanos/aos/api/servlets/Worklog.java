@@ -42,6 +42,12 @@ public class Worklog extends HttpServlet {
 			response.sendError(403, "Token is not valid or not found.");
 			return;
 		}
+		
+		if (token.getUsername().compareTo("testuser") == 0) {
+			response.sendError(403, "Sorry, no persistent operations with 'testuser'.");
+			return;
+		}
+		
 		HTTP.setUpDefaultHeaders(response);
 		
 		String URI = request.getRequestURI();
@@ -133,6 +139,12 @@ public class Worklog extends HttpServlet {
 			response.sendError(403, "Token is not valid or not found.");
 			return;
 		}
+		
+		if (token.getUsername().compareTo("testuser") == 0) {
+			response.sendError(403, "Sorry, no persistent operations with 'testuser'.");
+			return;
+		}
+		
 		HTTP.setUpDefaultHeaders(response);
 		
 		String URI = request.getRequestURI();
