@@ -38,10 +38,10 @@ public class Database {
 	static Connection		link		= null;
 	
 	static public boolean execute(String q) {
-		if (Database.link == null) {
-			Database.initialize();
-		}
 		try {
+			if ((Database.link == null) || Database.link.isValid(1)) {
+				Database.initialize();
+			}
 			Statement query = Database.link.createStatement();
 			query.execute(q);
 			return true;
@@ -53,7 +53,7 @@ public class Database {
 		return false;
 	}
 	
-	static public void initialize() {
+	static synchronized public void initialize() {
 		if ((System.getenv("MYSQLS_DATABASE") != null) &&
 			(System.getenv("MYSQLS_HOSTNAME") != null) &&
 			(System.getenv("MYSQLS_PORT") != null) &&
@@ -73,6 +73,7 @@ public class Database {
 		}
 		
 		try {
+			if (Database.link.isValid(1)) return;
 			Class.forName("com.mysql.jdbc.Driver").newInstance();
 			Database.link = DriverManager.getConnection("jdbc:mysql://" + Database.HOST + "/" + Database.DATABASE + "?user=" + Database.USER + "&password=" + Database.PASSWORD);
 		}
@@ -95,10 +96,10 @@ public class Database {
 	}
 	
 	static public ResultSet query(String q) {
-		if (Database.link == null) {
-			Database.initialize();
-		}
 		try {
+			if ((Database.link == null) || Database.link.isValid(1)) {
+				Database.initialize();
+			}
 			Statement query = Database.link.createStatement();
 			query.execute(q);
 			ResultSet list = query.getResultSet();
