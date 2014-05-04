@@ -30,12 +30,12 @@ import java.sql.Statement;
  */
 public class Database {
 	
-	static private final String	HOST		= "localhost:3306";
-	static private final String	DATABASE	= "aos";
-	static private final String	USER		= "root";
-	static private final String	PASSWORD	= "1234";
+	static private String	HOST		= "localhost:3306";
+	static private String	DATABASE	= "aos";
+	static private String	USER		= "root";
+	static private String	PASSWORD	= "1234";
 	
-	static Connection			link		= null;
+	static Connection		link		= null;
 	
 	static public boolean execute(String q) {
 		if (Database.link == null) {
@@ -54,6 +54,24 @@ public class Database {
 	}
 	
 	static public void initialize() {
+		if ((System.getenv("MYSQLS_DATABASE") != null) &&
+			(System.getenv("MYSQLS_HOSTNAME") != null) &&
+			(System.getenv("MYSQLS_PORT") != null) &&
+			(System.getenv("MYSQLS_USERNAME") != null) &&
+			(System.getenv("MYSQLS_PASSWORD") != null)) {
+			
+			String database = System.getenv("MYSQLS_DATABASE");
+			String host = System.getenv("MYSQLS_HOSTNAME");
+			int port = Integer.valueOf(System.getenv("MYSQLS_PORT"));
+			String username = System.getenv("MYSQLS_USERNAME");
+			String password = System.getenv("MYSQLS_PASSWORD");
+			
+			Database.HOST = host + ":" + port;
+			Database.DATABASE = database;
+			Database.USER = username;
+			Database.PASSWORD = password;
+		}
+		
 		try {
 			Class.forName("com.mysql.jdbc.Driver").newInstance();
 			Database.link = DriverManager.getConnection("jdbc:mysql://" + Database.HOST + "/" + Database.DATABASE + "?user=" + Database.USER + "&password=" + Database.PASSWORD);
