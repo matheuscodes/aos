@@ -116,8 +116,9 @@ public class Task {
 				
 				newone.setGoalTitle(rs.getString(Task.EXTRA_GOAL_TITLE));
 				newone.setCompletion(rs.getFloat(Task.EXTRA_COMPLETION));
-				newone.setCurrent(rs.getFloat(Task.EXTRA_CURRENT));
 				newone.setTotalTimeSpent(rs.getInt(Task.EXTRA_TOTAL_TIME_SPENT));
+				/* Order is important, setCurrent must be last */
+				newone.setCurrent(rs.getFloat(Task.EXTRA_CURRENT));
 				
 				results.add(newone);
 				
@@ -229,7 +230,12 @@ public class Task {
 	 * @param float1
 	 */
 	private void setCurrent(float c) {
-		this.current = c;
+		if ((c == 0) && (this.completion == 0)) {
+			this.current = this.initial;
+		}
+		else {
+			this.current = c;
+		}
 	}
 	
 	/**
