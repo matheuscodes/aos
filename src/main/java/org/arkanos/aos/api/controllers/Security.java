@@ -1,18 +1,21 @@
 /**
  * Copyright (C) 2014 Matheus Borges Teixeira
+ *
+ * This is a part of Arkanos Organizer Suite (AOS)
+ * AOS is a web application for organizing personal goals.
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
  * 
- * This file is part of Arkanos Organizer Suite, a tool for personal organization.
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
  * 
- * Arkanos Organizer Suite is free software: you can redistribute it and/or modify it under the
- * terms of the GNU Affero General Public License as published by the Free Software Foundation,
- * either version 3 of the License, or (at your option) any later version.
- * 
- * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without
- * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
- * Affero General Public License for more details.
- * 
- * You should have received a copy of the GNU Affero General Public License along with Arkanos
- * Organizer Suite. If not, see <http://www.gnu.org/licenses/>
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 package org.arkanos.aos.api.controllers;
 
@@ -23,16 +26,35 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 
 /**
- * @author arkanos
+ * Controls the security of the server.
+ * 
+ * @version 1.0
+ * @author Matheus Borges Teixeira
  * 
  */
 public class Security {
 	
+	/**
+	 * Security token provided by the server.
+	 * 
+	 * @author Matheus Borges Teixeira
+	 */
 	public class TokenInfo {
+		/** Token key **/
 		private final String	token;
+		/** Time until when the token is valid **/
 		private long			expiration;
+		/** User to whom the token was granted **/
 		private final String	user_name;
 		
+		/**
+		 * Simple token constructor.
+		 * 
+		 * @param token
+		 *            string with the token key.
+		 * @param user_name
+		 *            user to whom the token was granted.
+		 */
 		TokenInfo(String token, String user_name) {
 			this.token = token;
 			this.user_name = user_name;
@@ -57,10 +79,21 @@ public class Security {
 		}
 	}
 	
+	/** Default cookie name for the token **/
 	public static final String					TOKEN_COOKIE_NAME	= "aos-token";
 	
+	/** Cache of provided tokens **/
 	static private HashMap<String, TokenInfo>	all_tokens			= null;
 	
+	/**
+	 * Verifies if there is a valid token in a given request.
+	 * 
+	 * @param request
+	 *            to be checked.
+	 * @return the token found or null if no valid token is given.
+	 * @throws IOException
+	 *             whenever problems occur reading cookies.
+	 */
 	static public TokenInfo authenticateToken(HttpServletRequest request)
 					throws IOException {
 		TokenInfo token_info = null;

@@ -1,20 +1,21 @@
 /**
- *  Copyright (C) 2014 Matheus Borges Teixeira
- *  
- *  This file is part of Arkanos Organizer Suite, a tool for personal organization.
+ * Copyright (C) 2014 Matheus Borges Teixeira
  *
- *  Arkanos Organizer Suite is free software: you can redistribute it and/or 
- *  modify it under the terms of the GNU Affero General Public License as
- *  published by the Free Software Foundation, either version 3 of the
- *  License, or (at your option) any later version.
+ * This is a part of Arkanos Organizer Suite (AOS)
+ * AOS is a web application for organizing personal goals.
  *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU Affero General Public License for more details.
- *
- *  You should have received a copy of the GNU Affero General Public License
- *  along with Arkanos Organizer Suite.  If not, see <http://www.gnu.org/licenses/>
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 package org.arkanos.aos.api.controllers;
 
@@ -25,18 +26,30 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 /**
- * @author arkanos
+ * Controls the Database connection.
  * 
+ * @version 1.0
+ * @author Matheus Borges Teixeira
  */
 public class Database {
-	
+	/** Default host for the database **/
 	static private String	HOST		= "localhost:3306";
+	/** Default database name **/
 	static private String	DATABASE	= "aos";
+	/** Default database username **/
 	static private String	USER		= "root";
+	/** Default user password **/
 	static private String	PASSWORD	= "1234";
-	
+	/** Static connection to the database **/
 	static Connection		link		= null;
 	
+	/**
+	 * Simply executes a query in the database.
+	 * 
+	 * @param q
+	 *            String with the SQL.
+	 * @return whether the query could be executed.
+	 */
 	static public boolean execute(String q) {
 		try {
 			if ((Database.link == null) || Database.link.isValid(1) || Database.link.isClosed()) {
@@ -53,7 +66,11 @@ public class Database {
 		return false;
 	}
 	
+	/**
+	 * Starts up the database.
+	 */
 	static synchronized public void initialize() {
+		/* For CloudControl, MySQL credentials are set as variables */
 		if ((System.getenv("MYSQLS_DATABASE") != null) &&
 			(System.getenv("MYSQLS_HOSTNAME") != null) &&
 			(System.getenv("MYSQLS_PORT") != null) &&
@@ -95,6 +112,13 @@ public class Database {
 		}
 	}
 	
+	/**
+	 * Executes a query in the database and returns the results.
+	 * 
+	 * @param q
+	 *            String with the SQL query.
+	 * @return a ResultSet with the results or null if failed.
+	 */
 	static public ResultSet query(String q) {
 		try {
 			if ((Database.link == null) || Database.link.isValid(1) || Database.link.isClosed()) {
@@ -112,9 +136,16 @@ public class Database {
 		return null;
 	}
 	
+	/**
+	 * Process a string to remove undesired characters.
+	 * 
+	 * @param s
+	 *            String to be cleaned.
+	 * @return clean string to be used in SQL.
+	 */
 	static public String sanitizeString(String s) {
 		if (s == null) return null;
-		//TODO Sanitize weird/dangerous chars, SQL injection, etc.
+		//TODO this is a basic clean, needs improvement.
 		s.replace('\"', ' ');
 		s.replace('`', ' ');
 		s.replace(';', ' ');
