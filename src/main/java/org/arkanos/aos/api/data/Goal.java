@@ -63,7 +63,7 @@ public class Goal {
 												+ Goal.FIELD_TIME_PLANNED + " = " + time_planned + " AND "
 												+ Goal.FIELD_DESCRIPTION + " = \"" + description + "\" AND "
 												+ Goal.FIELD_USER_NAME + " = \"" + user_name + "\";");
-				if (rs.next()) return rs.getInt("created_id");
+				if ((rs != null) && rs.next()) return rs.getInt("created_id");
 			}
 			catch (SQLException e) {
 				// TODO Auto-generated catch block
@@ -82,7 +82,7 @@ public class Goal {
 			ResultSet rs = Database.query("SELECT * FROM " + Goal.TABLE_NAME + " WHERE "
 											+ Goal.FIELD_USER_NAME + " = \"" + user_name + "\""
 											+ " AND " + Goal.FIELD_ID + " = " + id + ";");
-			if (rs.next()) {
+			if ((rs != null) && rs.next()) {
 				Goal newone = new Goal(rs.getInt(Goal.FIELD_ID),
 										rs.getString(Goal.FIELD_TITLE),
 										rs.getInt(Goal.FIELD_TIME_PLANNED),
@@ -103,7 +103,7 @@ public class Goal {
 			ResultSet rs = Database.query("SELECT * FROM " + Goal.TABLE_NAME + " WHERE "
 											+ Goal.FIELD_USER_NAME + " = \"" + user_name + "\";");
 			Vector<Goal> results = new Vector<Goal>();
-			while (rs.next()) {
+			while ((rs != null) && rs.next()) {
 				Goal newone = new Goal(rs.getInt(Goal.FIELD_ID),
 										rs.getString(Goal.FIELD_TITLE),
 										rs.getInt(Goal.FIELD_TIME_PLANNED),
@@ -118,7 +118,7 @@ public class Goal {
 													+ "WHERE g." + Goal.FIELD_ID + " = " + newone.getId() + " "
 													+ "AND g." + Goal.FIELD_USER_NAME + " = \"" + user_name + "\""
 													+ "GROUP BY t." + Task.FIELD_ID + ",g." + Goal.FIELD_ID + ") help;");
-				if (newrs.next()) {
+				if ((newrs != null) && newrs.next()) {
 					newone.setCompletion(newrs.getFloat("completion"));
 					newone.setTotalTimeSpent(newrs.getInt("total_time_spent"));
 				}
@@ -140,7 +140,7 @@ public class Goal {
 			ResultSet rs = Database.query("SELECT * FROM " + Goal.TABLE_NAME + " WHERE "
 											+ Goal.FIELD_USER_NAME + " = \"" + user_name + "\";");
 			Vector<Goal> results = new Vector<Goal>();
-			while (rs.next()) {
+			while ((rs != null) && rs.next()) {
 				Goal newone = new Goal(rs.getInt(Goal.FIELD_ID),
 										rs.getString(Goal.FIELD_TITLE),
 										rs.getInt(Goal.FIELD_TIME_PLANNED),
@@ -158,7 +158,7 @@ public class Goal {
 													+ "WHERE g." + Goal.FIELD_ID + " = " + newone.getId() + " "
 													+ "AND g." + Goal.FIELD_USER_NAME + " = \"" + user_name + "\" "
 													+ "GROUP BY t." + Task.FIELD_ID + ",g." + Goal.FIELD_ID + ") help;");
-				if (newrs.next()) {
+				if ((newrs != null) && newrs.next()) {
 					newone.setCompletion(newrs.getFloat("completion"));
 					newone.setTotalTimeSpent(newrs.getInt("total_time_spent"));
 				}
@@ -180,7 +180,7 @@ public class Goal {
 			ResultSet rs = Database.query("SELECT COUNT(*) AS goal_count FROM " + Goal.TABLE_NAME
 											+ " WHERE " + Goal.FIELD_ID + " = " + goal_id + " AND "
 											+ Goal.FIELD_USER_NAME + " = \"" + user_name + "\";");
-			if (rs.next())
+			if ((rs != null) && rs.next())
 				return (rs.getInt("goal_count") > 0);
 			else
 				return false;

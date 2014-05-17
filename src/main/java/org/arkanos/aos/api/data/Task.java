@@ -64,7 +64,7 @@ public class Task {
 												+ Task.FIELD_TARGET + " = " + target + " AND "
 												+ Task.FIELD_INITIAL + " = " + initial + " AND "
 												+ Task.FIELD_GOAL_ID + " = " + goal_id + ";");
-				if (rs.next()) return rs.getInt("created_id");
+				if ((rs != null) && rs.next()) return rs.getInt("created_id");
 			}
 			catch (SQLException e) {
 				// TODO Auto-generated catch block
@@ -78,11 +78,11 @@ public class Task {
 		try {
 			ResultSet rs = Database.query("SELECT * " + " FROM " + Task.TABLE_NAME + " WHERE "
 											+ Task.FIELD_ID + " = " + id + ";");
-			if (rs.next()) return new Task(rs.getInt(Task.FIELD_ID),
-											rs.getInt(Task.FIELD_GOAL_ID),
-											rs.getString(Task.FIELD_NAME),
-											rs.getFloat(Task.FIELD_INITIAL),
-											rs.getFloat(Task.FIELD_TARGET));
+			if ((rs != null) && rs.next()) return new Task(rs.getInt(Task.FIELD_ID),
+															rs.getInt(Task.FIELD_GOAL_ID),
+															rs.getString(Task.FIELD_NAME),
+															rs.getFloat(Task.FIELD_INITIAL),
+															rs.getFloat(Task.FIELD_TARGET));
 		}
 		catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -107,7 +107,7 @@ public class Task {
 											+ " AND t." + Task.FIELD_ID + " IS NOT NULL "
 											+ "GROUP BY t." + Task.FIELD_ID + ",g." + Goal.FIELD_ID + ";");
 			Vector<Task> results = new Vector<Task>();
-			while (rs.next()) {
+			while ((rs != null) && rs.next()) {
 				Task newone = new Task(rs.getInt(Task.FIELD_ID),
 										rs.getInt(Task.FIELD_GOAL_ID),
 										rs.getString(Task.FIELD_NAME),

@@ -76,7 +76,7 @@ public class Work {
 											+ " AND w." + Work.FIELD_TASK_ID + " IS NOT NULL "
 											+ " AND w." + Work.FIELD_START + " IS NOT NULL;");
 			Vector<Work> results = new Vector<Work>();
-			while (rs.next()) {
+			while ((rs != null) && rs.next()) {
 				Work newone = new Work(rs.getString(Work.FIELD_START),
 										rs.getInt(Work.FIELD_TASK_ID),
 										rs.getFloat(Work.FIELD_RESULT),

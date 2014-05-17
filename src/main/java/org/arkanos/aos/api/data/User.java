@@ -53,7 +53,7 @@ public class User {
 		try {//TODO use double quotes
 			ResultSet rs = Database.query("SELECT " + User.FIELD_HASHED_PASSWORD + " FROM user WHERE " +
 											User.FIELD_USER_NAME + " = '" + user_name + "';");
-			if (rs.next()) {
+			if ((rs != null) && rs.next()) {
 				String pass = rs.getString(User.FIELD_HASHED_PASSWORD);
 				if ((pass != null) && (pass.compareTo(hashed_password) == 0))
 					return true;
@@ -72,11 +72,13 @@ public class User {
 		try {
 			ResultSet rs = Database.query("SELECT COUNT(*) FROM user WHERE " +
 											User.FIELD_USER_NAME + " = '" + user_name + "';");
-			rs.next();
-			if (rs.getInt(1) > 0)
-				return true;
-			else
-				return false;
+			if (rs != null) {
+				rs.next();
+				if (rs.getInt(1) > 0)
+					return true;
+				else
+					return false;
+			}
 		}
 		catch (SQLException e) {
 			// TODO Auto-generated catch block
