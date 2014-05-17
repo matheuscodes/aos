@@ -1,3 +1,22 @@
+/**
+ * Copyright (C) 2014 Matheus Borges Teixeira
+ *
+ * This is a part of Arkanos Organizer Suite (AOS)
+ * AOS is a web application for organizing personal goals.
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
 package org.arkanos.aos.api.servlets;
 
 import java.io.IOException;
@@ -18,15 +37,21 @@ import org.arkanos.aos.api.controllers.Security;
 import org.arkanos.aos.api.data.Goal;
 
 /**
- * Servlet implementation class Statistics
+ * Statistics REST API.
+ * 
+ * @version 1.0
+ * @author Matheus Borges Teixeira
  */
 @WebServlet({ "/statistics", "/statistics/*" })
 public class Statistics extends HttpServlet {
+	/** Possible statistics to be requested **/
 	private enum Metrics {
 		COMPLETIONS, DEDICATIONS, PRODUCTIVITIES
 	}
 	
+	/** Possible time periods to be configured **/
 	private enum Periodicity {
+		/* Currently only monthly is supported **/
 		YEAR, HALF, QUARTERLY, MONTHLY, WEEKLY, DAILY;
 		static public Periodicity checkWhich(String path) {
 			if (path == null) return MONTHLY;
@@ -49,6 +74,7 @@ public class Statistics extends HttpServlet {
 		}
 	}
 	
+	/** Default version number **/
 	private static final long	serialVersionUID	= 1L;
 	
 	/**
@@ -102,6 +128,16 @@ public class Statistics extends HttpServlet {
 		}
 	}
 	
+	/**
+	 * Extracts from a given goal the desired metric.
+	 * Used for generalization and already formats percentages.
+	 * 
+	 * @param g
+	 *            defines the goal.
+	 * @param metric
+	 *            specifies the metric.
+	 * @return the value of the metric ready to be used.
+	 */
 	private float getMetric(Goal g, Metrics metric) {
 		switch (metric) {
 			case COMPLETIONS:
@@ -115,6 +151,19 @@ public class Statistics extends HttpServlet {
 		}
 	}
 	
+	/**
+	 * Calculates and prints basic user metrics.
+	 * The result is a printed JSON in the response.
+	 * 
+	 * @param user_name
+	 *            defines the user.
+	 * @param time
+	 *            specifies the periodicity.
+	 * @param response
+	 *            informs where to write the JSON.
+	 * @throws IOException
+	 *             whenever there are problems operating the response.
+	 */
 	private void printGeneralStatistics(String user_name, Periodicity time, HttpServletResponse response) throws IOException {
 		String output = "{\"success\":true,";
 		Vector<Goal> user_goals = Goal.getUserGoals(user_name);
@@ -216,6 +265,19 @@ public class Statistics extends HttpServlet {
 		response.getWriter().print(output);
 	}
 	
+	/**
+	 * Calculates the focus for a user.
+	 * The result is a printed JSON in the response.
+	 * 
+	 * @param user_name
+	 *            defines the user.
+	 * @param time
+	 *            specifies the periodicity.
+	 * @param response
+	 *            informs where to write the JSON.
+	 * @throws IOException
+	 *             whenever there are problems operating the response.
+	 */
 	private void printGoalFocus(String user_name, Periodicity time, HttpServletResponse response) throws IOException {
 		String output = "{\"success\":true,\"fields\":[\"period\",";
 		Vector<Goal> user_goals = Goal.getUserGoals(user_name);
@@ -273,6 +335,21 @@ public class Statistics extends HttpServlet {
 		response.getWriter().print(output);
 	}
 	
+	/**
+	 * Calculates a selected metric for a user.
+	 * The result is a printed JSON in the response.
+	 * 
+	 * @param user_name
+	 *            defines the user.
+	 * @param time
+	 *            specifies the periodicity.
+	 * @param response
+	 *            informs where to write the JSON.
+	 * @param metric
+	 *            selects one of the available metrics to calculate.
+	 * @throws IOException
+	 *             whenever there are problems operating the response.
+	 */
 	private void printGoalMetric(String user_name, Periodicity time, HttpServletResponse response, Metrics metric) throws IOException {
 		String output = "{\"success\":true,\"fields\":[\"period\",";
 		Vector<Goal> user_goals = Goal.getUserGoals(user_name);
