@@ -1,20 +1,21 @@
 /**
- *  Copyright (C) 2014 Matheus Borges Teixeira
- *  
- *  This file is part of Arkanos Organizer Suite, a tool for personal organization.
+ * Copyright (C) 2014 Matheus Borges Teixeira
  *
- *  Arkanos Organizer Suite is free software: you can redistribute it and/or 
- *  modify it under the terms of the GNU Affero General Public License as
- *  published by the Free Software Foundation, either version 3 of the
- *  License, or (at your option) any later version.
+ * This is a part of Arkanos Organizer Suite (AOS)
+ * AOS is a web application for organizing personal goals.
  *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU Affero General Public License for more details.
- *
- *  You should have received a copy of the GNU Affero General Public License
- *  along with Arkanos Organizer Suite.  If not, see <http://www.gnu.org/licenses/>
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 package org.arkanos.aos.api.data;
 
@@ -31,22 +32,41 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
 /**
- * @author arkanos
+ * Goal data access and operation.
  * 
+ * @version 1.0
+ * @author Matheus Borges Teixeira
  */
 public class Goal {
+	/** SQL table name **/
 	static public final String	TABLE_NAME				= "goal";
+	/** SQL/JSON field for the goal ID **/
 	static public final String	FIELD_ID				= "id";
+	/** SQL/JSON field for the goal title **/
 	static public final String	FIELD_TITLE				= "title";
+	/** SQL/JSON field for the time planned **/
 	static public final String	FIELD_TIME_PLANNED		= "time_planned";
+	/** SQL/JSON field for the description **/
 	static public final String	FIELD_DESCRIPTION		= "description";
+	/** SQL/JSON field for the username **/
 	static public final String	FIELD_USER_NAME			= "user_name";
+	/** SQL/JSON field for the calculated completion **/
 	static public final String	EXTRA_COMPLETION		= "completion";
+	/** SQL/JSON field for the calculated dedication **/
 	static public final String	EXTRA_DEDICATION		= "dedication";
+	/** SQL/JSON field for the calculated time spent **/
 	static public final String	EXTRA_TOTAL_TIME_SPENT	= "total_time_spent";
 	
+	/**
+	 * Creates a new Goal in the database.
+	 * 
+	 * @param title
+	 * @param time_planned
+	 * @param description
+	 * @param user_name
+	 * @return id of the created goal or -1 if creation failed.
+	 */
 	static public int createGoal(String title, int time_planned, String description, String user_name) {
-		// TODO Auto-generated constructor stub
 		boolean insertion = Database.execute("INSERT INTO " + Goal.TABLE_NAME + " ("
 												+ Goal.FIELD_TITLE + ","
 												+ Goal.FIELD_TIME_PLANNED + ","
@@ -74,8 +94,13 @@ public class Goal {
 	}
 	
 	/**
-	 * @param id2
-	 * @return
+	 * Fetches a given goal from the database and calculates extra information.
+	 * 
+	 * @param user_name
+	 *            defines the owner of the goal.
+	 * @param id
+	 *            specifies the goal to be fetched.
+	 * @return the goal instance or null if none was found.
 	 */
 	public static Goal getGoal(String user_name, int id) {
 		try {
@@ -98,6 +123,13 @@ public class Goal {
 		return null;
 	}
 	
+	/**
+	 * Fetches all goals from a user.
+	 * 
+	 * @param user_name
+	 *            defines the user.
+	 * @return all goals or null, in case there are connection problems.
+	 */
 	static public Vector<Goal> getUserGoals(String user_name) {
 		try {
 			ResultSet rs = Database.query("SELECT * FROM " + Goal.TABLE_NAME + " WHERE "
@@ -135,6 +167,18 @@ public class Goal {
 		return null;
 	}
 	
+	/**
+	 * Fetches all goals but calculates extra data based on a time range.
+	 * Both dates provided should be in format YYYY-MM-DD HH:mm:ss.0
+	 * 
+	 * @param user_name
+	 *            defines the user.
+	 * @param from
+	 *            specifies the starting of the period.
+	 * @param to
+	 *            specifies the end of the period.
+	 * @return
+	 */
 	static public Vector<Goal> getUserGoalsSnapshot(String user_name, String from, String to) {
 		try {
 			ResultSet rs = Database.query("SELECT * FROM " + Goal.TABLE_NAME + " WHERE "
@@ -146,7 +190,7 @@ public class Goal {
 										rs.getInt(Goal.FIELD_TIME_PLANNED),
 										rs.getString(Goal.FIELD_DESCRIPTION),
 										user_name);
-				//TODO optimize?
+				//TODO might be possible to optimize.
 				ResultSet newrs = Database.query("SELECT AVG(help.progress) AS completion, SUM(help.spent) AS total_time_spent FROM ("
 													+ "SELECT IF(SUM((w." + Work.FIELD_RESULT + ")/(t." + Task.FIELD_TARGET + "-t." + Task.FIELD_INITIAL + ")) IS NULL, 0, SUM((w." + Work.FIELD_RESULT + ")/(t." + Task.FIELD_TARGET + "-t." + Task.FIELD_INITIAL + "))) AS progress, "
 													+ "SUM(" + Work.FIELD_TIME_SPENT + ") AS spent FROM goal g "
@@ -175,6 +219,15 @@ public class Goal {
 		return null;
 	}
 	
+	/**
+	 * Checks if a goal belongs to a user.
+	 * 
+	 * @param user_name
+	 *            defines the user.
+	 * @param goal_id
+	 *            specifies the goal to be checked.
+	 * @return whether the goal belongs to the user.
+	 */
 	static public boolean isUserGoal(String user_name, int goal_id) {
 		try {
 			ResultSet rs = Database.query("SELECT COUNT(*) AS goal_count FROM " + Goal.TABLE_NAME
@@ -192,10 +245,19 @@ public class Goal {
 		return false;
 	}
 	
+	/**
+	 * Creates a goal object based on a JSON file.
+	 * 
+	 * @param from
+	 *            defines the source of the JSON.
+	 * @param user_name
+	 *            defines the user to own the goal.
+	 * @return the created goal instance.
+	 */
 	static public Goal parseGoal(Reader from, String user_name) {
 		JSONParser jp = new JSONParser();
 		try {
-			//TODO send this shitty simple-JSON to fuck
+			//TODO rewrite to a better JSON library.
 			JSONObject jo = (JSONObject) jp.parse(from);
 			String id = "" + jo.get(Goal.FIELD_ID);
 			String title = "" + jo.get(Goal.FIELD_TITLE);
@@ -218,18 +280,32 @@ public class Goal {
 		return null;
 	}
 	
+	/** ID of the Goal instance **/
 	private final int		id;
-	
+	/** Planned time of the Goal instance **/
 	private int				time_planned;
-	
+	/** Title of the Goal instance **/
 	private String			title;
+	/** Description of the Goal instance **/
 	private String			description;
+	/** Owner of the Goal instance **/
 	private final String	user_name;
 	
 	/* Volatile data */
+	/** Calculated completion of the Goal instance **/
 	private float			completion			= 0;
+	/** Calculated total time spent of the Goal instance **/
 	private int				total_time_spent	= 0;
 	
+	/**
+	 * Constructor of the Goal instance.
+	 * 
+	 * @param id
+	 * @param title
+	 * @param time_planned
+	 * @param description
+	 * @param user_name
+	 */
 	public Goal(int id, String title, int time_planned, String description, String user_name) {
 		this.id = id;
 		this.user_name = user_name;
@@ -248,22 +324,21 @@ public class Goal {
 		}
 	}
 	
+	/**
+	 * Removes the instance from the database.
+	 * 
+	 * @return whether the instance could be removed.
+	 */
 	public boolean delete() {
 		return Database.execute("DELETE FROM " + Goal.TABLE_NAME
 								+ " WHERE " + Goal.FIELD_ID + " = " + this.id
 								+ " AND " + Goal.FIELD_USER_NAME + " = \"" + this.user_name + "\";");
 	}
 	
-	/**
-	 * @return
-	 */
 	public float getCompletion() {
 		return this.completion;
 	}
 	
-	/**
-	 * @return
-	 */
 	public float getDedication() {
 		if (this.time_planned > 0)
 			return this.total_time_spent / (float) this.time_planned;
@@ -275,16 +350,10 @@ public class Goal {
 		return this.id;
 	}
 	
-	/**
-	 * @return
-	 */
 	public int getID() {
 		return this.id;
 	}
 	
-	/**
-	 * @return
-	 */
 	public float getProductivity() {
 		if (this.getDedication() > 0)
 			return this.getCompletion() / this.getDedication();
@@ -292,27 +361,24 @@ public class Goal {
 			return 0;
 	}
 	
-	/**
-	 * @return
-	 */
 	public int getTimePlanned() {
 		return this.time_planned;
 	}
 	
-	/**
-	 * @return
-	 */
 	public String getTitle() {
 		return this.title;
 	}
 	
-	/**
-	 * @return
-	 */
 	public int getTotalTimeSpent() {
 		return this.total_time_spent;
 	}
 	
+	/**
+	 * Replaces content of the instance.
+	 * 
+	 * @param to
+	 *            defines the original instance.
+	 */
 	public void replaceContent(Goal to) {
 		/* NEVER
 		 * this.id = to.id;
@@ -352,6 +418,11 @@ public class Goal {
 		return result;
 	}
 	
+	/**
+	 * Updates the instance in the database.
+	 * 
+	 * @return whether the instance could be updated
+	 */
 	public boolean update() {
 		return Database.execute("UPDATE " + Goal.TABLE_NAME + " SET "
 								+ Goal.FIELD_TITLE + " = \"" + this.title + "\","

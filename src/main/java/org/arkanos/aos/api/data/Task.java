@@ -1,20 +1,21 @@
 /**
- *  Copyright (C) 2014 Matheus Borges Teixeira
- *  
- *  This file is part of Arkanos Organizer Suite, a tool for personal organization.
+ * Copyright (C) 2014 Matheus Borges Teixeira
  *
- *  Arkanos Organizer Suite is free software: you can redistribute it and/or 
- *  modify it under the terms of the GNU Affero General Public License as
- *  published by the Free Software Foundation, either version 3 of the
- *  License, or (at your option) any later version.
+ * This is a part of Arkanos Organizer Suite (AOS)
+ * AOS is a web application for organizing personal goals.
  *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU Affero General Public License for more details.
- *
- *  You should have received a copy of the GNU Affero General Public License
- *  along with Arkanos Organizer Suite.  If not, see <http://www.gnu.org/licenses/>
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 package org.arkanos.aos.api.data;
 
@@ -31,23 +32,44 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
 /**
- * @author arkanos
+ * Task data access and operation.
  * 
+ * @version 1.0
+ * @author Matheus Borges Teixeira
  */
 public class Task {
+	/** SQL table name **/
 	static public final String	TABLE_NAME				= "task";
+	/** SQL/JSON field for the ID **/
 	static public final String	FIELD_ID				= "id";
+	/** SQL/JSON field for the task's goal id **/
 	static public final String	FIELD_GOAL_ID			= "goal_id";
+	/** SQL/JSON field for the target value of the task **/
 	static public final String	FIELD_TARGET			= "target";
+	/** SQL/JSON field for the initial value of the task **/
 	static public final String	FIELD_INITIAL			= "initial";
+	/** SQL/JSON field for the task name **/
 	static public final String	FIELD_NAME				= "name";
+	/** SQL/JSON field for the task's goal name **/
 	static public final String	EXTRA_GOAL_TITLE		= "goal_title";
+	/** SQL/JSON field for the calculated completion **/
 	static public final String	EXTRA_COMPLETION		= "completion";
+	/** SQL/JSON field for the calculated current value of the task **/
 	static public final String	EXTRA_CURRENT			= "current";
+	/** SQL/JSON field for the calculated total time spent in the task **/
 	static public final String	EXTRA_TOTAL_TIME_SPENT	= "total_time_spent";
 	
+	/**
+	 * Creates a new Task in the database.
+	 * 
+	 * @param goal_id
+	 *            defines which goal task belongs to.
+	 * @param name
+	 * @param initial
+	 * @param target
+	 * @return the id of the created task or -1 if creation failed.
+	 */
 	static public int createTask(int goal_id, String name, float initial, float target) {
-		// TODO Auto-generated constructor stub
 		boolean insertion = Database.execute("INSERT INTO " + Task.TABLE_NAME + " ("
 												+ Task.FIELD_NAME + ","
 												+ Task.FIELD_TARGET + ","
@@ -74,6 +96,13 @@ public class Task {
 		return -1;
 	}
 	
+	/**
+	 * Fetches a given task from the database and calculates extra information.
+	 * 
+	 * @param id
+	 *            specifies the task to be fetched.
+	 * @return the task instance or null if none was found.
+	 */
 	static public Task getTask(int id) {
 		try {
 			ResultSet rs = Database.query("SELECT * " + " FROM " + Task.TABLE_NAME + " WHERE "
@@ -91,6 +120,13 @@ public class Task {
 		return null;
 	}
 	
+	/**
+	 * Fetches all tasks from a user.
+	 * 
+	 * @param user_name
+	 *            defines the user.
+	 * @return all tasks or null, in case there are connection problems.
+	 */
 	static public Vector<Task> getUserTasks(String user_name) {
 		try {
 			ResultSet rs = Database.query("SELECT t." + Task.FIELD_ID + " AS " + Task.FIELD_ID + ","
@@ -132,10 +168,17 @@ public class Task {
 		return null;
 	}
 	
+	/**
+	 * Creates a task object based on a JSON file.
+	 * 
+	 * @param from
+	 *            defines the source of the JSON.
+	 * @return the created task instance.
+	 */
 	static public Task parseTask(Reader from) {
 		JSONParser jp = new JSONParser();
 		try {
-			//TODO send this shitty simple-JSON to fuck
+			//TODO rewrite to a better JSON library.
 			JSONObject jo = (JSONObject) jp.parse(from);
 			String id = "" + jo.get(Task.FIELD_ID);
 			String goal_id = "" + jo.get(Task.FIELD_GOAL_ID);
@@ -164,26 +207,35 @@ public class Task {
 		return null;
 	}
 	
+	/** ID of the Task instance **/
 	private final int	id;
+	/** Goal ID of the Task instance **/
 	private final int	goal_id;
+	/** Name of the Task instance **/
 	private String		name;
+	/** Initial value of the Task instance **/
 	private float		initial;
+	/** Target value of the Task instance **/
 	private float		target;
 	
 	/* Dependent data */
+	/** Calculated completion of the Task instance **/
 	private float		completion;
+	/** Current value of the Task instance **/
 	private float		current;
-	
+	/** Goal title of the Task instance **/
 	private String		goal_title;
-	
+	/** Total time spent of the Task instance **/
 	private int			total_time_spent;
 	
 	/**
-	 * @param int1
-	 * @param int2
-	 * @param string
-	 * @param string2
-	 * @param int3
+	 * Constructor of the Task instance.
+	 * 
+	 * @param id
+	 * @param goal_id
+	 * @param name
+	 * @param initial
+	 * @param target
 	 */
 	public Task(int id, int goal_id, String name, float initial, float target) {
 		// TODO Auto-generated constructor stub
@@ -194,18 +246,26 @@ public class Task {
 		this.target = target;
 	}
 	
+	/**
+	 * Removes the instance from the database.
+	 * 
+	 * @return whether the instance could be removed.
+	 */
 	public boolean delete() {
 		return Database.execute("DELETE FROM " + Task.TABLE_NAME
 								+ " WHERE " + Task.FIELD_ID + " = " + this.id + ";");
 	}
 	
-	/**
-	 * @return
-	 */
 	public int getGoalID() {
 		return this.goal_id;
 	}
 	
+	/**
+	 * Replaces content of the instance.
+	 * 
+	 * @param to
+	 *            defines the original instance.
+	 */
 	public void replaceContent(Task to) {
 		/* NEVER
 		 * this.id = to.id;
@@ -219,16 +279,10 @@ public class Task {
 		this.total_time_spent = to.total_time_spent;
 	}
 	
-	/**
-	 * @param float1
-	 */
 	private void setCompletion(float c) {
 		this.completion = c;
 	}
 	
-	/**
-	 * @param float1
-	 */
 	private void setCurrent(float c) {
 		if ((c == 0) && (this.completion == 0)) {
 			this.current = this.initial;
@@ -238,16 +292,10 @@ public class Task {
 		}
 	}
 	
-	/**
-	 * @param string
-	 */
 	private void setGoalTitle(String gt) {
 		this.goal_title = gt;
 	}
 	
-	/**
-	 * @param i
-	 */
 	public void setInitial(float i) {
 		this.initial = i;
 	}
@@ -260,9 +308,6 @@ public class Task {
 		this.target = t;
 	}
 	
-	/**
-	 * @param int1
-	 */
 	private void setTotalTimeSpent(int tts) {
 		this.total_time_spent = tts;
 	}
@@ -285,6 +330,11 @@ public class Task {
 		return result;
 	}
 	
+	/**
+	 * Updates the instance in the database.
+	 * 
+	 * @return whether the instance could be updated
+	 */
 	public boolean update() {
 		return Database.execute("UPDATE " + Task.TABLE_NAME + " SET "
 								+ Task.FIELD_NAME + " = \"" + this.name + "\","

@@ -1,20 +1,21 @@
 /**
- *  Copyright (C) 2014 Matheus Borges Teixeira
- *  
- *  This file is part of Arkanos Organizer Suite, a tool for personal organization.
+ * Copyright (C) 2014 Matheus Borges Teixeira
  *
- *  Arkanos Organizer Suite is free software: you can redistribute it and/or 
- *  modify it under the terms of the GNU Affero General Public License as
- *  published by the Free Software Foundation, either version 3 of the
- *  License, or (at your option) any later version.
+ * This is a part of Arkanos Organizer Suite (AOS)
+ * AOS is a web application for organizing personal goals.
  *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU Affero General Public License for more details.
- *
- *  You should have received a copy of the GNU Affero General Public License
- *  along with Arkanos Organizer Suite.  If not, see <http://www.gnu.org/licenses/>
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 package org.arkanos.aos.api.data;
 
@@ -29,24 +30,43 @@ import org.arkanos.aos.api.controllers.Database;
 import org.json.simple.JSONObject;
 
 /**
- * @author arkanos
+ * Work entry data access and operation.
  * 
+ * @version 1.0
+ * @author Matheus Borges Teixeira
  */
 public class Work {
+	/** Specific date format used in SQL and JSON **/
 	public static final String	DATEFORMAT			= "yyyy-MM-dd HH:mm:ss.0";
-	
+	/** SQL table name **/
 	public static final String	TABLE_NAME			= "work";
+	/** SQL/JSON field for the work's task ID **/
 	public static final String	FIELD_TASK_ID		= "task_id";
+	/** SQL/JSON field for the contribution of the work **/
 	public static final String	FIELD_RESULT		= "result";
+	/** SQL/JSON field for the time spent **/
 	public static final String	FIELD_TIME_SPENT	= "time_spent";
+	/** SQL/JSON field for a comment **/
 	public static final String	FIELD_COMMENT		= "comment";
+	/** SQL/JSON field for the time when work started **/
 	public static final String	FIELD_START			= "start";
 	
+	/** SQL/JSON field for the work's task name **/
 	public static final String	EXTRA_TASK_NAME		= "task_name";
+	/** SQL/JSON field for the work's task's goal title **/
 	public static final String	EXTRA_GOAL_TITLE	= "goal_title";
 	
+	/**
+	 * Creates a new work entry in the database.
+	 * 
+	 * @param start
+	 * @param task_id
+	 * @param result
+	 * @param comment
+	 * @param time_spent
+	 * @return whether the work entry was created or not.
+	 */
 	static public boolean createWork(String start, int task_id, float result, String comment, int time_spent) {
-		// TODO Auto-generated constructor stub
 		return Database.execute("INSERT INTO " + Work.TABLE_NAME + " ("
 								+ Work.FIELD_TASK_ID + ","
 								+ Work.FIELD_RESULT + ","
@@ -58,12 +78,26 @@ public class Work {
 								+ time_spent + ",\"" + comment + "\",\"" + start + "\");");
 	}
 	
+	/**
+	 * Removes a specific work entry identified by its task and time.
+	 * 
+	 * @param task_id
+	 * @param start
+	 * @return whether the work entry could be removed.
+	 */
 	static public boolean deleteWork(int task_id, String start) {
 		return Database.execute("DELETE FROM " + Work.TABLE_NAME
 								+ " WHERE " + Work.FIELD_TASK_ID + " = " + task_id
 								+ " AND " + Work.FIELD_START + " = \"" + start + "\";");
 	}
 	
+	/**
+	 * Fetches all work entries from a user.
+	 * 
+	 * @param user_name
+	 *            defines the user.
+	 * @return all work entries or null, in case there are connection problems.
+	 */
 	static public Vector<Work> getUserWorklog(String user_name) {
 		try {
 			ResultSet rs = Database.query("SELECT " + Work.FIELD_TASK_ID + "," + Work.FIELD_RESULT + ","
@@ -98,24 +132,29 @@ public class Work {
 		return null;
 	}
 	
+	/** Task's goal title of the work instance **/
 	private String			goal_title;
-	
+	/** Task's name of the work instance **/
 	private String			task_name;
-	
+	/** Start time of the work instance **/
 	private final String	start;
-	
+	/** Task ID of the work instance **/
 	private final int		task_id;
+	/** Contribution of the work instance **/
 	private final float		result;
+	/** Comment of the work instance **/
 	private final String	comment;
-	
+	/** Time spent of the work instance **/
 	private final int		time_spent;
 	
 	/**
-	 * @param string
-	 * @param int1
-	 * @param float1
-	 * @param float2
-	 * @param int2
+	 * Constructor of the Work entry instance.
+	 * 
+	 * @param start
+	 * @param task_id
+	 * @param result
+	 * @param comment
+	 * @param time_spent
 	 */
 	public Work(String start, int task_id, float result, String comment, int time_spent) {
 		this.start = start;
@@ -125,9 +164,6 @@ public class Work {
 		this.time_spent = time_spent;
 	}
 	
-	/**
-	 * @param string
-	 */
 	private void setGoalTitle(String gt) {
 		this.goal_title = gt;
 	}
