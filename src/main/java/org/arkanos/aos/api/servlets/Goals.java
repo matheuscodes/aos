@@ -144,6 +144,8 @@ public class Goals extends HttpServlet {
 		
 		String title = Database.sanitizeString(request.getParameter(Goal.FIELD_TITLE));
 		int time_planned = Integer.parseInt(request.getParameter(Goal.FIELD_TIME_PLANNED));
+		/* In DB time_planned is stored as minutes */
+		time_planned *= 60;
 		String description = Database.sanitizeString(request.getParameter(Goal.FIELD_DESCRIPTION));
 		
 		int id = Goal.createGoal(title, time_planned, description, token.getUsername());
