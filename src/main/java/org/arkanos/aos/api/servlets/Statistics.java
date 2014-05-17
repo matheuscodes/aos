@@ -167,17 +167,32 @@ public class Statistics extends HttpServlet {
 		output += "\"productivity\":{";
 		output += "\"max\":" + df.format(max_productivity) + ",";
 		output += "\"min\":" + df.format(min_productivity) + ",";
-		output += "\"avg\":" + df.format(sum_productivity / user_goals.size()) + "},";
+		if (user_goals.size() > 0) {
+			output += "\"avg\":" + df.format(sum_productivity / user_goals.size()) + "},";
+		}
+		else {
+			output += "\"avg\":\"NaN\"},";
+		}
 		
 		output += "\"dedication\":{";
 		output += "\"max\":" + df.format(100 * max_dedication) + ",";
 		output += "\"min\":" + df.format(100 * min_dedication) + ",";
-		output += "\"avg\":" + df.format((100 * sum_dedication) / user_goals.size()) + "},";
+		if (user_goals.size() > 0) {
+			output += "\"avg\":" + df.format((100 * sum_dedication) / user_goals.size()) + "},";
+		}
+		else {
+			output += "\"avg\":\"NaN\"},";
+		}
 		
 		output += "\"completion\":{";
 		output += "\"max\":" + df.format(100 * max_completion) + ",";
 		output += "\"min\":" + df.format(100 * min_completion) + ",";
-		output += "\"avg\":" + df.format((100 * sum_completion) / user_goals.size()) + "},";
+		if (user_goals.size() > 0) {
+			output += "\"avg\":" + df.format((100 * sum_completion) / user_goals.size()) + "},";
+		}
+		else {
+			output += "\"avg\":\"NaN\"},";
+		}
 		
 		output += "\"planned_time\":" + df.format(total_time / 60f) + ",";
 		output += "\"used_time\":" + df.format(spent_time / 60f) + ",";
