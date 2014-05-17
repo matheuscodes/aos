@@ -258,6 +258,9 @@ public class Statistics extends HttpServlet {
 						output = output.substring(0, output.lastIndexOf(","));
 						output += "},";
 					}
+					else {
+						output += "{\"period\":\"" + active_month + "\"},";
+					}
 				}
 				output = output.substring(0, output.lastIndexOf(","));
 				output += "]}";
