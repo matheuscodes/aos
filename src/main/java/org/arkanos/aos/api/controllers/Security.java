@@ -125,8 +125,11 @@ public class Security {
 	}
 	
 	/**
+	 * Creates a token for a user.
+	 * 
 	 * @param user_name
-	 * @return
+	 *            of the user to be granted the token.
+	 * @return a key of the token created for the user.
 	 */
 	static public String createToken(String user_name) {
 		//TODO find a way of going around this.
@@ -139,6 +142,11 @@ public class Security {
 		return info.getToken();
 	}
 	
+	/**
+	 * Creates or returns the token cache.
+	 * 
+	 * @return the token cache.
+	 */
 	static private HashMap<String, TokenInfo> getTokens() {
 		if (Security.all_tokens == null) {
 			Security.all_tokens = new HashMap<String, TokenInfo>();
@@ -146,6 +154,14 @@ public class Security {
 		return Security.all_tokens;
 	}
 	
+	/**
+	 * Forces expiration of the authentication in a request.
+	 * 
+	 * @param request
+	 *            with the cookie to be invalidated.
+	 * @throws IOException
+	 *             whenever problems occur reading cookies.
+	 */
 	static public void invalidateToken(HttpServletRequest request)
 					throws IOException {
 		TokenInfo token_info = null;
