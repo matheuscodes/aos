@@ -4,9 +4,9 @@
 	<groupId>org.arkanos</groupId>
 	<artifactId>aos</artifactId>
 	<packaging>war</packaging>
-	<version>0.0.1</version>
-	<name>aos Maven Webapp</name>
-	<url>http://maven.apache.org</url>
+	<version>0.2.1</version>
+	<name>AOS - Arkanos Organizer Suite</name>
+	<url>https://aosalpha.cloudcontrolled.com</url>
 	<properties>
 		<jettyVersion>9.1.4.v20140401</jettyVersion>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
