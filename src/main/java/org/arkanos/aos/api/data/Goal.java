@@ -147,7 +147,7 @@ public class Goal {
 													+ "SUM(" + Work.FIELD_TIME_SPENT + ") AS spent FROM goal g "
 													+ "LEFT JOIN " + Task.TABLE_NAME + " t on t." + Task.FIELD_GOAL_ID + " = g." + Goal.FIELD_ID + " "
 													+ "LEFT JOIN " + Work.TABLE_NAME + " w ON t." + Task.FIELD_ID + " = w." + Work.FIELD_TASK_ID + " "
-													+ "WHERE g." + Goal.FIELD_ID + " = " + newone.getId() + " "
+													+ "WHERE g." + Goal.FIELD_ID + " = " + newone.getID() + " "
 													+ "AND g." + Goal.FIELD_USER_NAME + " = \"" + user_name + "\""
 													+ "GROUP BY t." + Task.FIELD_ID + ",g." + Goal.FIELD_ID + ") help;");
 				if ((newrs != null) && newrs.next()) {
@@ -199,7 +199,7 @@ public class Goal {
 													+ Work.FIELD_START + " >= \"" + from + "\" "
 													+ "AND " + Work.FIELD_START + " <= \"" + to + "\") "
 													+ " w ON t." + Task.FIELD_ID + " = w." + Work.FIELD_TASK_ID + " "
-													+ "WHERE g." + Goal.FIELD_ID + " = " + newone.getId() + " "
+													+ "WHERE g." + Goal.FIELD_ID + " = " + newone.getID() + " "
 													+ "AND g." + Goal.FIELD_USER_NAME + " = \"" + user_name + "\" "
 													+ "GROUP BY t." + Task.FIELD_ID + ",g." + Goal.FIELD_ID + ") help;");
 				if ((newrs != null) && newrs.next()) {
@@ -344,10 +344,6 @@ public class Goal {
 			return this.total_time_spent / (float) this.time_planned;
 		else
 			return 1;
-	}
-	
-	private int getId() {
-		return this.id;
 	}
 	
 	public int getID() {
