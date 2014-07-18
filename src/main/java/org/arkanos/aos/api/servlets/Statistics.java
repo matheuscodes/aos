@@ -187,7 +187,7 @@ public class Statistics extends HttpServlet {
 			total_time += g.getTimePlanned();
 			spent_time += g.getTotalTimeSpent();
 			
-			sum_completion += g.getCompletion();
+			sum_completion += g.getCompletion() * g.getTimePlanned();
 			if (min_completion > g.getCompletion()) {
 				min_completion = g.getCompletion();
 			}
@@ -195,7 +195,7 @@ public class Statistics extends HttpServlet {
 				max_completion = g.getCompletion();
 			}
 			
-			sum_dedication += g.getDedication();
+			sum_dedication += g.getDedication() * g.getTimePlanned();
 			if (min_dedication > g.getDedication()) {
 				min_dedication = g.getDedication();
 			}
@@ -203,7 +203,7 @@ public class Statistics extends HttpServlet {
 				max_dedication = g.getDedication();
 			}
 			
-			sum_productivity += g.getProductivity();
+			sum_productivity += g.getProductivity() * g.getTimePlanned();
 			if (min_productivity > g.getProductivity()) {
 				min_productivity = g.getProductivity();
 			}
@@ -217,7 +217,7 @@ public class Statistics extends HttpServlet {
 		output += "\"max\":" + df.format(max_productivity) + ",";
 		output += "\"min\":" + df.format(min_productivity) + ",";
 		if (user_goals.size() > 0) {
-			output += "\"avg\":" + df.format(sum_productivity / user_goals.size()) + "},";
+			output += "\"avg\":" + df.format(sum_productivity / total_time) + "},";
 		}
 		else {
 			output += "\"avg\":\"NaN\"},";
@@ -227,7 +227,7 @@ public class Statistics extends HttpServlet {
 		output += "\"max\":" + df.format(100 * max_dedication) + ",";
 		output += "\"min\":" + df.format(100 * min_dedication) + ",";
 		if (user_goals.size() > 0) {
-			output += "\"avg\":" + df.format((100 * sum_dedication) / user_goals.size()) + "},";
+			output += "\"avg\":" + df.format((100 * sum_dedication) / total_time) + "},";
 		}
 		else {
 			output += "\"avg\":\"NaN\"},";
@@ -237,7 +237,7 @@ public class Statistics extends HttpServlet {
 		output += "\"max\":" + df.format(100 * max_completion) + ",";
 		output += "\"min\":" + df.format(100 * min_completion) + ",";
 		if (user_goals.size() > 0) {
-			output += "\"avg\":" + df.format((100 * sum_completion) / user_goals.size()) + "},";
+			output += "\"avg\":" + df.format((100 * sum_completion) / total_time) + "},";
 		}
 		else {
 			output += "\"avg\":\"NaN\"},";
