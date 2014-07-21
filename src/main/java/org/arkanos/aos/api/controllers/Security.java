@@ -124,6 +124,92 @@ public class Security {
 			return null;
 	}
 	
+	//TODO: doc.
+	static private byte charToHexa(char c) {
+		switch (c) {
+			case 'f':
+				return 15;
+			case 'e':
+				return 14;
+			case 'd':
+				return 13;
+			case 'c':
+				return 12;
+			case 'b':
+				return 11;
+			case 'a':
+				return 10;
+			case '9':
+				return 9;
+			case '8':
+				return 8;
+			case '7':
+				return 7;
+			case '6':
+				return 6;
+			case '5':
+				return 5;
+			case '4':
+				return 4;
+			case '3':
+				return 3;
+			case '2':
+				return 2;
+			case '1':
+				return 1;
+			case '0':
+			default:
+				return 0;
+		}
+	}
+	
+	//TODO: doc.
+	static public boolean checkResetKey(String secret_key, String password, String reset_key) {
+		int i = 0;
+		if ((secret_key == null) || (secret_key.length() != reset_key.length())) return false;
+		for (char c : secret_key.toCharArray()) {
+			byte one = Security.charToHexa(c);
+			byte two = Security.charToHexa(password.charAt(i));
+			byte three = Security.charToHexa(reset_key.charAt(i));
+			if ((one & two) != (one & three)) return false;
+			++i;
+		}
+		return true;
+	}
+	
+	//TODO: doc.
+	static private String cleanKey(String key, String mask) {
+		String result = "";
+		int i = 0;
+		for (char c : mask.toCharArray()) {
+			if (i >= key.length()) {
+				break;
+			}
+			byte one = Security.charToHexa(key.charAt(i));
+			byte two = Security.charToHexa(c);
+			byte three = (byte) (one & (~two));
+			result += Security.hexaToChar(three);
+			++i;
+		}
+		return result;
+	}
+	
+	//TODO: doc.
+	static public String createResetKey(String secret_key, String password) {
+		String key = Security.createSecretKey(password.length());
+		return Security.insertSecret(Security.cleanKey(key, secret_key), password, secret_key);
+	}
+	
+	//TODO: doc.
+	static public String createSecretKey(int size) {
+		String key = "";
+		for (int i = 0; i < size; i++) {
+			double d = Math.random() * 15.0;
+			key += Security.hexaToChar((byte) d);
+		}
+		return key;
+	}
+	
 	/**
 	 * Creates a token for a user.
 	 * 
@@ -154,6 +240,41 @@ public class Security {
 		return Security.all_tokens;
 	}
 	
+	//TODO: doc.
+	static private String hexaToChar(byte b) {
+		switch (b) {
+			case 10:
+				return "a";
+			case 11:
+				return "b";
+			case 12:
+				return "c";
+			case 13:
+				return "d";
+			case 14:
+				return "e";
+			case 15:
+				return "f";
+			default:
+				return b + "";
+		}
+	}
+	
+	//TODO: doc.
+	private static String insertSecret(String cleanKey, String password, String mask) {
+		String result = "";
+		int i = 0;
+		for (char c : mask.toCharArray()) {
+			byte one = Security.charToHexa(cleanKey.charAt(i));
+			byte two = Security.charToHexa(c);
+			byte three = Security.charToHexa(password.charAt(i));
+			byte four = (byte) (one | (two & three));
+			result += Security.hexaToChar(four);
+			++i;
+		}
+		return result;
+	}
+	
 	/**
 	 * Forces expiration of the authentication in a request.
 	 * 
@@ -173,6 +294,5 @@ public class Security {
 				}
 			}
 		}
-		
 	}
 }

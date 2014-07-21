@@ -23,6 +23,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import org.arkanos.aos.api.controllers.Database;
+import org.arkanos.aos.api.controllers.Security;
 
 /**
  * User data access and operation.
@@ -31,17 +32,20 @@ import org.arkanos.aos.api.controllers.Database;
  * @author Matheus Borges Teixeira
  */
 public class User {
-	
+	/** SQL table name **/
+	static public final String	TABLE_NAME				= "user";
 	/** SQL field for the username **/
 	static final private String	FIELD_USER_NAME			= "user_name";
 	/** SQL field for the first name **/
-	static final private String	FIELD_FIRST_NAME		= "first_name";
+	static final public String	FIELD_FIRST_NAME		= "first_name";
 	/** SQL field for the last name **/
 	static final private String	FIELD_LAST_NAME			= "last_name";
 	/** SQL field for the email **/
 	static final private String	FIELD_EMAIL				= "email";
 	/** SQL field for the password **/
-	static final private String	FIELD_HASHED_PASSWORD	= "hashed_password";
+	static final public String	FIELD_HASHED_PASSWORD	= "hashed_password";
+	/** SQL field for the secret key **/
+	static final public String	FIELD_SECRET_KEY		= "secret_key";
 	
 	/**
 	 * Creates a new user in the database.
@@ -54,7 +58,7 @@ public class User {
 	 * @return whether the user was created or not.
 	 */
 	static public boolean create(String user_name, String first_name, String last_name, String email, String hashed_password) {
-		return Database.execute("INSERT INTO user(" +
+		return Database.execute("INSERT INTO " + User.TABLE_NAME + "(" +
 								User.FIELD_USER_NAME + "," + User.FIELD_FIRST_NAME + "," +
 								User.FIELD_LAST_NAME + "," + User.FIELD_EMAIL + "," +
 								User.FIELD_HASHED_PASSWORD + ") VALUES " +
@@ -71,7 +75,7 @@ public class User {
 	 */
 	public static boolean credentialsMatch(String user_name, String hashed_password) {
 		try {
-			ResultSet rs = Database.query("SELECT " + User.FIELD_HASHED_PASSWORD + " FROM user WHERE " +
+			ResultSet rs = Database.query("SELECT " + User.FIELD_HASHED_PASSWORD + " FROM " + User.TABLE_NAME + " WHERE " +
 											User.FIELD_USER_NAME + " = \"" + user_name + "\";");
 			if ((rs != null) && rs.next()) {
 				String pass = rs.getString(User.FIELD_HASHED_PASSWORD);
@@ -96,7 +100,7 @@ public class User {
 	 */
 	static public boolean exists(String user_name) {
 		try {
-			ResultSet rs = Database.query("SELECT COUNT(*) FROM user WHERE " +
+			ResultSet rs = Database.query("SELECT COUNT(*) FROM " + User.TABLE_NAME + " WHERE " +
 											User.FIELD_USER_NAME + " = \"" + user_name + "\";");
 			if (rs != null) {
 				rs.next();
@@ -111,6 +115,43 @@ public class User {
 			e.printStackTrace();
 		}
 		return true;
+	}
+	
+	//TODO: doc.
+	static public String getContact(String user_name) {
+		try {
+			ResultSet rs = Database.query("SELECT CONCAT(" + User.FIELD_FIRST_NAME + ",\" \"," +
+											User.FIELD_LAST_NAME + ",\" <\"," + User.FIELD_EMAIL + ",\">\") AS contact" +
+											" FROM " + User.TABLE_NAME + " WHERE " +
+											User.FIELD_USER_NAME + " = \"" + user_name + "\";");
+			if ((rs != null) && rs.next()) {
+				String contact = rs.getString("contact");
+				return contact;
+			}
+		}
+		catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
+	//TODO: doc.
+	static public String getStringInfo(String user_name, String field) {
+		try {
+			ResultSet rs = Database.query("SELECT " + field +
+											" FROM " + User.TABLE_NAME + " WHERE " +
+											User.FIELD_USER_NAME + " = \"" + user_name + "\";");
+			if ((rs != null) && rs.next()) {
+				String name = rs.getString(field);
+				return name;
+			}
+		}
+		catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
 	}
 	
 	/**
@@ -129,4 +170,42 @@ public class User {
 		}
 		return true;
 	}
+	
+	//TODO: doc.
+	static public boolean resetMatch(String given_key, String user_name) {
+		try {
+			ResultSet rs = Database.query("SELECT " + User.FIELD_HASHED_PASSWORD + "," + User.FIELD_SECRET_KEY + " FROM " + User.TABLE_NAME + " WHERE " +
+											User.FIELD_USER_NAME + " = \"" + user_name + "\";");
+			if ((rs != null) && rs.next()) {
+				String pass = rs.getString(User.FIELD_HASHED_PASSWORD);
+				String secret = rs.getString(User.FIELD_SECRET_KEY);
+				if ((pass != null) && (given_key != null) && (secret != null))
+					return Security.checkResetKey(secret, pass, given_key);
+				else
+					return false;
+			}
+		}
+		catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return false;
+	}
+	
+	//TODO: doc.
+	static public boolean saveSecretKey(String secret_key, String user_name) {
+		return Database.execute("UPDATE " + User.TABLE_NAME + " SET "
+								+ User.FIELD_SECRET_KEY + " = \"" + secret_key + "\""
+								+ " WHERE " + User.FIELD_USER_NAME + " = \"" + user_name + "\";");
+	}
+	
+	//TODO: doc.
+	static public boolean updatePassword(String user_name, String password) {
+		//TODO confirm account.
+		return Database.execute("UPDATE " + User.TABLE_NAME + " SET "
+								+ User.FIELD_HASHED_PASSWORD + " = \"" + password + "\","
+								+ User.FIELD_SECRET_KEY + " = NULL"
+								+ " WHERE " + User.FIELD_USER_NAME + " = \"" + user_name + "\";");
+	}
+	
 }
