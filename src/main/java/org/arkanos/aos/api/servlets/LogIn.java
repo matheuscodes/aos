@@ -44,12 +44,14 @@ public class LogIn extends HttpServlet {
 	/** Default version number **/
 	private static final long	serialVersionUID	= 1L;
 	
+	/** When last deletion occurred **/
+	private static long			last_deletion		= 0;
+	
 	/**
 	 * @see HttpServlet#HttpServlet()
 	 */
 	public LogIn() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 	
 	/**
@@ -62,8 +64,11 @@ public class LogIn extends HttpServlet {
 		String hashed_password = Database.sanitizeString(request.getParameter("hashed_password"));
 		
 		HTTP.setUpDefaultHeaders(response);
-		
-		//TODO put clean up here DELETE FROM user WHERE expiration_date < NOW();
+		/** Run deletion once a day **/
+		if ((LogIn.last_deletion + (24 * 60 * 60 * 1000)) < System.currentTimeMillis()) {
+			User.removeUnconfirmed();
+			LogIn.last_deletion = System.currentTimeMillis();
+		}
 		
 		if (Security.authenticateToken(request) == null) {
 			if ((user_name == null) || (hashed_password == null)) {

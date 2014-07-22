@@ -23,6 +23,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import org.arkanos.aos.api.controllers.Database;
+import org.arkanos.aos.api.controllers.Log;
 import org.arkanos.aos.api.controllers.Security;
 
 /**
@@ -46,6 +47,8 @@ public class User {
 	static final public String	FIELD_HASHED_PASSWORD	= "hashed_password";
 	/** SQL field for the secret key **/
 	static final public String	FIELD_SECRET_KEY		= "secret_key";
+	/** SQL field for the expiration date **/
+	static final private String	FIELD_EXPIRATION_DATE	= "expiration_date";
 	
 	/**
 	 * Creates a new user in the database.
@@ -169,6 +172,14 @@ public class User {
 			}
 		}
 		return true;
+	}
+	
+	//TODO: doc.
+	static public void removeUnconfirmed() {
+		if (!Database.execute("DELETE FROM " + User.TABLE_NAME + " WHERE " + User.FIELD_EXPIRATION_DATE + " < NOW();")) {
+			Log.error("User", "The deletion for unconfirmed users did not execute.");
+		}
+		return;
 	}
 	
 	//TODO: doc.
