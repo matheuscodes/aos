@@ -63,6 +63,8 @@ public class LogIn extends HttpServlet {
 		
 		HTTP.setUpDefaultHeaders(response);
 		
+		//TODO put clean up here DELETE FROM user WHERE expiration_date < NOW();
+		
 		if (Security.authenticateToken(request) == null) {
 			if ((user_name == null) || (hashed_password == null)) {
 				response.sendError(400, "User name and password are required.");
