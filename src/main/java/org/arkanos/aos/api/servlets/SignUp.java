@@ -103,6 +103,7 @@ public class SignUp extends HttpServlet {
 			String secret_key = User.getStringInfo(user_name, User.FIELD_SECRET_KEY);
 			if (secret_key == null) {
 				response.sendError(400, "Account is already confirmed.");
+				return;
 			}
 			if (secret_key.compareTo(key) == 0) {
 				User.confirmAccount(user_name);
