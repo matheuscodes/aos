@@ -31,7 +31,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.arkanos.aos.api.controllers.Database;
+import org.arkanos.aos.api.controllers.HTML;
 import org.arkanos.aos.api.controllers.HTTP;
+import org.arkanos.aos.api.controllers.Mailjet;
 import org.arkanos.aos.api.controllers.Security;
 import org.arkanos.aos.api.data.User;
 
@@ -54,6 +56,7 @@ public class SignUp extends HttpServlet {
 		// TODO Auto-generated constructor stub
 	}
 	
+	//TODO comment all
 	private void checkAndAdd(Vector<String> all, String suggestion) {
 		String s = suggestion.toLowerCase();
 		if (User.isLegalUsername(s) && !User.exists(s)) {
@@ -90,6 +93,31 @@ public class SignUp extends HttpServlet {
 	}
 	
 	/**
+	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
+	 */
+	@Override
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		String user_name = Database.sanitizeString(request.getParameter("user_name"));
+		String key = Database.sanitizeString(request.getParameter("key"));
+		if ((user_name != null) && (key != null)) {
+			String secret_key = User.getStringInfo(user_name, User.FIELD_SECRET_KEY);
+			if (secret_key == null) {
+				response.sendError(400, "Account is already confirmed.");
+			}
+			if (secret_key.compareTo(key) == 0) {
+				User.confirmAccount(user_name);
+				response.setStatus(200);
+				response.getWriter().print(HTML.getSuccessConfirm());
+				return;
+			}
+			else {
+				response.sendError(400, "The confirmation key is invalid.");
+			}
+		}
+		response.sendError(400, "Missing arguments.");
+	}
+	
+	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	@Override
@@ -114,7 +142,7 @@ public class SignUp extends HttpServlet {
 			(last_name.length() < 1) ||
 			(email.length() < 3) ||
 			(hashed_password.length() < 1)) {
-			response.sendError(400, "All fields are mandatory, no field empty or short.");
+			response.sendError(400, "All fields are mandatory, no field can be empty or short.");
 			return;
 		}
 		
@@ -129,6 +157,9 @@ public class SignUp extends HttpServlet {
 		else {
 			if (User.create(user_name, first_name, last_name, email, hashed_password)) {
 				Cookie c = new Cookie("aos-token", Security.createToken(user_name));
+				String secret_key = Security.createSecretKey(hashed_password.length());
+				User.saveSecretKey(secret_key, user_name);
+				Mailjet.sendMail(first_name + " " + last_name + " <" + email + ">", "Welcome to AOS", HTML.getWelcomeMail(first_name, user_name, secret_key));
 				response.setStatus(201);
 				response.addCookie(c);
 			}

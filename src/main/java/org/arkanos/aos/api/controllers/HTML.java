@@ -86,6 +86,20 @@ public class HTML {
 	/**
 	 * @return
 	 */
+	public static String getSuccessConfirm() {
+		String result = "";
+		result += HTML.getHeader();
+		result += "<body>";
+		result += "<p style='text-align:center'><img style='margin:2%; width:300px; height:200px' src='resources/images/AOSLogo.png'/></p>";
+		result += "<p style='text-align:center'>Your account has been successfully confirmed!</p>";
+		result += "<p style='text-align:center; font-size:0.8em'><a href='" + HTML.DOMAIN + "'>" + HTML.DOMAIN + "</a></p>";
+		result += "</body>";
+		return result;
+	}
+	
+	/**
+	 * @return
+	 */
 	public static String getSuccessReset() {
 		String result = "";
 		result += HTML.getHeader();
@@ -102,7 +116,7 @@ public class HTML {
 						"<p>AOS Arkanos Organizer Suite is a tool for managing personal goals. It has been built and provided in the hope it will be useful, but without any warranty.</p>" +
 						"<p>You can use the application up to one week without confirming your account. Please use this time to experiment and make sure you want to keep using it. Unconfirmed accounts will expire after the one week period and be completely removed from our records.</p>" +
 						"<p>Please use the following link to confirm your account:" +
-						
+						"<p><a href='" + HTML.DOMAIN + "signup?user_name=" + user_name + "&key=" + secret_key + "'>" + HTML.DOMAIN + "signup?user_name=" + user_name + "&key=" + secret_key + "<a/></p>" +
 						"<p><strong>Important:</strong> Please always make sure to access the application over HTTPS, to maintain security of your data. You can bookmark the link bellow:" +
 						"<p><a href='" + HTML.DOMAIN + "'>" + HTML.DOMAIN + "</a></p>" +
 						"<p><strong>Feedback is always welcome!</strong> Please feel free to contact me with feature requests, suggestions or bug reports.</p>" +

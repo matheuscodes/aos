@@ -21,6 +21,8 @@ package org.arkanos.aos.api.data;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import org.arkanos.aos.api.controllers.Database;
 import org.arkanos.aos.api.controllers.Log;
@@ -50,6 +52,14 @@ public class User {
 	/** SQL field for the expiration date **/
 	static final private String	FIELD_EXPIRATION_DATE	= "expiration_date";
 	
+	//TODO: doc.
+	static public boolean confirmAccount(String user_name) {
+		return Database.execute("UPDATE " + User.TABLE_NAME + " SET "
+								+ User.FIELD_EXPIRATION_DATE + " = NULL,"
+								+ User.FIELD_SECRET_KEY + " = NULL"
+								+ " WHERE " + User.FIELD_USER_NAME + " = \"" + user_name + "\";");
+	}
+	
 	/**
 	 * Creates a new user in the database.
 	 * 
@@ -61,12 +71,15 @@ public class User {
 	 * @return whether the user was created or not.
 	 */
 	static public boolean create(String user_name, String first_name, String last_name, String email, String hashed_password) {
+		long one_week = 7 * 24 * 60 * 60 * 1000;
+		Date expire = new Date(System.currentTimeMillis() + one_week);
+		SimpleDateFormat date_format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		return Database.execute("INSERT INTO " + User.TABLE_NAME + "(" +
 								User.FIELD_USER_NAME + "," + User.FIELD_FIRST_NAME + "," +
 								User.FIELD_LAST_NAME + "," + User.FIELD_EMAIL + "," +
-								User.FIELD_HASHED_PASSWORD + ") VALUES " +
+								User.FIELD_HASHED_PASSWORD + "," + User.FIELD_EXPIRATION_DATE + ") VALUES " +
 								"(\"" + user_name + "\",\"" + first_name + "\",\"" +
-								last_name + "\",\"" + email + "\",\"" + hashed_password + "\");");
+								last_name + "\",\"" + email + "\",\"" + hashed_password + "\",\"" + date_format.format(expire) + "\");");
 	}
 	
 	/**
@@ -212,9 +225,9 @@ public class User {
 	
 	//TODO: doc.
 	static public boolean updatePassword(String user_name, String password) {
-		//TODO confirm account.
 		return Database.execute("UPDATE " + User.TABLE_NAME + " SET "
 								+ User.FIELD_HASHED_PASSWORD + " = \"" + password + "\","
+								+ User.FIELD_EXPIRATION_DATE + " = NULL,"
 								+ User.FIELD_SECRET_KEY + " = NULL"
 								+ " WHERE " + User.FIELD_USER_NAME + " = \"" + user_name + "\";");
 	}
