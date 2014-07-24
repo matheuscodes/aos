@@ -113,6 +113,7 @@ public class SignUp extends HttpServlet {
 			}
 			else {
 				response.sendError(400, "The confirmation key is invalid.");
+				return;
 			}
 		}
 		response.sendError(400, "Missing arguments.");
