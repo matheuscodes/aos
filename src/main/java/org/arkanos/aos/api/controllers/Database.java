@@ -95,19 +95,19 @@ public class Database {
 			Database.link = DriverManager.getConnection("jdbc:mysql://" + Database.HOST + "/" + Database.DATABASE + "?user=" + Database.USER + "&password=" + Database.PASSWORD);
 		}
 		catch (SQLException e) {
-			// TODO Auto-generated catch block
+			Log.error("Database", "Error opening database.");
 			e.printStackTrace();
 		}
 		catch (InstantiationException e) {
-			// TODO Auto-generated catch block
+			Log.error("Database", "Cannot create object.");
 			e.printStackTrace();
 		}
 		catch (IllegalAccessException e) {
-			// TODO Auto-generated catch block
+			Log.error("Database", "Illegal access.");
 			e.printStackTrace();
 		}
 		catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
+			Log.error("Database", "Issues loading class.");
 			e.printStackTrace();
 		}
 	}
@@ -130,7 +130,7 @@ public class Database {
 			return list;
 		}
 		catch (SQLException e) {
-			// TODO Auto-generated catch block
+			Log.error("Database", "Problems executing: " + q);
 			e.printStackTrace();
 		}
 		return null;
@@ -145,7 +145,7 @@ public class Database {
 	 */
 	static public String sanitizeString(String s) {
 		if (s == null) return null;
-		//TODO this is a basic clean, needs improvement.
+		//TODO: This is a basic clean, needs improvement.
 		s = s.replace('\"', ' ');
 		s = s.replace('`', ' ');
 		s = s.replace(';', ' ');
