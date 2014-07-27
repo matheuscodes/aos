@@ -37,7 +37,7 @@ import org.arkanos.aos.api.controllers.Security;
 public class User {
 	/** SQL table name **/
 	static public final String	TABLE_NAME				= "user";
-	/** SQL field for the username **/
+	/** SQL field for the user_name **/
 	static final private String	FIELD_USER_NAME			= "user_name";
 	/** SQL field for the first name **/
 	static final public String	FIELD_FIRST_NAME		= "first_name";
@@ -52,7 +52,13 @@ public class User {
 	/** SQL field for the expiration date **/
 	static final private String	FIELD_EXPIRATION_DATE	= "expiration_date";
 	
-	//TODO: doc.
+	/**
+	 * Sets both expiration and secret keys to null.
+	 * 
+	 * @param user_name
+	 *            defines the user to be confirmed.
+	 * @return whether the operation fields were set or not.
+	 */
 	static public boolean confirmAccount(String user_name) {
 		return Database.execute("UPDATE " + User.TABLE_NAME + " SET "
 								+ User.FIELD_EXPIRATION_DATE + " = NULL,"
@@ -109,10 +115,10 @@ public class User {
 	}
 	
 	/**
-	 * Checks if a particular username exists or not.
+	 * Checks if a particular user_name exists or not.
 	 * 
 	 * @param user_name
-	 * @return whether the given username exists or not.
+	 * @return whether the given user_name exists or not.
 	 */
 	static public boolean exists(String user_name) {
 		try {
@@ -133,7 +139,14 @@ public class User {
 		return true;
 	}
 	
-	//TODO: doc.
+	/**
+	 * Extracts user information in the for of an contact.
+	 * Format: {@code FirstName LastName <Email>}
+	 * 
+	 * @param user_name
+	 *            defines the user to be formatted.
+	 * @return the contact information.
+	 */
 	static public String getContact(String user_name) {
 		try {
 			ResultSet rs = Database.query("SELECT CONCAT(" + User.FIELD_FIRST_NAME + ",\" \"," +
@@ -152,7 +165,15 @@ public class User {
 		return null;
 	}
 	
-	//TODO: doc.
+	/**
+	 * Extracts user information as a string.
+	 * 
+	 * @param user_name
+	 *            defines the selected user.
+	 * @param field
+	 *            specifies the desired information.
+	 * @return content of the field as a string.
+	 */
 	static public String getStringInfo(String user_name, String field) {
 		try {
 			ResultSet rs = Database.query("SELECT " + field +
@@ -171,10 +192,10 @@ public class User {
 	}
 	
 	/**
-	 * Checks if username uses simple characters.
+	 * Checks if user_name uses simple characters.
 	 * 
 	 * @param user_name
-	 * @return whether the username uses only the allowed characters.
+	 * @return whether the user_name uses only the allowed characters.
 	 */
 	static public boolean isLegalUsername(String user_name) {
 		for (char c : user_name.toCharArray()) {
@@ -187,7 +208,10 @@ public class User {
 		return true;
 	}
 	
-	//TODO: doc.
+	/**
+	 * Background maintenance procedure to clean database.
+	 * Removes all users whose accounts are expired.
+	 */
 	static public void removeUnconfirmed() {
 		if (!Database.execute("DELETE FROM " + User.TABLE_NAME + " WHERE " + User.FIELD_EXPIRATION_DATE + " < NOW();")) {
 			Log.error("User", "The deletion for unconfirmed users did not execute.");
@@ -195,7 +219,15 @@ public class User {
 		return;
 	}
 	
-	//TODO: doc.
+	/**
+	 * Checks if a key is valid according to stored information.
+	 * 
+	 * @param given_key
+	 *            defines the key to be checked.
+	 * @param user_name
+	 *            specifies the user.
+	 * @return whether the key is valid or not.
+	 */
 	static public boolean resetMatch(String given_key, String user_name) {
 		try {
 			ResultSet rs = Database.query("SELECT " + User.FIELD_HASHED_PASSWORD + "," + User.FIELD_SECRET_KEY + " FROM " + User.TABLE_NAME + " WHERE " +
@@ -216,14 +248,30 @@ public class User {
 		return false;
 	}
 	
-	//TODO: doc.
+	/**
+	 * Saves a generated secret key to the user table.
+	 * 
+	 * @param secret_key
+	 *            defines the key to be saved.
+	 * @param user_name
+	 *            specifies to which user.
+	 * @return whether the key could be saved or not.
+	 */
 	static public boolean saveSecretKey(String secret_key, String user_name) {
 		return Database.execute("UPDATE " + User.TABLE_NAME + " SET "
 								+ User.FIELD_SECRET_KEY + " = \"" + secret_key + "\""
 								+ " WHERE " + User.FIELD_USER_NAME + " = \"" + user_name + "\";");
 	}
 	
-	//TODO: doc.
+	/**
+	 * Replaces the password for a user.
+	 * 
+	 * @param user_name
+	 *            specifies the user.
+	 * @param password
+	 *            defines the new password.
+	 * @return whether the new password was saved or not.
+	 */
 	static public boolean updatePassword(String user_name, String password) {
 		return Database.execute("UPDATE " + User.TABLE_NAME + " SET "
 								+ User.FIELD_HASHED_PASSWORD + " = \"" + password + "\","
