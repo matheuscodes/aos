@@ -313,7 +313,6 @@ public class Statistics extends HttpServlet {
 					}
 					if (total > 0) {
 						output += "{\"period\":\"" + active_month + "\",";
-						//TODO use better logic.
 						for (Goal g : current) {
 							output += "\"goal_" + g.getID() + "\":" + (100 * (g.getTotalTimeSpent() / total)) + ",";
 						}
@@ -379,7 +378,6 @@ public class Statistics extends HttpServlet {
 					}
 					
 					output += "{\"period\":\"" + active_month + "\",";
-					//TODO use better logic.
 					for (Goal g : Goal.getUserGoalsSnapshot(user_name, now.get(Calendar.YEAR) + "-01-01 00:00:00", active_month + "-31 23:59:59")) {
 						output += "\"goal_" + g.getID() + "\":" + this.getMetric(g, metric) + ",";
 					}
