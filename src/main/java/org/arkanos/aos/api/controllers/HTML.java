@@ -19,17 +19,31 @@
 package org.arkanos.aos.api.controllers;
 
 /**
- * TODO: Document all.
+ * Controls the templates for HTML code.
  * 
+ * @version 1.0
+ * @author Matheus Borges Teixeira
  */
 public class HTML {
-	
+	/** AOS Domain to be used in links **/
 	static private final String	DOMAIN	= "https://aos.cloudcontrolled.com/";
 	
+	/**
+	 * Creates a simple HTML {@code <head>}.
+	 * 
+	 * @return a simple configured header as a string.
+	 */
 	private static String getHeader() {
 		return HTML.getHeaderWith("");
 	}
 	
+	/**
+	 * Creates a HTML {@code <head>} with configurable content.
+	 * 
+	 * @param what
+	 *            defines the special content to be added.
+	 * @return a configured header as a string.
+	 */
 	private static String getHeaderWith(String what) {
 		String result = new String();
 		result += "<head>";
@@ -40,6 +54,17 @@ public class HTML {
 		return result;
 	}
 	
+	/**
+	 * Creates the body for the Reset Email.
+	 * 
+	 * @param name
+	 *            specifies the user's name.
+	 * @param user_name
+	 *            defines the user_name for the link.
+	 * @param secret_key
+	 *            defines the key for the link.
+	 * @return the email body as a string.
+	 */
 	public static String getResetMail(String name, String user_name, String secret_key) {
 		String result = "<p>Dear " + name + ",</p>" +
 						"<p>Someone has requested to reset your password for <strong>AOS - Arkanos Organizer Suite</strong>.</p>" +
@@ -50,6 +75,15 @@ public class HTML {
 		return result;
 	}
 	
+	/**
+	 * Creates the HTML page for resetting the password.
+	 * 
+	 * @param user_name
+	 *            defines the user_name to change the password.
+	 * @param key
+	 *            defines the key that needs to be used.
+	 * @return the page as a string.
+	 */
 	public static String getResetPassword(String user_name, String key) {
 		String result = "";
 		String script = new String();
@@ -84,7 +118,9 @@ public class HTML {
 	}
 	
 	/**
-	 * @return
+	 * Creates the HTML page confirming the account.
+	 * 
+	 * @return the page as a string.
 	 */
 	public static String getSuccessConfirm() {
 		String result = "";
@@ -98,7 +134,9 @@ public class HTML {
 	}
 	
 	/**
-	 * @return
+	 * Creates the HTML page confirming the password change.
+	 * 
+	 * @return the page as a string.
 	 */
 	public static String getSuccessReset() {
 		String result = "";
@@ -111,6 +149,17 @@ public class HTML {
 		return result;
 	}
 	
+	/**
+	 * Creates the body for the Welcome Email.
+	 * 
+	 * @param name
+	 *            specifies user's name.
+	 * @param user_name
+	 *            defines the user_name to be confirmed.
+	 * @param secret_key
+	 *            defines the key of confirmation.
+	 * @return the email body as a string.
+	 */
 	public static String getWelcomeMail(String name, String user_name, String secret_key) {
 		String result = "<p style='text-align:center;font-size:120%;font-weight:bold;'>Hi there " + name + " and welcome to AOS!</p>" +
 						"<p>AOS Arkanos Organizer Suite is a tool for managing personal goals. It has been built and provided in the hope it will be useful, but without any warranty.</p>" +
