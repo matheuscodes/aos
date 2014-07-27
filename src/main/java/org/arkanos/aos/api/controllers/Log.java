@@ -21,13 +21,23 @@ package org.arkanos.aos.api.controllers;
 import java.util.Date;
 
 /**
- * @author arkanos
+ * Controls the logging.
  * 
+ * @version 1.0
+ * @author Matheus Borges Teixeira
  */
 public class Log {
 	
+	/**
+	 * Logs an entry as an error.
+	 * 
+	 * @param who
+	 *            should define the class calling.
+	 * @param what
+	 *            specifies a message to record.
+	 */
 	static public void error(String who, String what) {
-		System.err.println("[ERROR] " + new Date(System.currentTimeMillis()) + " - " + who + ": " + what);
+		System.out.println("[ERROR] " + new Date(System.currentTimeMillis()) + " - " + who + ": " + what);
 	}
 	
 }
