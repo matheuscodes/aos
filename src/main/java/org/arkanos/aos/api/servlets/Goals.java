@@ -221,11 +221,9 @@ public class Goals extends HttpServlet {
 					}
 				}
 				catch (NumberFormatException e) {
-					//TODO auto
 					response.sendError(400, "Something was wrong with the numeric parameters.");
-					e.printStackTrace();
+					return;
 				}
-				return;
 			}
 			else {
 				response.sendError(404, "Goal not found, use POST on '/goals' to create.");
