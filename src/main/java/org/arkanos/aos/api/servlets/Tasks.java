@@ -49,7 +49,6 @@ public class Tasks extends HttpServlet {
 	 */
 	public Tasks() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 	
 	/**

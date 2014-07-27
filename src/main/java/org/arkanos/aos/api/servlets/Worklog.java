@@ -52,7 +52,6 @@ public class Worklog extends HttpServlet {
 	 */
 	public Worklog() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 	
 	/**

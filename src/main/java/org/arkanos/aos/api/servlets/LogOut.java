@@ -46,7 +46,6 @@ public class LogOut extends HttpServlet {
 	 */
 	public LogOut() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 	
 	/**

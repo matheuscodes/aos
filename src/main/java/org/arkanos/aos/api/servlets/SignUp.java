@@ -53,7 +53,6 @@ public class SignUp extends HttpServlet {
 	 */
 	public SignUp() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 	
 	//TODO comment all

@@ -48,7 +48,6 @@ public class Goals extends HttpServlet {
 	 */
 	public Goals() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 	
 	/**

@@ -82,7 +82,6 @@ public class Statistics extends HttpServlet {
 	 */
 	public Statistics() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 	
 	/**
