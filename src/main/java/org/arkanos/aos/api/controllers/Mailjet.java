@@ -31,17 +31,27 @@ import javax.mail.internet.MimeMessage;
 
 /**
  * Controls the email sending.
- * TODO: Document all.
  * 
  * @version 1.0
  * @author Matheus Borges Teixeira
  * 
  */
 public class Mailjet {
-	
+	/** Configuration key for Mailjet **/
 	private static String	APIKey		= "1";
+	/** Authorization key for Mailjet **/
 	private static String	SecretKey	= "1";
 	
+	/**
+	 * Sends an email.
+	 * 
+	 * @param to
+	 *            specifies the recipient for the email.
+	 * @param what
+	 *            defines the subject of the email.
+	 * @param html_content
+	 *            defines the content of the email.
+	 */
 	public static void sendMail(String to, String what, String html_content) {
 		if ((System.getenv("MAILJET_API") != null) && (System.getenv("MAILJET_SECRET") != null)) {
 			Mailjet.APIKey = System.getenv("MAILJET_API");
