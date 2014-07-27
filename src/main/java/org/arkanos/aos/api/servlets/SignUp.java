@@ -60,7 +60,14 @@ public class SignUp extends HttpServlet {
 		SignUp.requests = new HashMap<String, Long>();
 	}
 	
-	//TODO comment all
+	/**
+	 * Checks whether a suggestion is valid and put it on a list if it is.
+	 * 
+	 * @param all
+	 *            specifies the array of suggestions which are valid.
+	 * @param suggestion
+	 *            defines the user_name which will be checked.
+	 */
 	private void checkAndAdd(Vector<String> all, String suggestion) {
 		String s = suggestion.toLowerCase();
 		if (User.isLegalUsername(s) && !User.exists(s)) {
@@ -68,6 +75,19 @@ public class SignUp extends HttpServlet {
 		}
 	}
 	
+	/**
+	 * Based on some simple logic and inputs tries to come up with 3 suggestions.
+	 * 
+	 * @param user_name
+	 *            defines an input for combination.
+	 * @param first_name
+	 *            defines an input for combination.
+	 * @param last_name
+	 *            defines an input for combination.
+	 * @param email
+	 *            defines an input for combination.
+	 * @return a list with up to 3 found suggestions.
+	 */
 	private Vector<String> createSuggestions(String user_name, String first_name, String last_name, String email) {
 		Vector<String> suggestions = new Vector<String>();
 		
