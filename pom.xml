@@ -4,7 +4,7 @@
 	<groupId>org.arkanos</groupId>
 	<artifactId>aos</artifactId>
 	<packaging>war</packaging>
-	<version>0.2.1</version>
+	<version>1.0.0</version>
 	<name>AOS - Arkanos Organizer Suite</name>
 	<url>https://aosalpha.cloudcontrolled.com</url>
 	<properties>
