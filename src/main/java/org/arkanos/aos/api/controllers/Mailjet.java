@@ -85,7 +85,7 @@ public class Mailjet {
 			
 		}
 		catch (MessagingException e) {
-			//TODO: additionally send me a message.
+			//TODO: Additionally send me a message.
 			System.err.println(e);
 		}
 	}
