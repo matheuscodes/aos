@@ -60,7 +60,7 @@ public class Database {
 			return true;
 		}
 		catch (SQLException e) {
-			// TODO Auto-generated catch block
+			Log.error("Database", "Problems executing: " + q);
 			e.printStackTrace();
 		}
 		return false;
