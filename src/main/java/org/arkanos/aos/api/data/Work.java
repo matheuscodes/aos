@@ -27,6 +27,7 @@ import java.text.SimpleDateFormat;
 import java.util.Vector;
 
 import org.arkanos.aos.api.controllers.Database;
+import org.arkanos.aos.api.controllers.Log;
 import org.json.simple.JSONObject;
 
 /**
@@ -126,7 +127,7 @@ public class Work {
 			return results;
 		}
 		catch (SQLException e) {
-			// TODO Auto-generated catch block
+			Log.error("Work", "Problems retrieving logged work for a user.");
 			e.printStackTrace();
 		}
 		return null;
@@ -190,7 +191,7 @@ public class Work {
 			result += Work.EXTRA_GOAL_TITLE + "\":\"" + this.goal_title + "\"}";
 		}
 		catch (ParseException e) {
-			// TODO Auto-generated catch block
+			Log.error("Work", "Problems while parsing Work to a JSON.");
 			e.printStackTrace();
 			return "{\"error\":\"parsing\"}";
 		}

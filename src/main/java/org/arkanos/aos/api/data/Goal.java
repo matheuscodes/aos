@@ -27,6 +27,7 @@ import java.text.DecimalFormat;
 import java.util.Vector;
 
 import org.arkanos.aos.api.controllers.Database;
+import org.arkanos.aos.api.controllers.Log;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -86,7 +87,7 @@ public class Goal {
 				if ((rs != null) && rs.next()) return rs.getInt("created_id");
 			}
 			catch (SQLException e) {
-				// TODO Auto-generated catch block
+				Log.error("Goal", "Problems while creating a goal.");
 				e.printStackTrace();
 			}
 		}
@@ -117,7 +118,7 @@ public class Goal {
 			}
 		}
 		catch (SQLException e) {
-			// TODO Auto-generated catch block
+			Log.error("Goal", "Problems retrieving a goal.");
 			e.printStackTrace();
 		}
 		return null;
@@ -141,7 +142,7 @@ public class Goal {
 										rs.getInt(Goal.FIELD_TIME_PLANNED),
 										rs.getString(Goal.FIELD_DESCRIPTION),
 										user_name);
-				//TODO optimize?
+				//TODO: Can this query be optimized?
 				ResultSet newrs = Database.query("SELECT AVG(help.progress) AS completion, SUM(help.spent) AS total_time_spent FROM ("
 													+ "SELECT IF(SUM((w." + Work.FIELD_RESULT + ")/(t." + Task.FIELD_TARGET + "-t." + Task.FIELD_INITIAL + ")) IS NULL, 0, SUM((w." + Work.FIELD_RESULT + ")/(t." + Task.FIELD_TARGET + "-t." + Task.FIELD_INITIAL + "))) AS progress, "
 													+ "SUM(" + Work.FIELD_TIME_SPENT + ") AS spent FROM goal g "
@@ -161,7 +162,7 @@ public class Goal {
 			return results;
 		}
 		catch (SQLException e) {
-			// TODO Auto-generated catch block
+			Log.error("Goal", "Problems retrieving all goals from a user.");
 			e.printStackTrace();
 		}
 		return null;
@@ -190,7 +191,7 @@ public class Goal {
 										rs.getInt(Goal.FIELD_TIME_PLANNED),
 										rs.getString(Goal.FIELD_DESCRIPTION),
 										user_name);
-				//TODO might be possible to optimize.
+				//TODO: Can this query be optimized?
 				ResultSet newrs = Database.query("SELECT AVG(help.progress) AS completion, SUM(help.spent) AS total_time_spent FROM ("
 													+ "SELECT IF(SUM((w." + Work.FIELD_RESULT + ")/(t." + Task.FIELD_TARGET + "-t." + Task.FIELD_INITIAL + ")) IS NULL, 0, SUM((w." + Work.FIELD_RESULT + ")/(t." + Task.FIELD_TARGET + "-t." + Task.FIELD_INITIAL + "))) AS progress, "
 													+ "SUM(" + Work.FIELD_TIME_SPENT + ") AS spent FROM goal g "
@@ -213,7 +214,7 @@ public class Goal {
 			return results;
 		}
 		catch (SQLException e) {
-			// TODO Auto-generated catch block
+			Log.error("Goal", "Problems retrieving goals on a given period.");
 			e.printStackTrace();
 		}
 		return null;
@@ -239,7 +240,7 @@ public class Goal {
 				return false;
 		}
 		catch (SQLException e) {
-			// TODO Auto-generated catch block
+			Log.error("Goal", "Problems checking user goal.");
 			e.printStackTrace();
 		}
 		return false;
@@ -257,7 +258,7 @@ public class Goal {
 	static public Goal parseGoal(Reader from, String user_name) {
 		JSONParser jp = new JSONParser();
 		try {
-			//TODO rewrite to a better JSON library.
+			//TODO: Find a better JSON library.
 			JSONObject jo = (JSONObject) jp.parse(from);
 			String id = "" + jo.get(Goal.FIELD_ID);
 			String title = "" + jo.get(Goal.FIELD_TITLE);
@@ -270,11 +271,11 @@ public class Goal {
 			return newone;
 		}
 		catch (ParseException e1) {
-			// TODO Auto-generated catch block
+			Log.error("Goal", "Problems while parsing a goal from a JSON.");
 			e1.printStackTrace();
 		}
 		catch (IOException e) {
-			// TODO Auto-generated catch block
+			Log.error("Goal", "Problems while reading data to be parsed.");
 			e.printStackTrace();
 		}
 		return null;

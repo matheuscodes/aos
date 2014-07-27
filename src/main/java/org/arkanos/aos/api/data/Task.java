@@ -27,6 +27,7 @@ import java.text.DecimalFormat;
 import java.util.Vector;
 
 import org.arkanos.aos.api.controllers.Database;
+import org.arkanos.aos.api.controllers.Log;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -89,7 +90,7 @@ public class Task {
 				if ((rs != null) && rs.next()) return rs.getInt("created_id");
 			}
 			catch (SQLException e) {
-				// TODO Auto-generated catch block
+				Log.error("Task", "Problems while creating a Task.");
 				e.printStackTrace();
 			}
 		}
@@ -114,7 +115,7 @@ public class Task {
 															rs.getFloat(Task.FIELD_TARGET));
 		}
 		catch (SQLException e) {
-			// TODO Auto-generated catch block
+			Log.error("Task", "Problems retrieving a Task.");
 			e.printStackTrace();
 		}
 		return null;
@@ -162,7 +163,7 @@ public class Task {
 			return results;
 		}
 		catch (SQLException e) {
-			// TODO Auto-generated catch block
+			Log.error("Task", "Problems retrieving all Tasks from a user.");
 			e.printStackTrace();
 		}
 		return null;
@@ -178,7 +179,7 @@ public class Task {
 	static public Task parseTask(Reader from) {
 		JSONParser jp = new JSONParser();
 		try {
-			//TODO rewrite to a better JSON library.
+			//TODO: Find a better JSON library.
 			JSONObject jo = (JSONObject) jp.parse(from);
 			String id = "" + jo.get(Task.FIELD_ID);
 			String goal_id = "" + jo.get(Task.FIELD_GOAL_ID);
@@ -197,11 +198,11 @@ public class Task {
 			return newone;
 		}
 		catch (ParseException e1) {
-			// TODO Auto-generated catch block
+			Log.error("Task", "Problems while parsing a Task from a JSON.");
 			e1.printStackTrace();
 		}
 		catch (IOException e) {
-			// TODO Auto-generated catch block
+			Log.error("Task", "Problems while reading data to be parsed.");
 			e.printStackTrace();
 		}
 		return null;
@@ -238,7 +239,6 @@ public class Task {
 	 * @param target
 	 */
 	public Task(int id, int goal_id, String name, float initial, float target) {
-		// TODO Auto-generated constructor stub
 		this.id = id;
 		this.goal_id = goal_id;
 		this.name = name;

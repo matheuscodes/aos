@@ -102,7 +102,7 @@ public class User {
 			}
 		}
 		catch (SQLException e) {
-			// TODO Auto-generated catch block
+			Log.error("User", "Problems while matching credentials.");
 			e.printStackTrace();
 		}
 		return false;
@@ -127,7 +127,7 @@ public class User {
 			}
 		}
 		catch (SQLException e) {
-			// TODO Auto-generated catch block
+			Log.error("User", "Problems verifying user existence.");
 			e.printStackTrace();
 		}
 		return true;
@@ -146,7 +146,7 @@ public class User {
 			}
 		}
 		catch (SQLException e) {
-			// TODO Auto-generated catch block
+			Log.error("User", "Problems retrieving an user as a contact.");
 			e.printStackTrace();
 		}
 		return null;
@@ -164,7 +164,7 @@ public class User {
 			}
 		}
 		catch (SQLException e) {
-			// TODO Auto-generated catch block
+			Log.error("User", "Problems while fetching the field " + field + " from user.");
 			e.printStackTrace();
 		}
 		return null;
@@ -210,7 +210,7 @@ public class User {
 			}
 		}
 		catch (SQLException e) {
-			// TODO Auto-generated catch block
+			Log.error("User", "Problems while matching reset keys.");
 			e.printStackTrace();
 		}
 		return false;
