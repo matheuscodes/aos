@@ -258,11 +258,9 @@ public class Tasks extends HttpServlet {
 						}
 					}
 					catch (NumberFormatException e) {
-						//TODO auto
 						response.sendError(400, "Something was wrong with the numeric parameters.");
-						e.printStackTrace();
+						return;
 					}
-					return;
 				}
 				else {
 					response.sendError(403, "Task does not belong to user.");
