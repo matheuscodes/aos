@@ -1,6 +1,7 @@
 package org.arkanos.aos.api.servlets;
 
 import java.io.IOException;
+import java.util.HashMap;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -19,14 +20,17 @@ import org.arkanos.aos.api.data.User;
  */
 @WebServlet("/reset")
 public class Reset extends HttpServlet {
-	private static final long	serialVersionUID	= 1L;
+	private static final long				serialVersionUID	= 1L;
+	
+	/** Stores recent requests **/
+	private static HashMap<String, Long>	requests			= null;
 	
 	/**
 	 * @see HttpServlet#HttpServlet()
 	 */
 	public Reset() {
 		super();
-		// TODO Block multiple requests
+		Reset.requests = new HashMap<String, Long>();
 	}
 	
 	/**
@@ -56,12 +60,20 @@ public class Reset extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String user_name = request.getParameter("user_name");
 		if (user_name != null) {
+			if (Reset.requests.get(user_name) != null) {
+				long one_day = 24 * 60 * 60 * 1000;
+				if ((Reset.requests.get(user_name).longValue() + one_day) > System.currentTimeMillis()) {
+					response.sendError(400, "There is already a recent reset request. Please check your spam folder.");
+					return;
+				}
+			}
 			if (User.exists(Database.sanitizeString(user_name))) {
 				String password = User.getStringInfo(user_name, User.FIELD_HASHED_PASSWORD);
 				String secret_key = Security.createSecretKey(password.length());
 				String scrambled = Security.createResetKey(secret_key, password);
 				User.saveSecretKey(secret_key, Database.sanitizeString(user_name));
 				Mailjet.sendMail(User.getContact(user_name), "AOS Password Reset", HTML.getResetMail(User.getStringInfo(user_name, User.FIELD_FIRST_NAME), user_name, scrambled));
+				Reset.requests.put(user_name, new Long(System.currentTimeMillis()));
 				response.setStatus(204);
 				return;
 			}

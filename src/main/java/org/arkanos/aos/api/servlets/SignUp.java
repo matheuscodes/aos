@@ -21,6 +21,7 @@ package org.arkanos.aos.api.servlets;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.HashMap;
 import java.util.Vector;
 
 import javax.servlet.ServletException;
@@ -46,13 +47,17 @@ import org.arkanos.aos.api.data.User;
 @WebServlet("/signup")
 public class SignUp extends HttpServlet {
 	/** Default version number **/
-	private static final long	serialVersionUID	= 1L;
+	private static final long				serialVersionUID	= 1L;
+	
+	/** Stores recent requests **/
+	private static HashMap<String, Long>	requests			= null;
 	
 	/**
 	 * @see HttpServlet#HttpServlet()
 	 */
 	public SignUp() {
 		super();
+		SignUp.requests = new HashMap<String, Long>();
 	}
 	
 	//TODO comment all
@@ -131,7 +136,7 @@ public class SignUp extends HttpServlet {
 		String email = Database.sanitizeString(request.getParameter("email"));
 		String hashed_password = Database.sanitizeString(request.getParameter("hashed_password"));
 		
-		//TODO add check for bots to avoid DB-Filler/Spammer.
+		//TODO: Add check for Bots to avoid DB-Filler and Spammers.
 		
 		if (!User.isLegalUsername(user_name)) {
 			response.sendError(400, "Username is not valid.");
@@ -156,11 +161,19 @@ public class SignUp extends HttpServlet {
 			writer.print("\"\"]");
 		}
 		else {
+			if (SignUp.requests.get(email) != null) {
+				long one_day = 24 * 60 * 60 * 1000;
+				if ((SignUp.requests.get(email).longValue() + one_day) > System.currentTimeMillis()) {
+					response.sendError(400, "This email was recently used. Please wait to create another account.");
+					return;
+				}
+			}
 			if (User.create(user_name, first_name, last_name, email, hashed_password)) {
 				Cookie c = new Cookie("aos-token", Security.createToken(user_name));
 				String secret_key = Security.createSecretKey(hashed_password.length());
 				User.saveSecretKey(secret_key, user_name);
 				Mailjet.sendMail(first_name + " " + last_name + " <" + email + ">", "Welcome to AOS", HTML.getWelcomeMail(first_name, user_name, secret_key));
+				SignUp.requests.put(email, new Long(System.currentTimeMillis()));
 				response.setStatus(201);
 				response.addCookie(c);
 			}
