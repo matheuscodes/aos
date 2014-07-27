@@ -124,7 +124,13 @@ public class Security {
 			return null;
 	}
 	
-	//TODO: doc.
+	/**
+	 * Converts a character to binary data.
+	 * 
+	 * @param c
+	 *            specifies a character of the Hex code.
+	 * @return the value of the character.
+	 */
 	static private byte charToHexa(char c) {
 		switch (c) {
 			case 'f':
@@ -163,7 +169,17 @@ public class Security {
 		}
 	}
 	
-	//TODO: doc.
+	/**
+	 * Checks whether a key is valid.
+	 * 
+	 * @param secret_key
+	 *            defines a mask for the password.
+	 * @param password
+	 *            informs the password to extract.
+	 * @param reset_key
+	 *            specifies the key to be checked.
+	 * @return whether the key is valid or not.
+	 */
 	static public boolean checkResetKey(String secret_key, String password, String reset_key) {
 		int i = 0;
 		if ((secret_key == null) || (secret_key.length() != reset_key.length())) return false;
@@ -177,7 +193,15 @@ public class Security {
 		return true;
 	}
 	
-	//TODO: doc.
+	/**
+	 * Removes data from a fake key based on a mask.
+	 * 
+	 * @param key
+	 *            defines a fake key to be opened.
+	 * @param mask
+	 *            specifies the positions to be cleaned.
+	 * @return the fake key with the bits from the mask removed.
+	 */
 	static private String cleanKey(String key, String mask) {
 		String result = "";
 		int i = 0;
@@ -194,13 +218,27 @@ public class Security {
 		return result;
 	}
 	
-	//TODO: doc.
+	/**
+	 * Creates a key hidden by random scrambled data.
+	 * 
+	 * @param secret_key
+	 *            defines a mask to find the valid data.
+	 * @param password
+	 *            specifies the origin of the valid data.
+	 * @return the key with hidden data.
+	 */
 	static public String createResetKey(String secret_key, String password) {
 		String key = Security.createSecretKey(password.length());
 		return Security.insertSecret(Security.cleanKey(key, secret_key), password, secret_key);
 	}
 	
-	//TODO: doc.
+	/**
+	 * Creates a random set of bits.
+	 * 
+	 * @param size
+	 *            defines the amount of words.
+	 * @return a random key to be used as mask.
+	 */
 	static public String createSecretKey(int size) {
 		String key = "";
 		for (int i = 0; i < size; i++) {
@@ -240,7 +278,13 @@ public class Security {
 		return Security.all_tokens;
 	}
 	
-	//TODO: doc.
+	/**
+	 * Converts numeric data to Hex code.
+	 * 
+	 * @param b
+	 *            specifies the bits to convert.
+	 * @return the Hex code as a string.
+	 */
 	static private String hexaToChar(byte b) {
 		switch (b) {
 			case 10:
@@ -260,7 +304,17 @@ public class Security {
 		}
 	}
 	
-	//TODO: doc.
+	/**
+	 * Merges valid data into a randomly generated key.
+	 * 
+	 * @param cleanKey
+	 *            defines the destination of data.
+	 * @param password
+	 *            defines the origin of data.
+	 * @param mask
+	 *            specifies the bits to be used.
+	 * @return a key with hidden valid data.
+	 */
 	private static String insertSecret(String cleanKey, String password, String mask) {
 		String result = "";
 		int i = 0;
