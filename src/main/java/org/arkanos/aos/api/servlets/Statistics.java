@@ -94,8 +94,9 @@ public class Statistics extends HttpServlet {
 			response.sendError(403, "Token is not valid or not found.");
 			return;
 		}
+		
 		HTTP.setUpDefaultHeaders(response);
-		response.setContentType("application/x-json");
+		
 		String period = request.getParameter("periodicity");
 		String URI = request.getRequestURI();
 		if (!URI.endsWith("/")) {

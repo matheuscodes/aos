@@ -37,6 +37,7 @@ public class HTTP {
 	 */
 	static public void setUpDefaultHeaders(HttpServletResponse response) {
 		response.addHeader("Cache-Control", "no-store");
+		response.setContentType("application/x-json");
 	}
 	
 }

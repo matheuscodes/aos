@@ -63,8 +63,6 @@ public class Tasks extends HttpServlet {
 		}
 		
 		HTTP.setUpDefaultHeaders(response);
-		//TODO move to default headers
-		response.setContentType("application/x-json");
 		
 		String URI = request.getRequestURI();
 		if (URI.endsWith("/tasks") || URI.endsWith("/tasks/")) {
@@ -113,9 +111,8 @@ public class Tasks extends HttpServlet {
 			response.sendError(403, "Token is not valid or not found.");
 			return;
 		}
+		
 		HTTP.setUpDefaultHeaders(response);
-		//TODO move to default headers
-		response.setContentType("application/x-json");
 		
 		String URI = request.getRequestURI();
 		if (!URI.endsWith("/tasks") && !URI.endsWith("/tasks/")) {
@@ -185,7 +182,6 @@ public class Tasks extends HttpServlet {
 			}
 		}
 		
-		response.setContentType("application/x-json");
 		int goal_id = Integer.parseInt(request.getParameter(Task.FIELD_GOAL_ID));
 		float initial = Float.parseFloat(request.getParameter(Task.FIELD_INITIAL));
 		float target = Float.parseFloat(request.getParameter(Task.FIELD_TARGET));
@@ -222,8 +218,6 @@ public class Tasks extends HttpServlet {
 		}
 		
 		HTTP.setUpDefaultHeaders(response);
-		//TODO move to default headers
-		response.setContentType("application/x-json");
 		
 		String URI = request.getRequestURI();
 		if (URI.endsWith("/tasks") || URI.endsWith("/tasks/")) {

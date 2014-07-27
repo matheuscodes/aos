@@ -122,7 +122,6 @@ public class Worklog extends HttpServlet {
 		}
 		
 		HTTP.setUpDefaultHeaders(response);
-		response.setContentType("application/x-json");
 		
 		String URI = request.getRequestURI();
 		if (!URI.endsWith("/worklog") && !URI.endsWith("/worklog/")) {

@@ -62,8 +62,6 @@ public class Goals extends HttpServlet {
 		}
 		
 		HTTP.setUpDefaultHeaders(response);
-		//TODO move to default headers
-		response.setContentType("application/x-json");
 		
 		String URI = request.getRequestURI();
 		if (URI.endsWith("/goals") || URI.endsWith("/goals/")) {
@@ -112,8 +110,9 @@ public class Goals extends HttpServlet {
 			response.sendError(403, "Token is not valid or not found.");
 			return;
 		}
+		
 		HTTP.setUpDefaultHeaders(response);
-		response.setContentType("application/x-json");
+		
 		String goals = "{\"success\":true,\"goals\":[";
 		String user_name = token.getUsername();
 		int count = 0;
@@ -186,8 +185,6 @@ public class Goals extends HttpServlet {
 		}
 		
 		HTTP.setUpDefaultHeaders(response);
-		//TODO move to default headers
-		response.setContentType("application/x-json");
 		
 		String URI = request.getRequestURI();
 		if (URI.endsWith("/goals") || URI.endsWith("/goals/")) {

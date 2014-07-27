@@ -218,7 +218,7 @@ public class Security {
 	 * @return a key of the token created for the user.
 	 */
 	static public String createToken(String user_name) {
-		//TODO find a way of going around this.
+		//TODO: Find a way of going around this without creating a new TokenInfo class.
 		Security builder = new Security();
 		TokenInfo info = builder.new TokenInfo(user_name + "_" + Math.random(),
 												user_name);
