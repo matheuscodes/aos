@@ -16,10 +16,14 @@ import org.arkanos.aos.api.controllers.Security;
 import org.arkanos.aos.api.data.User;
 
 /**
- * TODO: Document all.
+ * Reset REST API and pages.
+ * 
+ * @version 1.0
+ * @author Matheus Borges Teixeira
  */
 @WebServlet("/reset")
 public class Reset extends HttpServlet {
+	/** Default version number **/
 	private static final long				serialVersionUID	= 1L;
 	
 	/** Stores recent requests **/
