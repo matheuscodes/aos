@@ -70,7 +70,7 @@ CREATE TABLE `goal` (
   `user_name` varchar(13) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `goal_user` (`user_name`),
-  CONSTRAINT `goal_user` FOREIGN KEY (`user_name`) REFERENCES `user` (`user_name`) ON DELETE NO ACTION ON UPDATE NO ACTION
+  CONSTRAINT `goal_user` FOREIGN KEY (`user_name`) REFERENCES `user` (`user_name`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=41 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
