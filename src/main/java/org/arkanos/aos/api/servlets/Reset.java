@@ -30,11 +30,20 @@ public class Reset extends HttpServlet {
 	private static HashMap<String, Long>	requests			= null;
 	
 	/**
+	 * Creates a static reference for requests.
+	 */
+	public static synchronized void createRequests() {
+		if (Reset.requests == null) {
+			Reset.requests = new HashMap<String, Long>();
+		}
+	}
+	
+	/**
 	 * @see HttpServlet#HttpServlet()
 	 */
 	public Reset() {
 		super();
-		Reset.requests = new HashMap<String, Long>();
+		Reset.createRequests();
 	}
 	
 	/**

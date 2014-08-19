@@ -53,11 +53,20 @@ public class SignUp extends HttpServlet {
 	private static HashMap<String, Long>	requests			= null;
 	
 	/**
+	 * Creates a static reference for requests.
+	 */
+	public static synchronized void createRequests() {
+		if (SignUp.requests == null) {
+			SignUp.requests = new HashMap<String, Long>();
+		}
+	}
+	
+	/**
 	 * @see HttpServlet#HttpServlet()
 	 */
 	public SignUp() {
 		super();
-		SignUp.requests = new HashMap<String, Long>();
+		SignUp.createRequests();
 	}
 	
 	/**
