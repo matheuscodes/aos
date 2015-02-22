@@ -25,7 +25,14 @@ _Crypto JS, Copyright (c) 2009 [Jeff Mott](https://code.google.com/p/crypto-js/w
 ## Feature Overview
 
 <img src="https://raw.githubusercontent.com/matheuscodes/aos/master/src/main/webapp/resources/images/features.png" width=256px align="right" />
-<br/><br/><br/><br/><br/><br/>
+
+- **Sign-up/Login:** the user can create an account to store data and access it remotely. An email to confirm the account is sent, and additionally the user can use that email to recover passwords.
+- **Statistics:** the user can see the statics calculated based on the data from his account.
+- **Goals:** the user can see the status of current goals, break goals into new tasks and create new ones. 
+- **Tasks:** the user can see the status of the task, edit it and log work. 
+- **Worklog:** the user can see all the logged work and remove any if necessary.
+- **Logout:** leaves the application and removes cookies, local cache data and the account data remain.
+
 ### Statistics
 
 <img src="https://raw.githubusercontent.com/matheuscodes/aos/master/src/main/webapp/resources/images/statistics.png" />
