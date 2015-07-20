@@ -88,6 +88,12 @@ public class Database {
 			Database.USER = username;
 			Database.PASSWORD = password;
 		}
+		else{
+			if(System.getProperty("MYSQL_HOST") != null) Database.HOST = System.getProperty("MYSQL_HOST");
+			if(System.getProperty("MYSQL_DATABASE") != null) Database.DATABASE = System.getProperty("MYSQL_DATABASE");
+			if(System.getProperty("MYSQL_USER") != null) Database.USER = System.getProperty("MYSQL_USER");
+			if(System.getProperty("MYSQL_PASSWORD") != null) Database.PASSWORD = System.getProperty("MYSQL_PASSWORD");
+		}
 		
 		try {
 			if ((Database.link != null) && Database.link.isValid(1) && !Database.link.isClosed()) return;

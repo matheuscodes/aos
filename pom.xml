@@ -8,7 +8,7 @@
 	<name>AOS - Arkanos Organizer Suite</name>
 	<url>https://aosalpha.cloudcontrolled.com</url>
 	<properties>
-		<jettyVersion>9.1.4.v20140401</jettyVersion>
+		<jettyVersion>9.2.8.v20150217</jettyVersion>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
  
@@ -48,6 +48,22 @@
 	<build>
 		<plugins>
 			<plugin>
+    				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>keytool-maven-plugin</artifactId>
+				<version>1.5</version>
+				<!-- This needs to be generated once via mvn keytool:generateKeyPair -->
+				<configuration>
+					<keystore>${project.build.directory}/jetty-ssl.keystore</keystore>
+					<dname>cn=localhost</dname>
+					<!--Both `keypass` and `storepass` must be at least 6 characters long. -->
+					<keypass>secret</keypass>
+					<storepass>secret</storepass>
+					<alias>aoskeys</alias>
+					<keyalg>RSA</keyalg>
+					<validity>99999</validity>
+				</configuration>
+			</plugin>
+			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
 				<version>3.1</version>
@@ -60,6 +76,30 @@
 				<groupId>org.eclipse.jetty</groupId>
 				<artifactId>jetty-maven-plugin</artifactId>
 				<version>${jettyVersion}</version>
+				<configuration>
+					<stopPort>9966</stopPort>
+					<stopKey>killingmesoftly</stopKey>
+					<stopWait>10</stopWait>
+					<jettyXml>jetty.xml,jetty-http.xml,jetty-ssl.xml,jetty-https.xml</jettyXml>
+					<systemProperties>
+						<systemProperty>
+							<name>MYSQL_HOST</name>
+							<value>localhost:3306</value>
+						</systemProperty>
+						<systemProperty>
+							<name>MYSQL_DATABASE</name>
+							<value>aos</value>
+						</systemProperty>
+						<systemProperty>
+							<name>MYSQL_USER</name>
+							<value>root</value>
+						</systemProperty>
+						<systemProperty>
+							<name>MYSQL_PASSWORD</name>
+							<value>${mysql_password}</value>
+						</systemProperty>
+					</systemProperties>
+				</configuration>
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
