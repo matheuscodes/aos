@@ -5,3 +5,29 @@ CREATE TABLE IF NOT EXISTS tasks (
 	id uuid	PRIMARY KEY
 );
 --rollback DROP TABLE tasks;
+
+--changeset matheus:1-creating-types
+CREATE TYPE status_type AS ENUM ('open', 'postponed', 'done');
+CREATE TYPE priority_type AS ENUM ('trivial', 'normal', 'important', 'critical');
+--rollback DROP TYPE status_type, priority_type
+
+--changeset matheus:2-altering-schema
+ALTER TABLE tasks
+	ADD createdAt TIMESTAMP,
+	ADD updatedAt TIMESTAMP,
+	ADD dueDate TIMESTAMP,
+	ADD resolvedAt TIMESTAMP,
+	ADD title VARCHAR(70),
+	ADD description VARCHAR(140),
+	ADD priority priority_type,
+	ADD status status_type;
+	
+--changeset matheus:3-fixing-naming-hibernate
+ALTER TABLE tasks
+	RENAME COLUMN createdAt TO created_at;
+ALTER TABLE tasks
+	RENAME COLUMN updatedAt TO updated_at;
+ALTER TABLE tasks
+	RENAME COLUMN dueDate TO due_date;
+ALTER TABLE tasks
+	RENAME COLUMN resolvedAt TO resolved_at;
