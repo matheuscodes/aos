@@ -1,3 +1,5 @@
 *~
 /target
-/mailjet
+/.m2
+/db/data
+/db/postgres.conf

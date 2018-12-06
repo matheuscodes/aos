@@ -1,0 +1,24 @@
+version: '3'
+services:
+  app:
+    image: maven:3.5.3-jdk-8-alpine
+    ports:
+     - "8080:8080"
+    volumes:
+      - .:/root
+    working_dir: /root
+    command: mvn spring-boot:run -Dspring.config.location=classpath:/application.properties
+  postgres:
+    image: "postgres:9.5"
+    restart: always
+    environment:
+      POSTGRES_USER: aos
+      POSTGRES_PASSWORD: aosAdmin
+      POSTGRES_DB: aos
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./db:/var/lib/postgresql
+      - ./db/postgres.conf:/etc/postgresql.conf
+ 
+    
