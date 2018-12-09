@@ -11,7 +11,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
-		<jetty.version>9.3.9.v20160517</jetty.version>
+		<jetty.version>9.4.14.v20181114</jetty.version>
         <log.folder>${project.build.directory}/log</log.folder>
         <hibernate.version>5.2.9.Final</hibernate.version>
 	</properties>
@@ -19,7 +19,7 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>1.4.0.RELEASE</version>
+		<version>1.5.18.RELEASE</version>
 	</parent>
 	
 	<dependencies>

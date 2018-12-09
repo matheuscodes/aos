@@ -40,9 +40,12 @@ public class TaskService {
   }
 
   public boolean updateTask(Task selected, Task task) {
-	selected.setUpdatedAt(LocalDateTime.now());
-    taskDao.update(task);
-    return true;
+	if(selected.getId().compareTo(task.getId()) == 0) {
+	  task.setUpdatedAt(LocalDateTime.now());	  
+	  taskDao.update(task);
+	  return true;
+	}
+    return false;
   }
 
 }

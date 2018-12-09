@@ -20,6 +20,7 @@ public class CORSResponseFilter implements ContainerResponseFilter {
     responseContext.getHeaders().add("Access-Control-Allow-Origin", "*");
     responseContext.getHeaders().add("Access-Control-Allow-Methods",
         "POST, GET, PUT, DELETE, OPTIONS");
+    responseContext.getHeaders().add("Access-Control-Allow-Headers", "content-type");
     responseContext.getHeaders().add("X-Powered-By", "matheus.software");
   }
 }

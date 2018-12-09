@@ -3,11 +3,11 @@
 </ng-container>
 
 <ng-template #editTaskForm>
-    <ng-container *ngTemplateOutlet="taskForm;context:{parent:submitUpdate}"></ng-container>
+    <ng-container *ngTemplateOutlet="taskForm;context:{parent:submitUpdate.bind(this)}"></ng-container>
 </ng-template>
 
 <ng-template #newTaskForm>
-  <ng-container *ngTemplateOutlet="taskForm;context:{parent:submitNew}"></ng-container>
+  <ng-container *ngTemplateOutlet="taskForm;context:{parent:submitNew.bind(this)}"></ng-container>
 </ng-template>
 
 <ng-template #taskForm  let-parent="parent">

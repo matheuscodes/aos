@@ -1,5 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 
+import {NgbModal, ModalDismissReasons} from '@ng-bootstrap/ng-bootstrap';
 import {NgbDateAdapter, NgbDateStruct, NgbDateNativeAdapter} from '@ng-bootstrap/ng-bootstrap';
 
 import { TaskService } from '../task.service';
@@ -14,18 +15,32 @@ export class TaskDetailsComponent implements OnInit {
 
   @Input() task: object;
 
-  constructor(private taskService: TaskService) { }
+  constructor(
+    private taskService: TaskService,
+    private modalService: NgbModal
+  ) {  }
 
   ngOnInit() {
   }
 
   submitUpdate(data) {
-    console.log(this.task);
-    alert(`update\n${JSON.stringify(data,null,2)}`);
+    console.log('Saving', data);
+    try {
+      this.taskService.saveTask(data);
+      alert('Your task is being saved...');
+    } catch(e) {
+      alert(e.message);
+    }
   }
   submitNew(data) {
-    console.log(this.task);
-    alert(`new\n${JSON.stringify(data,null,2)}`);
+    console.log('Creating', data);
+    try {
+      this.taskService.addTask(data);
+      this.task = {};
+      alert('Your task is being created...');
+    } catch(e) {
+      alert(e.message);
+    }
   }
 
    getStatuses() {

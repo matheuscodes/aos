@@ -12,7 +12,7 @@ import javax.persistence.criteria.Root;
 import org.springframework.stereotype.Repository;
 
 import software.matheus.aos.model.Task;
-//import software.matheus.aos.model.Task_;
+import software.matheus.aos.model.Task_;
 
 @Repository
 public class TaskDAO extends AbstractDAO<Task> {
@@ -29,7 +29,7 @@ public class TaskDAO extends AbstractDAO<Task> {
     CriteriaBuilder queryBuilder = getEntityManager().getCriteriaBuilder();
     CriteriaQuery<Task> query = queryBuilder.createQuery(Task.class);
     Root<Task> root = query.from(Task.class);
-    //query.where(queryBuilder.equal(root.get(Task_.id), id));
+    query.where(queryBuilder.equal(root.get(Task_.id), id));
     query.select(root);
     List<Task> results = getEntityManager().createQuery(query).getResultList();
     if (results.isEmpty()) {

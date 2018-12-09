@@ -52,7 +52,7 @@ public class TaskResource {
       return Response.status(Response.Status.NOT_FOUND).build();
     }
     if (taskService.updateTask(selected, task)) {
-      return Response.ok(selected).build();
+      return Response.ok(task).build();
     } else {
       return Response.status(Response.Status.BAD_REQUEST).build();
     }

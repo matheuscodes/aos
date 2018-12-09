@@ -12,6 +12,8 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.Type;
+import org.hibernate.annotations.TypeDef;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
@@ -19,6 +21,7 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import software.matheus.aos.extension.PostgreSQLEnumType;
 
 @Entity
 @Table(name = "tasks")
@@ -26,6 +29,10 @@ import lombok.ToString;
 @Setter
 @ToString
 @JsonInclude(Include.NON_NULL)
+@TypeDef(
+	    name = "pgsql_enum",
+	    typeClass = PostgreSQLEnumType.class
+	)
 public class Task {
   @Id
   @GeneratedValue(generator = "UUID")
@@ -41,9 +48,13 @@ public class Task {
   private String description;
 
   @Enumerated(EnumType.STRING)
+  @Column(columnDefinition = "priority_type")
+  @Type( type = "pgsql_enum" )
   private TaskPriority priority;
   
   @Enumerated(EnumType.STRING)
+  @Column(columnDefinition = "status_type")
+  @Type( type = "pgsql_enum" )
   private TaskStatus status;
 
 }

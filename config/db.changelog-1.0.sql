@@ -31,3 +31,14 @@ ALTER TABLE tasks
 	RENAME COLUMN dueDate TO due_date;
 ALTER TABLE tasks
 	RENAME COLUMN resolvedAt TO resolved_at;
+
+	
+--changeset matheus:4-setting-mandatory-defaults
+ALTER TABLE tasks
+	ALTER COLUMN priority SET NOT NULL;
+ALTER TABLE tasks
+	ALTER COLUMN status SET NOT NULL;
+ALTER TABLE tasks
+	ALTER COLUMN created_at SET DEFAULT now();	
+ALTER TABLE tasks
+	ALTER COLUMN updated_at SET DEFAULT now();
