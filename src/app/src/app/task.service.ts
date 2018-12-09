@@ -4,6 +4,8 @@ import { HttpClient,  HttpHeaders, HttpErrorResponse } from '@angular/common/htt
 import { throwError } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
 
+import { Task } from './task';
+
 @Injectable({
   providedIn: 'root'
 })
@@ -35,7 +37,9 @@ export class TaskService {
     return this.tasks;
   }
 
-  addTask(task) {
+  addTask(task: Task) {
+    console.log(task);
+    task.validate();
     console.log(this.tasksUrl, task, this.httpOptions);
     return this.http.post(this.tasksUrl, task, this.httpOptions)
                     .pipe(
@@ -44,7 +48,8 @@ export class TaskService {
                     .subscribe(() => this.refresh());
   }
 
-  saveTask(task) {
+  saveTask(task: Task) {
+    task.validate();
     console.log(`${this.tasksUrl}/${task.id}`, task, this.httpOptions);
     return this.http.put(`${this.tasksUrl}/${task.id}`, task, this.httpOptions)
                     .pipe(
@@ -70,19 +75,28 @@ export class TaskService {
     this.tasks = [];
     this.http.get(this.tasksUrl)
              .subscribe(list => {
-               // TODO validate list DTO
                if(Array.isArray(list)){
                  list.forEach(item => {
                    const data = item;
-                   data.createdAt = new Date(item.createdAt);
-                   data.updatedAt = new Date(item.updatedAt);
-                   data.dueDate = new Date(item.dueDate);
-                   this.tasks.push(data);
+                   if(item.createdAt) {
+                     data.createdAt = new Date(item.createdAt);
+                   }
+                   if(item.updatedAt) {
+                     data.updatedAt = new Date(item.updatedAt);
+                   }
+                   if(item.dueDate) {
+                     data.dueDate = new Date(item.dueDate);
+                   }
+                   this.add(<Task>(data))
                  });
                } else {
                  throw new Error('Unexpected result from parsing.');
                }
              });
+  }
+
+  private add(item: Task) {
+    this.tasks.push(item);
   }
 
 }

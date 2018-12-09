@@ -5,6 +5,8 @@ import {NgbDateAdapter, NgbDateStruct, NgbDateNativeAdapter} from '@ng-bootstrap
 
 import { TaskService } from '../task.service';
 
+import { Task } from '../task';
+
 @Component({
   selector: 'app-task-details',
   templateUrl: './task-details.component.html',
@@ -35,7 +37,7 @@ export class TaskDetailsComponent implements OnInit {
   submitNew(data) {
     console.log('Creating', data);
     try {
-      this.taskService.addTask(data);
+      this.taskService.addTask(new Task(data));
       this.task = {};
       alert('Your task is being created...');
     } catch(e) {

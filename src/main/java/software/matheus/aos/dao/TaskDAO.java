@@ -44,6 +44,7 @@ public class TaskDAO extends AbstractDAO<Task> {
     CriteriaQuery<Task> query = queryBuilder.createQuery(Task.class);
     Root<Task> root = query.from(Task.class);
     query.select(root);
+    query.orderBy(queryBuilder.asc(root.get(Task_.dueDate)));
     return getEntityManager().createQuery(query).getResultList();
   }
 }
