@@ -15,7 +15,7 @@ public class JerseyConfig extends ResourceConfig {
 	    packages(
 	    	"software.matheus.aos.api", 
 	    	"software.matheus.aos.extension",
-	        "software.matheus.aos.filters"
+	        "software.matheus.aos.filter"
 	    );
 	}
 }

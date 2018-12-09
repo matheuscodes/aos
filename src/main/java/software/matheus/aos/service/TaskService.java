@@ -1,5 +1,6 @@
 package software.matheus.aos.service;
 
+import java.time.LocalDateTime;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.UUID;
@@ -33,15 +34,15 @@ public class TaskService {
   }
 
   public void addTask(Task task) {
+    task.setUpdatedAt(LocalDateTime.now());
+    task.setCreatedAt(LocalDateTime.now());
     taskDao.save(task);
   }
 
   public boolean updateTask(Task selected, Task task) {
-    //if (selected.getId() != task.getId()) {
-      return false;
-    //}
-    //taskDao.update(task);
-    //return true;
+	selected.setUpdatedAt(LocalDateTime.now());
+    taskDao.update(task);
+    return true;
   }
 
 }

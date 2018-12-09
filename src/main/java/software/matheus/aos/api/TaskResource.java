@@ -1,5 +1,6 @@
 package software.matheus.aos.api;
 
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 import javax.ws.rs.Consumes;
