@@ -1,6 +1,14 @@
 version: '3'
 services:
   app:
+    image: node:8-alpine
+    ports:
+     - "4200:4200"
+    volumes:
+      - ./src/app:/root
+    working_dir: /root
+    command: "npm run full-start"
+  api:
     image: maven:3.5.3-jdk-8-alpine
     ports:
      - "8080:8080"
@@ -20,5 +28,3 @@ services:
     volumes:
       - ./db:/var/lib/postgresql
       - ./db/postgres.conf:/etc/postgresql.conf
- 
-    

@@ -3,6 +3,7 @@
     <tr>
       <th scope="col">#</th>
       <th scope="col">Title</th>
+      <th scope="col">Due Date</th>
       <th scope="col">Options</th>
     </tr>
   </thead>
@@ -10,6 +11,7 @@
     <tr *ngFor = "let t of getTasks()">
       <th scope="row">{{t.id}}</th>
       <td>{{t.title}}</td>
+      <td>{{t.dueDate}}</td>
       <td>
         <ng-template #editModal let-modal>
           <div class="modal-header">
