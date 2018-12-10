@@ -4,6 +4,7 @@
       <th scope="col">#</th>
       <th scope="col">Title</th>
       <th scope="col">Due Date</th>
+      <th scope="col">Priority</th>
       <th scope="col">Options</th>
     </tr>
   </thead>
@@ -12,6 +13,7 @@
       <th scope="row">{{t.id}}</th>
       <td>{{t.title}}</td>
       <td>{{t.dueDate}}</td>
+      <td>{{t.priority}}</td>
       <td>
         <ng-template #editModal let-modal>
           <div class="modal-header">
@@ -24,7 +26,20 @@
             <app-task-details [task]="t" ></app-task-details>
           </div>
         </ng-template>
+
+
         <button class="btn btn-lg btn-outline-primary" (click)="open(editModal)">Edit</button>
+      </td>
+      <td>
+        <form #postponeTask = "ngForm" (ngSubmit) = "postpone(t)" >
+          <div class="input-group">
+            <input name="remindAt" class="form-control" placeholder="yyyy-mm-dd" ngbDatepicker #dueDate="ngbDatepicker" [(ngModel)]="t.remindAt" ngModel>
+            <div class="input-group-append">
+              <button class="btn btn-outline-secondary calendar" (click)="dueDate.toggle()" type="button"></button>
+            </div>
+            <input type="submit" class="btn btn-primary" value="Postpone">
+          </div>
+        </form>
       </td>
     </tr>
   </tbody>

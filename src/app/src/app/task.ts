@@ -9,6 +9,7 @@ export class Task {
   description: string;
   priority: string;
   status: string;
+  remindAt: Date;
 
   constructor(data) {
     Object.assign(this,data);

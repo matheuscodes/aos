@@ -39,11 +39,12 @@ public class Task {
   @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
   @Column(name = "id", updatable = false, nullable = false)
   private UUID id;
-  
+
   private LocalDateTime createdAt;
   private LocalDateTime updatedAt;
   private LocalDateTime dueDate;
   private LocalDateTime resolvedAt;
+  private LocalDateTime remindAt;
   private String title;
   private String description;
 
@@ -51,7 +52,7 @@ public class Task {
   @Column(columnDefinition = "priority_type")
   @Type( type = "pgsql_enum" )
   private TaskPriority priority;
-  
+
   @Enumerated(EnumType.STRING)
   @Column(columnDefinition = "status_type")
   @Type( type = "pgsql_enum" )

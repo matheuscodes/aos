@@ -1,12 +1,16 @@
 import { Component, OnInit } from '@angular/core';
+
 import {NgbModal, ModalDismissReasons} from '@ng-bootstrap/ng-bootstrap';
+import {NgbDateAdapter, NgbDateStruct, NgbDateNativeAdapter} from '@ng-bootstrap/ng-bootstrap';
 
 import { TaskService } from '../task.service';
+import { Task } from '../task';
 
 @Component({
   selector: 'app-task-list',
   templateUrl: './task-list.component.html',
-  styleUrls: ['./task-list.component.css']
+  styleUrls: ['./task-list.component.css'],
+  providers: [{provide: NgbDateAdapter, useClass: NgbDateNativeAdapter}]
 })
 export class TaskListComponent implements OnInit {
 
@@ -22,6 +26,13 @@ export class TaskListComponent implements OnInit {
 
    getTasks() {
      return this.taskService.getTasks();
+   }
+
+   postpone(data) {
+     const task = new Task(data);
+     task.status = 'postponed';
+     this.taskService.saveTask(task);
+     alert("Postponing the task...");
    }
 
    open(content) {

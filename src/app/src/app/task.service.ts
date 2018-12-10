@@ -49,7 +49,6 @@ export class TaskService {
   }
 
   saveTask(task: Task) {
-    task.validate();
     console.log(`${this.tasksUrl}/${task.id}`, task, this.httpOptions);
     return this.http.put(`${this.tasksUrl}/${task.id}`, task, this.httpOptions)
                     .pipe(
@@ -87,7 +86,15 @@ export class TaskService {
                    if(item.dueDate) {
                      data.dueDate = new Date(item.dueDate);
                    }
-                   this.add(<Task>(data))
+
+                   if(item.remindAt) {
+                     data.remindAt = new Date(item.remindAt);
+
+                     if(new Date() < data.remindAt) {
+                       return;
+                     }
+                   }
+                   this.add(new Task(data))
                  });
                } else {
                  throw new Error('Unexpected result from parsing.');
