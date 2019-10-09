@@ -24,7 +24,7 @@ export class TaskService {
   ]
 
   constructor(private http: HttpClient) {
-    this.tasksUrl = "http://192.168.99.100:8080/tasks";
+    this.tasksUrl = "http://192.168.99.102:8080/tasks";
     this.httpOptions = {
       headers: new HttpHeaders({
         'Content-Type':  'application/json'

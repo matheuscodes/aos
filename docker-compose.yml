@@ -1,13 +1,11 @@
-version: '3'
+version: '3.7'
 services:
   app:
-    image: node:8-alpine
+    build:
+      context: ./app
+      dockerfile: Dockerfile
     ports:
-     - "4200:4200"
-    volumes:
-      - ./src/app:/root
-    working_dir: /root
-    command: "npm run full-start"
+     - "8081:8081"
   api:
     image: maven:3.5.3-jdk-8-alpine
     ports:
