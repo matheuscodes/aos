@@ -57,3 +57,45 @@ VALUES
  ('de84dba6-8b07-4c1c-bd5d-0d022eaf79ce', '2018-12-21 01:00:00', null, 'Schedule meeting', 'Postponed till friday', 'critical', 'postponed', '2018-12-14 01:00:00'),
  ('171d1172-8273-4f70-9955-9bf83c73a289', '2018-12-14 01:00:00', null, 'Go home', null, 'trivial', 'open', null),
  ('1da97c49-e9e6-4aa1-9417-95a5a54a6a54', null, null, 'Rest', null, 'important', 'open', null);
+ 
+--changeset matheus:7-creating-archetypes
+CREATE TYPE purpose_archetype AS ENUM ('liberation', 'power', 'mastery', 
+									   'safety', 'understanding', 'freedom',
+									   'service', 'control', 'innovation',
+									   'belonging', 'enjoyment', 'intimacy');
+--rollback DROP TYPE archetype
+
+--changeset matheus:8-create-purpose
+CREATE TABLE IF NOT EXISTS purpose (
+	--base
+	id uuid	PRIMARY KEY,
+	created_at TIMESTAMP,
+	updated_at TIMESTAMP,
+	title VARCHAR(70),
+	description VARCHAR(140),
+	--specific
+	archetype purpose_archetype
+);
+--rollback DROP TABLE purpose
+
+
+--changeset matheus:9-create-milestone
+CREATE TABLE IF NOT EXISTS milestone (
+	purpose_id uuid,
+	name VARCHAR(70),
+	date DATE,
+	PRIMARY KEY(purpose_id, name),
+	FOREIGN KEY (purpose_id) REFERENCES purpose (id) ON DELETE CASCADE ON UPDATE CASCADE	
+);
+--rollback DROP TABLE milestone
+
+
+--changeset matheus:10-renaming-plurals
+ALTER TABLE purpose RENAME TO purposes;
+ALTER TABLE milestone RENAME TO milestones;
+
+--changeset matheus:11-changing-milestone-key
+ALTER TABLE milestones
+	ADD id INT,
+	DROP CONSTRAINT milestone_pkey,
+  	ADD PRIMARY KEY (id);
