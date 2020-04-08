@@ -1,8 +1,11 @@
 *~
 /target
 /.m2
+/db
 /db/data
 /db/postgres.conf
 .settings
 .classpath
 .project
+/node_modules
+/src/assets

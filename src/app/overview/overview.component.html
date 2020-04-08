@@ -1,0 +1,34 @@
+<div class="card" style="margin:10px">
+  <div class="card-body">
+    <h1>Purposes</h1>
+    <div class="accordion" id="purposes">
+      <div *ngFor = "let p of getData() | keyvalue">
+        <app-purpose [purpose]="p.value"></app-purpose>
+      </div>
+    </div>
+    <h1>Yearly Objectives</h1>
+    <div class="accordion" id="yearly_objectives">
+      <div *ngFor = "let yearly of getYearly() | keyvalue">
+        <div class="card">
+          <div class="card-header" id="heading-{{yearly.key}}">
+            <h2 class="mb-0">
+              <h2 class="collapsed" data-toggle="collapse" [attr.data-target]="'#collapse-'+ yearly.key" aria-expanded="true" [attr.aria-controls]="'collapse-'+ yearly.key">
+                {{yearly.key}}
+              </h2>
+            </h2>
+          </div>
+          <div id="collapse-{{yearly.key}}" class="collapse" [attr.aria-labelledby]="'heading-'+ yearly.key" data-parent="#yearly_objectives">
+            <div class="card-body">
+              <h2>Objectives</h2>
+              <div class="accordion" id="objectives">
+                <div *ngFor = "let o of yearly.value">
+                  <app-objective [objective]="o"></app-objective>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

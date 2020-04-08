@@ -1,0 +1,19 @@
+<div class="card">
+  <div class="card-header" id="heading-{{purpose.uuid}}">
+    <h2 class="mb-0">
+      <h2 class="collapsed" data-toggle="collapse" [attr.data-target]="'#collapse-'+ purpose.uuid" aria-expanded="true" [attr.aria-controls]="'collapse-'+ purpose.uuid">
+        {{purpose.definition}}
+      </h2>
+    </h2>
+  </div>
+  <div id="collapse-{{purpose.uuid}}" class="collapse" [attr.aria-labelledby]="'heading-'+ purpose.uuid" data-parent="#purposes">
+    <div class="card-body">
+      <h2>Epics</h2>
+      <div class="accordion" id="epics">
+        <div *ngFor = "let e of purpose.epics | keyvalue">
+          <app-epic [epic]="e.value"></app-epic>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
