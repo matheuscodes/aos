@@ -1,0 +1,16 @@
+<div class="card">
+  <div class="card-header" id="heading-result-{{result.uuid}}">
+    <h2 class="mb-0">
+      <h5 class="collapsed" data-toggle="collapse" [attr.data-target]="'#collapse-result-'+ result.uuid" aria-expanded="true" [attr.aria-controls]="'collapse-result-'+ result.uuid">
+        {{result.definition}} - {{(result.completion*100).toFixed(2)}}%
+      </h5>
+    </h2>
+  </div>
+  <div id="collapse-result-{{result.uuid}}" class="collapse" [attr.aria-labelledby]="'heading-result-'+ result.uuid" data-parent="#results">
+    <div class="card-body">
+      <p>{{result.total_time/60}} hours, {{result.total_money}} €, {{result.total_mental}} {{result.total_stamina}}</p>
+      <p>{{result.efforts.length}}</p>
+      <p>{{result.initial}} → {{result.current}} → {{result.target}}</p>
+    </div>
+  </div>
+</div>

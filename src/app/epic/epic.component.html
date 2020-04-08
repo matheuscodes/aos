@@ -1,0 +1,22 @@
+<div class="card">
+  <div class="card-header" id="heading-epic-{{epic.uuid}}">
+    <h2 class="mb-0">
+      <h3 class="collapsed" data-toggle="collapse" [attr.data-target]="'#collapse-epic-'+ epic.uuid" aria-expanded="true" [attr.aria-controls]="'collapse-epic-'+ epic.uuid">
+        {{epic.title}}
+      </h3>
+    </h2>
+  </div>
+  <div id="collapse-epic-{{epic.uuid}}" class="collapse" [attr.aria-labelledby]="'heading-epic-'+ epic.uuid" data-parent="#epics">
+    <div class="card-body">
+      <canvas #epicChart></canvas>
+      <h3>Notes</h3>
+      <p *ngFor = "let note of (epic.notes || '').split('\n')">{{note}}</p>
+      <h3>Objectives</h3>
+      <div class="accordion" id="objectives">
+        <div *ngFor = "let o of epic.objectives | keyvalue">
+          <app-objective [objective]="o.value"></app-objective>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

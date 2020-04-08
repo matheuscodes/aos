@@ -1,78 +1,44 @@
-# Arkanos Organizer Suite
+# Readme
 
-Arkanos Organizer Suite - Tool for managing personal goals.
+## Instructions to run backend
+- Run `docker-compose up postgres`
+- When DB server is up, adjust IPs accordingly on `config/application.properties`
+  - *Hindsight:* should have set this to an environment variable
+- Run `docker-compose up api`
 
-Copyright (C) 2014-2015 Matheus Borges Teixeira
+## Instructions to run frontend
+Choose one of the following:
+- Adjust the API Url on `src/app/src/app/task.service.ts`
+- Run `docker-compose up app`
+  - Note for windows: currently docker container stops right after first compile.
+- Run `cd src/app && npm run full-start`
+  - Conditions here is to have Node.js & NPM installed with permissions to global install.
+- Run `cd src/app && npm install && npm run start`
 
-<img src="https://raw.githubusercontent.com/matheuscodes/aos/master/src/main/webapp/resources/images/AOSLogo.png" width=256px />
+# App
 
-# About
+This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 8.3.21.
 
-AOS is a web application for organizing personal goals. Based on JavaScript and the Sencha framework, it provides a way for users to organize goals, break down into tasks and log work, in order to be able to quantize their own development and through that learn more about themselves.
+## Development server
 
-The code is live and running at https://aos.cloudcontrolled.com/
+Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
 
-Please keep in mind the system uses a double opt-in for registrations and if an account is not confirmed though the registration mail all data will be **mercilessly deleted from the server**. Another note, make sure to always use a secure (HTTPS) connection, there is no detection/redirection feature in place to move from open to secure automatically.
+## Code scaffolding
 
-**License:** AGPL.
+Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
 
-_PW Small Icons, Copyright (C) 2013 [Peax Webdesign](http://www.peax-webdesign.com)_
+## Build
 
-_Kingthings Trypewriter, Copyright (C) 2005 [Kingthings](http://www.kingthingsfonts.co.uk)_
+Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build.
 
-_Crypto JS, Copyright (c) 2009 [Jeff Mott](https://code.google.com/p/crypto-js/wiki/License)_
+## Running unit tests
 
-## Feature Overview
+Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
 
-<img src="https://raw.githubusercontent.com/matheuscodes/aos/master/src/main/webapp/resources/images/features.png" width=256px align="right" />
+## Running end-to-end tests
 
-- **Sign-up/Login:** the user can create an account to store data and access it remotely. An email to confirm the account is sent, and additionally the user can use that email to recover passwords.
-- **Statistics:** the user can see the statics calculated based on the data from his account.
-- **Goals:** the user can see the status of current goals, break goals into new tasks and create new ones. 
-- **Tasks:** the user can see the status of the task, edit it and log work. 
-- **Worklog:** the user can see all the logged work and remove any if necessary.
-- **Logout:** leaves the application and removes cookies, local cache data and the account data remain.
+Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
 
-### Statistics
+## Further help
 
-<img src="https://raw.githubusercontent.com/matheuscodes/aos/master/src/main/webapp/resources/images/statistics.png" />
-
-Based on the goals, tasks and logged work, a set of statistics can be calculated. On this tab the user can understand how he stands in relation to the past and planned efforts.
-
-#### Overview
-
-On this top level overview the user can observe some numbers comparing all goals altogether, as well as some reference to the expectations on the current time, to see if things are generally ahead or behind schedule.
-
-<img src="https://raw.githubusercontent.com/matheuscodes/aos/master/src/main/webapp/resources/images/top_level.png" width="25%" align="right"/>
-<img src="https://raw.githubusercontent.com/matheuscodes/aos/master/src/main/webapp/resources/images/averages.png" width="74%" align="left"/>
-
-Each goal is assigned a colour to be referred in the following statistics. These are always the same, to keep it clear to the user and have an horizontal overview.
-
-<img src="https://raw.githubusercontent.com/matheuscodes/aos/master/src/main/webapp/resources/images/goals.png" />
-
-#### Completion
-
-Based on the logged work, these graphs show the monthly progress of each goal.
-
-<img src="https://raw.githubusercontent.com/matheuscodes/aos/master/src/main/webapp/resources/images/completion.png" />
-
-#### Dedication
-
-Based on the logged work, these graphs show the development in relation to the originally planned amount of time.
-
-<img src="https://raw.githubusercontent.com/matheuscodes/aos/master/src/main/webapp/resources/images/dedication.png" />
-
-#### Productivity
-
-Based on the progress and amount of hours logged, using the planned time as reference, the user can see how does the actual outcome compares to the expected time required to it.
-
-<img src="https://raw.githubusercontent.com/matheuscodes/aos/master/src/main/webapp/resources/images/productivity.png" />
-
-#### Focus
-
-Based on the logged work, the user can see the distribution of hours between the different goals.
-
-<img src="https://raw.githubusercontent.com/matheuscodes/aos/master/src/main/webapp/resources/images/focus.png" />
-
-# More information
-For more information about the features and details of this tool, please refer to the **Instructions** tab which can be found inside the **Information** screen. Use the top right button at the **Login** screen to get there.
+To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
