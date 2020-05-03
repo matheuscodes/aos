@@ -1,4 +1,5 @@
 import Result from './result'
+import Efforts from './efforts'
 import { Report, PeriodReport, ReportUnit } from './report'
 
 export interface ObjectiveResults {
@@ -16,6 +17,8 @@ export default class Objective {
   private cached_completion_sum: number;
 
   private monthly: PeriodReport;
+
+  private cached_efforts: Efforts;
 
   constructor(data: any) {
     this.uuid = data.uuid;
@@ -78,5 +81,28 @@ export default class Objective {
     return {
       monthly: this.monthly
     }
+  }
+
+  get efforts(): Efforts {
+    if(!this.cached_efforts) {
+      this.cached_efforts = new Efforts();
+      Object.keys(this.results).forEach(key => {
+        const result = this.results[key];
+        result.efforts.forEach(effort => {
+          this.cached_efforts.addEffort(effort,result,this);
+        });
+      });
+    }
+    return this.cached_efforts;
+  }
+
+  clearCache() {
+    delete this.cached_total_time;
+    delete this.cached_completion_sum;
+    delete this.monthly;
+    delete this.cached_efforts;
+    Object.keys(this.results).forEach(r => {
+      this.results[r].clearCache();
+    });
   }
 }

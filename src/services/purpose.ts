@@ -57,6 +57,14 @@ export default class Purpose {
     return report.dedication / Object.keys(this.epics).length
   }
 
+  clearCache() {
+    delete this.cached_total_time;
+    delete this.cached_completion_sum;
+    delete this.monthly;
+    Object.keys(this.epics).forEach(e => {
+      this.epics[e].clearCache();
+    });
+  }
   get report(): Report {
     if(!this.monthly) {
       this.monthly = {}

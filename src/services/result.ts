@@ -28,10 +28,6 @@ export default class Result {
         this.efforts.push(new Effort(effort));
       })
     }
-
-    if(this.uuid == 'f7105dbc-42d7-11ea-9c33-7824af77e6ea'){
-      console.log(this)
-    }
   }
 
   get total_time(): number {
@@ -90,6 +86,17 @@ export default class Result {
     return {
       monthly: this.monthly
     }
+  }
+
+  addEffort(effort: Effort) {
+    this.clearCache();
+    this.efforts.push(effort);
+  }
+
+  clearCache() {
+    delete this.cached_current;
+    delete this.cached_total_time;
+    delete this.monthly;
   }
 
 }

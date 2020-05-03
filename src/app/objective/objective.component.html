@@ -15,6 +15,35 @@
           <app-result [result]="r.value"></app-result>
         </div>
       </div>
+      <h4>Efforts</h4>
+      <table class="table">
+        <thead class="thead-light">
+          <tr>
+            <th scope="col">Date</th>
+            <th scope="col">Time</th>
+            <th scope="col">Result</th>
+            <th scope="col">Modifier</th>
+            <th scope="col">Comment</th>
+            <th scope="col" width="128pt"><img src="assets/noun_Time_2896455.svg"/></th>
+            <th scope="col" width="128pt"><img src="assets/noun_Money_1687804.svg"/></th>
+            <th scope="col" width="128pt"><img src="assets/noun_Mental Health_1061782.svg"/></th>
+            <th scope="col" width="128pt"><img src="assets/noun_heart beat_1510475.svg"/></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor = "let e of objective.efforts.table">
+            <td>{{e.effort.date.toJSON().substring(0,10)}}</td>
+            <td>{{e.effort.time}}</td>
+            <td>{{e.result.definition}}</td>
+            <td>{{e.effort.modifier}}</td>
+            <td>{{e.effort.comment}}</td>
+            <td>{{e.effort.time_spent}} minutes</td>
+            <td>{{e.effort.money_spent}} €</td>
+            <td>{{e.effort.thought_spent}} cog load</td>
+            <td>{{e.effort.thew_spent}} kcal</td>
+          </tr>
+        </tbody>
+      </table>
     </div>
   </div>
 </div>

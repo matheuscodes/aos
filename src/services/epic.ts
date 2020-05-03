@@ -10,7 +10,7 @@ export default class Epic {
   title: string;
   notes: string;
   objectives: EpicObjectives;
-  
+
   private cached_total_time: number;
   private cached_completion_sum: number;
 
@@ -50,6 +50,15 @@ export default class Epic {
 
   private relativeDedication(report: ReportUnit): number {
     return report.dedication / Object.keys(this.objectives).length
+  }
+
+  clearCache() {
+    delete this.cached_total_time;
+    delete this.cached_completion_sum;
+    delete this.monthly;
+    Object.keys(this.objectives).forEach(o => {
+      this.objectives[o].clearCache();
+    });
   }
 
   get report(): Report {

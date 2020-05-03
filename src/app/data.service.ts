@@ -39,6 +39,12 @@ export class DataService {
     return this.yearly;
   }
 
+  clearCache() {
+     Object.keys(this.purposes).forEach(p => {
+       this.purposes[p].clearCache();
+     });
+  }
+
   refresh() {
     this.purposes = {};
     this.yearly = {};
