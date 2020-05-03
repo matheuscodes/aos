@@ -15,14 +15,14 @@ export class DataService {
 
   data;
   httpOptions;
-  tasksUrl: string;
+  purposesUrl: string;
 
   yearly;
   purposes;
 
   constructor(private http: HttpClient) {
     this.yearly = {};
-    this.tasksUrl = "http://localhost:4200/assets/clean.json";
+    this.purposesUrl = "http://localhost:3000/users/local";
     this.httpOptions = {
       headers: new HttpHeaders({
         'Content-Type':  'application/json'
@@ -45,11 +45,30 @@ export class DataService {
      });
   }
 
+  submit() {
+    const seen = [];
+    this.http.put(this.purposesUrl, {
+      id: "local",
+      purposes: JSON.parse(JSON.stringify(this.purposes, (key, val) => {
+        if(key.includes("cached") || key.includes("monthly")) return
+        if (typeof val == "object") {
+          if (seen.indexOf(val) >= 0) return
+          seen.push(val)
+        }
+        return val
+      })),
+    }).subscribe({
+      next: console.log,
+      error: console.log, // TODO handle error and retries.
+    });
+  }
+
   refresh() {
     this.purposes = {};
     this.yearly = {};
-    this.http.get(this.tasksUrl)
-             .subscribe(data => {
+    this.http.get<any>(this.purposesUrl)
+             .subscribe(response => {
+               const data = response.purposes;
                Object.keys(data).forEach(key => {
                  this.purposes[key] = new Purpose(data[key]);
                })
