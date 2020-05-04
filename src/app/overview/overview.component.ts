@@ -55,13 +55,13 @@ export class OverviewComponent implements OnInit {
       try {
         const createdEffort = new Effort(queuedEffort.effort);
         queuedEffort.result.addEffort(createdEffort);
-        this.dataService.submit();
         this.dataService.clearCache();
       } catch(e) {
         console.log(e);
         failed.push(queuedEffort);
       }
     });
+    this.dataService.submit();
     this.queuedEfforts = failed;
   }
 
