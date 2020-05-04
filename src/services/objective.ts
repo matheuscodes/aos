@@ -92,6 +92,14 @@ export default class Objective {
           this.cached_efforts.addEffort(effort,result,this);
         });
       });
+      this.cached_efforts.table.sort((a,b) => {
+        if(a.effort.date == b.effort.date) return 0;
+        if(a.effort.date < b.effort.date) {
+          return 1;
+        } else {
+          return -1;
+        }
+      });
     }
     return this.cached_efforts;
   }

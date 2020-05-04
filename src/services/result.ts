@@ -18,8 +18,8 @@ export default class Result {
   constructor(data: any) {
     this.uuid = data.uuid;
     this.definition = data.definition;
-    this.target = data.target;
-    this.initial = data.initial;
+    this.target = (data.target || 0);
+    this.initial = (data.initial || 0);
     this.time_estimate = data.time_estimate || data.estimate;
 
     this.efforts = []
@@ -47,15 +47,29 @@ export default class Result {
   }
 
   get completion(): number {
-    return (this.current - this.initial) / (this.target - this.initial);
+    const target = this.target || this.current;
+    if(target === this.initial) {
+      return 0;
+    }
+    return (this.current - this.initial) / (target - this.initial);
   }
 
   private relativeCompletion(effort: Effort): number {
-    return effort.modifier / (this.target - this.initial)
+    const target = this.target || this.current;
+    if(target === this.initial) {
+      return 0;
+    }
+    return effort.modifier / (target - this.initial)
   }
 
   private relativeDedication(effort: Effort): number {
-    return effort.time_spent / (this.time_estimate || effort.time_spent)
+    if(!this.time_estimate) {
+      return 1;
+    }
+    if(!effort.time_spent) {
+      return 0;
+    }
+    return effort.time_spent / this.time_estimate
   }
 
   get report(): Report {

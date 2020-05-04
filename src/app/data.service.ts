@@ -59,7 +59,7 @@ export class DataService {
       })),
     }).subscribe({
       next: console.log,
-      error: console.log, // TODO handle error and retries.
+      error: console.error, // TODO handle error and retries.
     });
   }
 
