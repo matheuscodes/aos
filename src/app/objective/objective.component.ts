@@ -82,13 +82,19 @@ export class ObjectiveComponent implements OnInit {
                 yAxes: [{
                     id: 'left-y-axis',
                     type: 'linear',
-                    position: 'left'
+                    position: 'left',
+                    ticks: {
+                        min: 0,
+                    }
                 }, {
                     id: 'right-y-axis',
                     type: 'linear',
                     position: 'right',
                     gridLines: {
                       display: false
+                    },
+                    ticks: {
+                        min: 0,
                     }
                 }]
             }

@@ -64,7 +64,7 @@ export default class Result {
 
   private relativeDedication(effort: Effort): number {
     if(!this.time_estimate) {
-      return 1;
+      return 0;
     }
     if(!effort.time_spent) {
       return 0;

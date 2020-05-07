@@ -50,11 +50,19 @@ export default class Objective {
   }
 
   private relativeCompletion(report: ReportUnit): number {
-    return report.completion / Object.keys(this.results).length
+    return report.completion / this.allResultsCount();
   }
 
   private relativeDedication(report: ReportUnit): number {
-    return report.dedication / Object.keys(this.results).length
+    return report.dedication / this.estimatedResultsCount();
+  }
+
+  private estimatedResultsCount() {
+    return Object.keys(this.results).map(key => this.results[key]).filter(result => result.time_estimate).length;
+  }
+
+  private allResultsCount() {
+    return Object.keys(this.results).length;
   }
 
   get report(): Report {

@@ -46,7 +46,6 @@ export class OverviewComponent implements OnInit {
     const resultUUID = test.target.value;
     const result = results[resultUUID];
     effort.result = result;
-    console.log(this.queuedEfforts)
   }
 
   saveEfforts() {
