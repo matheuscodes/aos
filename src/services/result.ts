@@ -15,7 +15,9 @@ export default class Result {
 
   private monthly: PeriodReport;
 
-  constructor(data: any) {
+  private cached_parent: any;
+
+  constructor(data: any, parent: any) {
     this.uuid = data.uuid;
     this.definition = data.definition;
     this.target = (data.target || 0);
@@ -25,8 +27,12 @@ export default class Result {
     this.efforts = []
     if(data.efforts) {
       data.efforts.forEach(effort => {
-        this.efforts.push(new Effort(effort));
+        this.efforts.push(new Effort(effort, this));
       })
+    }
+
+    if(parent) {
+      this.cached_parent = parent;
     }
   }
 
@@ -111,6 +117,10 @@ export default class Result {
     delete this.cached_current;
     delete this.cached_total_time;
     delete this.monthly;
+  }
+
+  get parent() {
+    return this.cached_parent;
   }
 
 }

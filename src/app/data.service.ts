@@ -5,6 +5,7 @@ import { throwError } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
 
 import Purpose from '../services/purpose';
+import YearPlan from '../services/year-plan';
 
 let id = 1;
 
@@ -77,14 +78,16 @@ export class DataService {
                    Object.keys(this.purposes[p].epics[e].objectives).forEach(o => {
                      //Yearly
                      if(this.purposes[p].epics[e].objectives[o].due_date) {
-                       if(!this.yearly[this.purposes[p].epics[e].objectives[o].due_date.toJSON().substr(0,4)]) {
-                         this.yearly[this.purposes[p].epics[e].objectives[o].due_date.toJSON().substr(0,4)] = []
+                       const year = this.purposes[p].epics[e].objectives[o].due_date.toJSON().substr(0,4);
+                       if(!this.yearly[year]) {
+                         this.yearly[year] = new YearPlan(year);
                        }
-                       this.yearly[this.purposes[p].epics[e].objectives[o].due_date.toJSON().substr(0,4)].push(this.purposes[p].epics[e].objectives[o]);
+                       this.yearly[year].addObjective(this.purposes[p].epics[e].objectives[o]);
                      }
                    });
                  });
                });
+               console.log(this.yearly);
              });
   }
 }

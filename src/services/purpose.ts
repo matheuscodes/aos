@@ -28,7 +28,7 @@ export default class Purpose {
     this.epics = {};
     if(data.epics) {
       Object.keys(data.epics).forEach(key => {
-        this.epics[key] = new Epic(data.epics[key]);
+        this.epics[key] = new Epic(data.epics[key],this);
       })
     }
   }
@@ -88,6 +88,16 @@ export default class Purpose {
     }
     return {
       monthly: this.monthly
+    }
+  }
+
+  completionTillMonth(month: string) {
+    let completion = 0;
+    const latestCompletion = Object.keys(this.report.monthly).filter(key => key <= month).map(key => this.report.monthly[key].completion).reduce((a, b) => a + b, 0);
+    if(latestCompletion) {
+      return latestCompletion;
+    } else {
+      return 0;
     }
   }
 }

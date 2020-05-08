@@ -20,7 +20,9 @@ export default class Objective {
 
   private cached_efforts: Efforts;
 
-  constructor(data: any) {
+  private cached_parent: any;
+
+  constructor(data: any, parent: any) {
     this.uuid = data.uuid;
     this.title = data.title;
     this.time_planned = data.time_planned;
@@ -28,8 +30,12 @@ export default class Objective {
     this.results = {}
     if(data.results) {
       Object.keys(data.results).forEach(key => {
-        this.results[key] = new Result(data.results[key]);
+        this.results[key] = new Result(data.results[key],this);
       })
+    }
+
+    if(parent) {
+      this.cached_parent = parent;
     }
   }
 
@@ -120,5 +126,19 @@ export default class Objective {
     Object.keys(this.results).forEach(r => {
       this.results[r].clearCache();
     });
+  }
+
+  get parent() {
+    return this.cached_parent;
+  }
+
+  completionTillMonth(month: string) {
+    let completion = 0;
+    const latestCompletion = Object.keys(this.report.monthly).filter(key => key <= month).map(key => this.report.monthly[key].completion).reduce((a, b) => a + b, 0);
+    if(latestCompletion) {
+      return latestCompletion;
+    } else {
+      return 0;
+    }
   }
 }

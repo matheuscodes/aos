@@ -52,7 +52,7 @@ export class OverviewComponent implements OnInit {
     const failed = [];
     this.queuedEfforts.forEach(queuedEffort => {
       try {
-        const createdEffort = new Effort(queuedEffort.effort);
+        const createdEffort = new Effort(queuedEffort.effort, queuedEffort.result);
         queuedEffort.result.addEffort(createdEffort);
         this.dataService.clearCache();
       } catch(e) {

@@ -16,15 +16,21 @@ export default class Epic {
 
   private monthly: PeriodReport;
 
-  constructor(data: any) {
+  private cached_parent: any;
+
+  constructor(data: any, parent: any) {
     this.uuid = data.uuid;
     this.title = data.title;
     this.notes = data.notes;
     this.objectives = {}
     if(data.objectives) {
       Object.keys(data.objectives).forEach(key => {
-        this.objectives[key] = new Objective(data.objectives[key]);
+        this.objectives[key] = new Objective(data.objectives[key],this);
       })
+    }
+
+    if(parent) {
+      this.cached_parent = parent;
     }
   }
 
@@ -84,6 +90,20 @@ export default class Epic {
     }
     return {
       monthly: this.monthly
+    }
+  }
+
+  get parent() {
+    return this.cached_parent;
+  }
+
+  completionTillMonth(month: string) {
+    let completion = 0;
+    const latestCompletion = Object.keys(this.report.monthly).filter(key => key <= month).map(key => this.report.monthly[key].completion).reduce((a, b) => a + b, 0);
+    if(latestCompletion) {
+      return latestCompletion;
+    } else {
+      return 0;
     }
   }
 }

@@ -145,9 +145,78 @@
                 </div>
               </div>
             </div>
+            <h3>Impact</h3>
+            <table class="table">
+              <thead class="thead-light">
+                <tr>
+                  <th scope="col">Objective</th>
+                  <th scope="col">{{yearly.value.year}}/Q1</th>
+                  <th scope="col">{{yearly.value.year}}/Q2</th>
+                  <th scope="col">{{yearly.value.year}}/Q3</th>
+                  <th scope="col">{{yearly.value.year}}/Q4</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor = "let e of yearly.value.report.objectives">
+                  <td>{{e.objective.title}}</td>
+                  <td>{{(e.Q1.completion*100).toFixed(2)}}%</td>
+                  <td>{{(e.Q2.completion*100).toFixed(2)}}% ({{((e.Q2.completion - e.Q1.completion)*100).toFixed(2)}}%)</td>
+                  <td>{{(e.Q3.completion*100).toFixed(2)}}% ({{((e.Q3.completion - e.Q2.completion)*100).toFixed(2)}}%)</td>
+                  <td>{{(e.Q4.completion*100).toFixed(2)}}% ({{((e.Q4.completion - e.Q3.completion)*100).toFixed(2)}}%)</td>
+                </tr>
+              </tbody>
+            </table>
+            <table class="table">
+              <thead class="thead-light">
+                <tr>
+                  <th scope="col">Epic</th>
+                  <th scope="col">Previous Year</th>
+                  <th scope="col">{{yearly.value.year}}/Q1</th>
+                  <th scope="col">{{yearly.value.year}}/Q2</th>
+                  <th scope="col">{{yearly.value.year}}/Q3</th>
+                  <th scope="col">{{yearly.value.year}}/Q4</th>
+                  <th scope="col">Total</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor = "let e of yearly.value.report.epics">
+                  <td>{{e.epic.title}}</td>
+                  <td>{{(e.previous.completion*100).toFixed(2)}}%</td>
+                  <td>{{(e.Q1.completion*100).toFixed(2)}}% ({{((e.Q1.completion - e.previous.completion)*100).toFixed(2)}}%)</td>
+                  <td>{{(e.Q2.completion*100).toFixed(2)}}% ({{((e.Q2.completion - e.Q1.completion)*100).toFixed(2)}}%)</td>
+                  <td>{{(e.Q3.completion*100).toFixed(2)}}% ({{((e.Q3.completion - e.Q2.completion)*100).toFixed(2)}}%)</td>
+                  <td>{{(e.Q4.completion*100).toFixed(2)}}% ({{((e.Q4.completion - e.Q3.completion)*100).toFixed(2)}}%)</td>
+                  <td>{{((e.Q4.completion - e.previous.completion)*100).toFixed(2)}}%</td>
+                </tr>
+              </tbody>
+            </table>
+            <table class="table">
+              <thead class="thead-light">
+                <tr>
+                  <th scope="col">Purpose</th>
+                  <th scope="col">Previous Year</th>
+                  <th scope="col">{{yearly.value.year}}/Q1</th>
+                  <th scope="col">{{yearly.value.year}}/Q2</th>
+                  <th scope="col">{{yearly.value.year}}/Q3</th>
+                  <th scope="col">{{yearly.value.year}}/Q4</th>
+                  <th scope="col">Total</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor = "let e of yearly.value.report.purposes">
+                  <td>{{e.purpose.definition}}</td>
+                  <td>{{(e.previous.completion*100).toFixed(2)}}%</td>
+                  <td>{{(e.Q1.completion*100).toFixed(2)}}% ({{((e.Q1.completion - e.previous.completion)*100).toFixed(2)}}%)</td>
+                  <td>{{(e.Q2.completion*100).toFixed(2)}}% ({{((e.Q2.completion - e.Q1.completion)*100).toFixed(2)}}%)</td>
+                  <td>{{(e.Q3.completion*100).toFixed(2)}}% ({{((e.Q3.completion - e.Q2.completion)*100).toFixed(2)}}%)</td>
+                  <td>{{(e.Q4.completion*100).toFixed(2)}}% ({{((e.Q4.completion - e.Q3.completion)*100).toFixed(2)}}%)</td>
+                  <td>{{((e.Q4.completion - e.previous.completion)*100).toFixed(2)}}%</td>
+                </tr>
+              </tbody>
+            </table>
             <h3>Objectives</h3>
             <div class="accordion" id="objectives">
-              <div *ngFor = "let o of yearly.value">
+              <div *ngFor = "let o of yearly.value.objectives">
                 <app-objective [objective]="o"></app-objective>
               </div>
             </div>
