@@ -87,7 +87,6 @@ export class DataService {
                    });
                  });
                });
-               console.log(this.yearly);
              });
   }
 }
