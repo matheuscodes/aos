@@ -70,9 +70,9 @@
                           </td>
                           <td>
                             <div class="input-group mb-3">
-                              <select class="custom-select" id="objective-select-{{yearly.key}}" (change)="selectObjective($event, e, yearly.value)">
+                              <select class="custom-select" id="objective-select-{{yearly.key}}" (change)="selectObjective($event, e, yearly.value.objectives)">
                                 <option selected>Objective</option>
-                                <option *ngFor = "let o of yearly.value" [value]="o.uuid" >
+                                <option *ngFor = "let o of yearly.value.objectives" [value]="o.uuid" >
                                   {{o.title}}
                                 </option>
                               </select>
