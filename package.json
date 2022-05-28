@@ -15,7 +15,7 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "backend": "json-server --watch db.json",
+    "backend": "node ./backend/join.js && json-server --watch db.json",
     "build": "ng build",
     "test": "ng test",
     "lint": "ng lint",
