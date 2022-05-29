@@ -1,14 +1,22 @@
 <div class="card" style="margin:10px">
   <ul class="nav nav-tabs" id="overview-tab" role="tablist">
     <li class="nav-item">
-      <a class="nav-link active" id="long-term-tab" data-toggle="tab" href="#long-term" role="tab">Purposes</a>
+      <a class="nav-link active" id="summary-tab" data-toggle="tab" href="#summary" role="tab">Overview</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" id="long-term-tab" data-toggle="tab" href="#long-term" role="tab">Purposes</a>
     </li>
     <li class="nav-item">
       <a class="nav-link" id="yearly-tab" data-toggle="tab" href="#yearly" role="tab">Yearly OKRs</a>
     </li>
   </ul>
   <div class="tab-content" id="overview-tab-content">
-    <div class="tab-pane fade show active" id="long-term" role="tabpanel">
+    <div class="tab-pane fade show active" id="summary" role="tabpanel">
+      <div class="card-body">
+          <app-summary [everything]="getDataArray()" *ngIf="getDataArray().length > 0"></app-summary>
+      </div>
+    </div>
+    <div class="tab-pane fade" id="long-term" role="tabpanel">
       <div class="card-body">
         <div class="accordion" id="purposes">
           <div *ngFor = "let p of getData() | keyvalue">

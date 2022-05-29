@@ -19,7 +19,7 @@ export class DataService {
   purposesUrl: string;
 
   yearly;
-  purposes;
+  purposes: {[key: string]: Purpose};
 
   constructor(private http: HttpClient) {
     this.yearly = {};
@@ -78,7 +78,7 @@ export class DataService {
                    Object.keys(this.purposes[p].epics[e].objectives).forEach(o => {
                      //Yearly
                      if(this.purposes[p].epics[e].objectives[o].due_date) {
-                       const year = this.purposes[p].epics[e].objectives[o].due_date.toJSON().substr(0,4);
+                       const year: number = parseInt(this.purposes[p].epics[e].objectives[o].due_date.toJSON().substr(0,4));
                        if(!this.yearly[year]) {
                          this.yearly[year] = new YearPlan(year);
                        }

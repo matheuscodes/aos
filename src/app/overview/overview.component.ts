@@ -15,6 +15,8 @@ export class OverviewComponent implements OnInit {
 
   queuedEfforts: any[]
 
+  data: any[] = []
+
   constructor(
     private dataService: DataService
   ) {
@@ -22,7 +24,16 @@ export class OverviewComponent implements OnInit {
   }
 
   getData() {
-    return this.dataService.getData();
+    const data = this.dataService.getData();
+    Object.keys(data).forEach(i => {
+      if(!this.data.map(i => i.uuid).includes(i))
+        this.data.push(data[i])
+    });
+    return data;
+  }
+
+  getDataArray() {
+    return this.data;
   }
 
   getYearly() {

@@ -9,6 +9,7 @@ import { PurposeComponent } from './purpose/purpose.component';
 import { EpicComponent } from './epic/epic.component';
 import { ObjectiveComponent } from './objective/objective.component';
 import { ResultComponent } from './result/result.component';
+import { SummaryComponent } from './summary/summary.component';
 
 @NgModule({
   declarations: [
@@ -17,7 +18,8 @@ import { ResultComponent } from './result/result.component';
     PurposeComponent,
     EpicComponent,
     ObjectiveComponent,
-    ResultComponent
+    ResultComponent,
+    SummaryComponent,
   ],
   imports: [
     BrowserModule,
