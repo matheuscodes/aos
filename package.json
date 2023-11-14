@@ -16,7 +16,7 @@
     "ng": "ng",
     "frontend": "ng build --watch",
     "backend": "node ./src/backend.js",
-    "build": "ng build",
+    "build": "pkg -t node18-win-x64 src/backend.js",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e"
@@ -46,6 +46,7 @@
     "@angular/compiler-cli": "17.0.2",
     "@angular/language-service": "17.0.2",
     "@types/node": "8.9.4",
+    "pkg": "5.8.1",
     "ts-node": "7.0.0",
     "tslint": "5.15.0",
     "typescript": "5.2.2"
