@@ -12,3 +12,5 @@
 db.json
 storage
 .angular
+/backend/storage.zip
+.idea
