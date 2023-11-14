@@ -21,7 +21,9 @@ function recursive(array) {
 
 
 function load(file) {
-  return JSON.parse(fs.readFileSync(file));
+  const read = JSON.parse(fs.readFileSync(file))
+  read.origin = file
+  return read
 }
 
 const files = recursive(["./backend/storage"])[0]
