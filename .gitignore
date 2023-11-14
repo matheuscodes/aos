@@ -1,16 +1,6 @@
 *~
-/target
-/.m2
-/db
-/db/data
-/db/postgres.conf
-.settings
-.classpath
-.project
-/node_modules
-/src/assets
+node_modules
 db.json
 storage
 .angular
-/backend/storage.zip
 .idea
