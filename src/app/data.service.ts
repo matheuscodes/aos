@@ -23,7 +23,7 @@ export class DataService {
 
   constructor(private http: HttpClient) {
     this.yearly = {};
-    this.purposesUrl = "http://localhost:3000/users/local";
+    this.purposesUrl = "http://localhost:3000/api/purposes";
     this.httpOptions = {
       headers: new HttpHeaders({
         'Content-Type':  'application/json'

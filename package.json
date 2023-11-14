@@ -14,7 +14,7 @@
   "homepage": "https://github.com/matheuscodes/aos#readme",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve",
+    "frontend": "ng build --watch",
     "backend": "node ./src/backend.js",
     "build": "ng build",
     "test": "ng test",

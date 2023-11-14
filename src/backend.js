@@ -87,7 +87,9 @@ refresh();
 
 application.use(cors())
 
-application.get('/users/local', (req, res) => {
+application.use('/', express.static('./dist/app'))
+
+application.get('/api/purposes', (req, res) => {
   res.send(JSON.stringify({
       "id": "local",
       "purposes": joined,
