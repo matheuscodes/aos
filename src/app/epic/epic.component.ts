@@ -28,9 +28,17 @@ export class EpicComponent implements OnInit {
 
   @Input() epic: any;
 
+  objectives: any;
+
   constructor() { }
 
   ngOnInit() {
+    if(this.epic) {
+      this.objectives = Object.values(this.epic.objectives)
+      this.objectives.sort((a: any,b: any) => {
+        return parseInt(b.due_date.toJSON().slice(0,4)) - parseInt(a.due_date.toJSON().slice(0,4));
+      });
+    }
   }
 
   ngAfterViewInit() { this.createChart() }

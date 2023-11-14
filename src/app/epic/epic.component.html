@@ -13,8 +13,8 @@
       <p *ngFor = "let note of (epic.notes || '').split('\n')">{{note}}</p>
       <h3>Objectives</h3>
       <div class="accordion" id="objectives">
-        <div *ngFor = "let o of epic.objectives | keyvalue">
-          <app-objective [objective]="o.value"></app-objective>
+        <div *ngFor = "let o of objectives">
+          <app-objective [objective]="o"></app-objective>
         </div>
       </div>
     </div>
