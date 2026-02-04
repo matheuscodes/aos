@@ -3,9 +3,9 @@
   "compilerOptions": {
     "outDir": "./dist/out-tsc/spec",
     "types": [
-      "jasmine",
-      "node"
-    ]
+      "jasmine"
+    ],
+    "skipLibCheck": true
   },
   "files": [
     "src/test.ts",

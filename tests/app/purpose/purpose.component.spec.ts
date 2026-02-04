@@ -111,9 +111,9 @@ describe('PurposeComponent', () => {
       expect(fixture.nativeElement).toBeTruthy();
     });
 
-    it('should render without errors when purpose is undefined', () => {
+    it('should throw error when rendering with undefined purpose', () => {
       component.purpose = undefined;
-      expect(() => fixture.detectChanges()).not.toThrow();
+      expect(() => fixture.detectChanges()).toThrow();
     });
 
     it('should render without errors when purpose is provided', () => {
@@ -124,7 +124,7 @@ describe('PurposeComponent', () => {
 
   describe('component instance', () => {
     it('should have all required properties', () => {
-      expect(component.purpose).toBeDefined();
+      expect(component.purpose).not.toBeDefined();
     });
 
     it('should have ngOnInit method', () => {

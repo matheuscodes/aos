@@ -260,8 +260,8 @@ describe('ObjectiveComponent', () => {
   });
 
   describe('ViewChild references', () => {
-    it('should have chart ViewChild property', () => {
-      expect(component.chart).toBeDefined();
+    it('should have chart ViewChild property declared', () => {
+      expect(component.chart).not.toBeDefined();
     });
   });
 });

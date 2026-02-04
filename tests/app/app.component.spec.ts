@@ -58,7 +58,7 @@ describe('AppComponent', () => {
     });
 
     it('should have all required properties', () => {
-      expect(component).toHaveProperty('title');
+      expect(component.title).toBeDefined();
     });
   });
 });

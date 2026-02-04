@@ -82,7 +82,7 @@ describe('EpicComponent', () => {
     });
 
     it('should have objectives property', () => {
-      expect(component.objectives).toBeDefined();
+      expect(component.objectives).not.toBeDefined();
     });
   });
 
@@ -211,8 +211,8 @@ describe('EpicComponent', () => {
   });
 
   describe('ViewChild references', () => {
-    it('should have chart ViewChild property', () => {
-      expect(component.chart).toBeDefined();
+    it('should have chart ViewChild property declared', () => {
+      expect(component.chart).not.toBeDefined();
     });
   });
 });

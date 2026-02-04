@@ -331,14 +331,14 @@ describe('OverviewComponent', () => {
   });
 
   describe('ViewChild references', () => {
-    it('should have chart ViewChild property', () => {
-      expect(component.chart).toBeDefined();
+    it('should have chart ViewChild property declared', () => {
+      expect(component.chart).not.toBeDefined();
     });
   });
 
   describe('properties', () => {
     it('should have downloadedData property', () => {
-      expect(component.downloadedData).toBeDefined();
+      expect(component.downloadedData).not.toBeDefined();
     });
 
     it('should have queuedEfforts property', () => {

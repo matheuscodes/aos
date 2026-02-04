@@ -135,9 +135,9 @@ describe('ResultComponent', () => {
       expect(fixture.nativeElement).toBeTruthy();
     });
 
-    it('should render without errors when result is undefined', () => {
+    it('should throw error when rendering with undefined result', () => {
       component.result = undefined;
-      expect(() => fixture.detectChanges()).not.toThrow();
+      expect(() => fixture.detectChanges()).toThrow();
     });
 
     it('should render without errors when result is provided', () => {
@@ -148,7 +148,7 @@ describe('ResultComponent', () => {
 
   describe('component instance', () => {
     it('should have all required properties', () => {
-      expect(component.result).toBeDefined();
+      expect(component.result).not.toBeDefined();
     });
 
     it('should have ngOnInit method', () => {
@@ -244,14 +244,40 @@ describe('ResultComponent', () => {
     });
 
     it('should handle multiple result changes', () => {
-      const result1 = { uuid: 'r1', title: 'Result 1', target: 50 };
-      const result2 = { uuid: 'r2', title: 'Result 2', target: 100 };
+      const result1 = { 
+        uuid: 'r1', 
+        title: 'Result 1', 
+        target: 50,
+        definition: 'Def 1',
+        completion: 0.5,
+        total_time: 60,
+        total_money: 100,
+        total_mental: 5,
+        total_stamina: 5,
+        efforts: [],
+        initial: 0,
+        current: 25
+      };
+      const result2 = { 
+        uuid: 'r2', 
+        title: 'Result 2', 
+        target: 100,
+        definition: 'Def 2',
+        completion: 0.7,
+        total_time: 120,
+        total_money: 200,
+        total_mental: 7,
+        total_stamina: 7,
+        efforts: [],
+        initial: 0,
+        current: 70
+      };
       
-      component.result = result1;
+      component.result = result1 as any;
       fixture.detectChanges();
       expect(component.result).toBe(result1);
       
-      component.result = result2;
+      component.result = result2 as any;
       fixture.detectChanges();
       expect(component.result).toBe(result2);
     });

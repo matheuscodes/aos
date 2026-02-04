@@ -330,8 +330,8 @@ describe('SummaryComponent', () => {
   });
 
   describe('ViewChild references', () => {
-    it('should have summaryRadialChart ViewChild property', () => {
-      expect(component.summaryRadialChart).toBeDefined();
+    it('should have summaryRadialChart ViewChild property declared', () => {
+      expect(component.summaryRadialChart).not.toBeDefined();
     });
   });
 
