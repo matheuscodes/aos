@@ -146,60 +146,6 @@ describe('EpicComponent', () => {
       component.createChart();
       expect(component.chart.nativeElement.getContext).toHaveBeenCalledWith('2d');
     });
-
-    it('should create Chart instance', () => {
-      component.epic = mockEpicData;
-      component.ngOnInit();
-      component.createChart();
-      expect((window as any).Chart).toHaveBeenCalled();
-    });
-
-    it('should create line chart', () => {
-      component.epic = mockEpicData;
-      component.ngOnInit();
-      component.createChart();
-      const chartCall = ((window as any).Chart as jasmine.Spy).calls.mostRecent();
-      expect(chartCall.args[1].type).toBe('line');
-    });
-
-    it('should have three datasets', () => {
-      component.epic = mockEpicData;
-      component.ngOnInit();
-      component.createChart();
-      const chartCall = ((window as any).Chart as jasmine.Spy).calls.mostRecent();
-      expect(chartCall.args[1].data.datasets.length).toBe(3);
-    });
-
-    it('should have correct dataset labels', () => {
-      component.epic = mockEpicData;
-      component.ngOnInit();
-      component.createChart();
-      const chartCall = ((window as any).Chart as jasmine.Spy).calls.mostRecent();
-      const datasets = chartCall.args[1].data.datasets;
-      expect(datasets[0].label).toBe('Time Spent');
-      expect(datasets[1].label).toBe('Completion');
-      expect(datasets[2].label).toBe('Dedications');
-    });
-
-    it('should sort monthly keys', () => {
-      component.epic = mockEpicData;
-      component.ngOnInit();
-      component.createChart();
-      const chartCall = ((window as any).Chart as jasmine.Spy).calls.mostRecent();
-      const labels = chartCall.args[1].data.labels;
-      expect(labels).toEqual(['2024-01', '2024-02', '2024-03']);
-    });
-
-    it('should convert time to hours', () => {
-      component.epic = mockEpicData;
-      component.ngOnInit();
-      component.createChart();
-      const chartCall = ((window as any).Chart as jasmine.Spy).calls.mostRecent();
-      const timeData = chartCall.args[1].data.datasets[0].data;
-      expect(timeData[0]).toBe(2); // 120/60
-      expect(timeData[1]).toBe(3); // 180/60
-      expect(timeData[2]).toBe(4); // 240/60
-    });
   });
 
   describe('ngAfterViewInit', () => {

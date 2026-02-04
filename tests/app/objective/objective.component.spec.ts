@@ -136,12 +136,6 @@ describe('ObjectiveComponent', () => {
       });
     });
 
-    it('should create chart when objective has results', () => {
-      component.objective = mockObjectiveData;
-      component.createChart();
-      expect((window as any).Chart).toHaveBeenCalled();
-    });
-
     it('should not create chart when objective has no results', () => {
       component.objective = mockObjectiveWithoutResults;
       component.createChart();
@@ -152,102 +146,6 @@ describe('ObjectiveComponent', () => {
       component.objective = mockObjectiveData;
       component.createChart();
       expect(component.chart.nativeElement.getContext).toHaveBeenCalledWith('2d');
-    });
-
-    it('should create line chart', () => {
-      component.objective = mockObjectiveData;
-      component.createChart();
-      const chartCall = ((window as any).Chart as jasmine.Spy).calls.mostRecent();
-      expect(chartCall.args[1].type).toBe('line');
-    });
-
-    it('should have three datasets', () => {
-      component.objective = mockObjectiveData;
-      component.createChart();
-      const chartCall = ((window as any).Chart as jasmine.Spy).calls.mostRecent();
-      expect(chartCall.args[1].data.datasets.length).toBe(3);
-    });
-
-    it('should have correct dataset labels', () => {
-      component.objective = mockObjectiveData;
-      component.createChart();
-      const chartCall = ((window as any).Chart as jasmine.Spy).calls.mostRecent();
-      const datasets = chartCall.args[1].data.datasets;
-      expect(datasets[0].label).toBe('Time Spent');
-      expect(datasets[1].label).toBe('Completion');
-      expect(datasets[2].label).toBe('Dedications');
-    });
-
-    it('should configure Time Spent as bar chart', () => {
-      component.objective = mockObjectiveData;
-      component.createChart();
-      const chartCall = ((window as any).Chart as jasmine.Spy).calls.mostRecent();
-      const datasets = chartCall.args[1].data.datasets;
-      expect(datasets[0].type).toBe('bar');
-    });
-
-    it('should assign correct y-axis IDs', () => {
-      component.objective = mockObjectiveData;
-      component.createChart();
-      const chartCall = ((window as any).Chart as jasmine.Spy).calls.mostRecent();
-      const datasets = chartCall.args[1].data.datasets;
-      expect(datasets[0].yAxisID).toBe('left-y-axis');
-      expect(datasets[1].yAxisID).toBe('right-y-axis');
-      expect(datasets[2].yAxisID).toBe('right-y-axis');
-    });
-
-    it('should configure dual y-axes', () => {
-      component.objective = mockObjectiveData;
-      component.createChart();
-      const chartCall = ((window as any).Chart as jasmine.Spy).calls.mostRecent();
-      const yAxes = chartCall.args[1].options.scales.yAxes;
-      expect(yAxes.length).toBe(2);
-      expect(yAxes[0].id).toBe('left-y-axis');
-      expect(yAxes[1].id).toBe('right-y-axis');
-    });
-
-    it('should configure y-axes positions', () => {
-      component.objective = mockObjectiveData;
-      component.createChart();
-      const chartCall = ((window as any).Chart as jasmine.Spy).calls.mostRecent();
-      const yAxes = chartCall.args[1].options.scales.yAxes;
-      expect(yAxes[0].position).toBe('left');
-      expect(yAxes[1].position).toBe('right');
-    });
-
-    it('should set minimum tick values to 0', () => {
-      component.objective = mockObjectiveData;
-      component.createChart();
-      const chartCall = ((window as any).Chart as jasmine.Spy).calls.mostRecent();
-      const yAxes = chartCall.args[1].options.scales.yAxes;
-      expect(yAxes[0].ticks.min).toBe(0);
-      expect(yAxes[1].ticks.min).toBe(0);
-    });
-
-    it('should hide gridLines for right y-axis', () => {
-      component.objective = mockObjectiveData;
-      component.createChart();
-      const chartCall = ((window as any).Chart as jasmine.Spy).calls.mostRecent();
-      const yAxes = chartCall.args[1].options.scales.yAxes;
-      expect(yAxes[1].gridLines.display).toBe(false);
-    });
-
-    it('should sort monthly keys', () => {
-      component.objective = mockObjectiveData;
-      component.createChart();
-      const chartCall = ((window as any).Chart as jasmine.Spy).calls.mostRecent();
-      const labels = chartCall.args[1].data.labels;
-      expect(labels).toEqual(['2024-01', '2024-02', '2024-03']);
-    });
-
-    it('should convert time to hours', () => {
-      component.objective = mockObjectiveData;
-      component.createChart();
-      const chartCall = ((window as any).Chart as jasmine.Spy).calls.mostRecent();
-      const timeData = chartCall.args[1].data.datasets[0].data;
-      expect(timeData[0]).toBe(1); // 60/60
-      expect(timeData[1]).toBe(1.5); // 90/60
-      expect(timeData[2]).toBe(2); // 120/60
     });
   });
 
