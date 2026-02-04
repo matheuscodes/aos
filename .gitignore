@@ -6,3 +6,6 @@ storage
 .idea
 dist
 backend.exe
+coverage
+*.log
+.DS_Store
