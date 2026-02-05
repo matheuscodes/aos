@@ -1,13 +1,8 @@
 import { Injectable } from '@angular/core';
-import { HttpClient,  HttpHeaders, HttpErrorResponse } from '@angular/common/http';
-
-import { throwError } from 'rxjs';
-import { map, catchError } from 'rxjs/operators';
+import { HttpClient,  HttpHeaders } from '@angular/common/http';
 
 import Purpose from '../services/purpose';
 import YearPlan from '../services/year-plan';
-
-let id = 1;
 
 @Injectable({
   providedIn: 'root'

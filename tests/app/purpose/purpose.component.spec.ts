@@ -77,33 +77,6 @@ describe('PurposeComponent', () => {
     });
   });
 
-  describe('ngOnInit', () => {
-    it('should be defined', () => {
-      expect(component.ngOnInit).toBeDefined();
-    });
-
-    it('should execute without errors', () => {
-      expect(() => component.ngOnInit()).not.toThrow();
-    });
-
-    it('should not throw when purpose is undefined', () => {
-      component.purpose = undefined;
-      expect(() => component.ngOnInit()).not.toThrow();
-    });
-
-    it('should not throw when purpose is provided', () => {
-      component.purpose = mockPurposeData;
-      expect(() => component.ngOnInit()).not.toThrow();
-    });
-
-    it('should not modify purpose input', () => {
-      const originalPurpose = { ...mockPurposeData };
-      component.purpose = mockPurposeData;
-      component.ngOnInit();
-      expect(component.purpose).toEqual(originalPurpose);
-    });
-  });
-
   describe('template integration', () => {
     it('should compile template successfully', () => {
       component.purpose = mockPurposeData;
@@ -125,18 +98,6 @@ describe('PurposeComponent', () => {
   describe('component instance', () => {
     it('should have all required properties', () => {
       expect(component.purpose).not.toBeDefined();
-    });
-
-    it('should have ngOnInit method', () => {
-      expect(typeof component.ngOnInit).toBe('function');
-    });
-  });
-
-  describe('lifecycle hooks', () => {
-    it('should call ngOnInit on initialization', () => {
-      spyOn(component, 'ngOnInit');
-      component.ngOnInit();
-      expect(component.ngOnInit).toHaveBeenCalled();
     });
   });
 

@@ -100,34 +100,6 @@ describe('ResultComponent', () => {
     });
   });
 
-  describe('ngOnInit', () => {
-    it('should be defined', () => {
-      expect(component.ngOnInit).toBeDefined();
-    });
-
-    it('should execute without errors', () => {
-      expect(() => component.ngOnInit()).not.toThrow();
-    });
-
-    it('should not throw when result is undefined', () => {
-      component.result = undefined;
-      expect(() => component.ngOnInit()).not.toThrow();
-    });
-
-    it('should not throw when result is provided', () => {
-      component.result = mockResultData;
-      expect(() => component.ngOnInit()).not.toThrow();
-    });
-
-    it('should not modify result input', () => {
-      const originalResult = { ...mockResultData };
-      component.result = mockResultData;
-      component.ngOnInit();
-      expect(component.result.uuid).toBe(originalResult.uuid);
-      expect(component.result.title).toBe(originalResult.title);
-    });
-  });
-
   describe('template integration', () => {
     it('should compile template successfully', () => {
       component.result = mockResultData;
@@ -149,18 +121,6 @@ describe('ResultComponent', () => {
   describe('component instance', () => {
     it('should have all required properties', () => {
       expect(component.result).not.toBeDefined();
-    });
-
-    it('should have ngOnInit method', () => {
-      expect(typeof component.ngOnInit).toBe('function');
-    });
-  });
-
-  describe('lifecycle hooks', () => {
-    it('should call ngOnInit on initialization', () => {
-      spyOn(component, 'ngOnInit');
-      component.ngOnInit();
-      expect(component.ngOnInit).toHaveBeenCalled();
     });
   });
 

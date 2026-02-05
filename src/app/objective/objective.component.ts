@@ -1,22 +1,22 @@
-import { Component, Input, OnInit, ElementRef, ViewChild } from '@angular/core';
+import { Component, Input, AfterViewInit, ElementRef, ViewChild } from '@angular/core';
 import { Chart } from 'chart.js';
 
 declare global {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     interface Array<T> {
-        accumulate(any): any;
+        accumulate(fn: any): any;
     }
 }
 
 
 function sum(a,b) {return a+b}
-function avg(a,b,c,d) {return a+(b/d.length)}
 function relativiness(reference) {
   return function(a) {return a/reference}
 }
 const minToHour = relativiness(60)
 Array.prototype.accumulate = function(fn) {
     if(this.length > 0) {
-      var r = [this[0]];
+      const r = [this[0]];
       this.reduce(function(a, b) {
         return r[r.length] = fn(a, b);
       });
@@ -31,14 +31,12 @@ Array.prototype.accumulate = function(fn) {
   templateUrl: './objective.component.html',
   styleUrls: ['./objective.component.css']
 })
-export class ObjectiveComponent implements OnInit {
+export class ObjectiveComponent implements AfterViewInit {
   @ViewChild('objectiveChart',{static: false}) chart: ElementRef;
 
   @Input() objective: any;
 
   constructor() { }
-
-  ngOnInit() {}
 
   ngAfterViewInit() { this.createChart() }
 
@@ -49,7 +47,7 @@ export class ObjectiveComponent implements OnInit {
       const completions = keys.map(i => this.objective.report.monthly[i].completion).accumulate(sum).map(relativiness(0.01))
       const dedications = keys.map(i => this.objective.report.monthly[i].dedication).accumulate(sum).map(relativiness(0.01))
       const ctx = this.chart.nativeElement.getContext('2d');
-      const revenueLineChart = new Chart(ctx, {
+      new Chart(ctx, {
         // The type of chart we want to create
         type: 'line',
 

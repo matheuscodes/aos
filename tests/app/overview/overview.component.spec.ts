@@ -151,16 +151,6 @@ describe('OverviewComponent', () => {
     });
   });
 
-  describe('ngOnInit', () => {
-    it('should be defined', () => {
-      expect(component.ngOnInit).toBeDefined();
-    });
-
-    it('should execute without errors', () => {
-      expect(() => component.ngOnInit()).not.toThrow();
-    });
-  });
-
   describe('addQueuedEffort', () => {
     it('should add new effort to queuedEfforts', () => {
       const initialLength = component.queuedEfforts.length;

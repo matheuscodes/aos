@@ -99,26 +99,6 @@ describe('ObjectiveComponent', () => {
     });
   });
 
-  describe('ngOnInit', () => {
-    it('should be defined', () => {
-      expect(component.ngOnInit).toBeDefined();
-    });
-
-    it('should execute without errors', () => {
-      expect(() => component.ngOnInit()).not.toThrow();
-    });
-
-    it('should not throw when objective is undefined', () => {
-      component.objective = undefined;
-      expect(() => component.ngOnInit()).not.toThrow();
-    });
-
-    it('should not throw when objective is provided', () => {
-      component.objective = mockObjectiveData;
-      expect(() => component.ngOnInit()).not.toThrow();
-    });
-  });
-
   describe('createChart', () => {
     beforeEach(() => {
       const mockCanvas = document.createElement('canvas');

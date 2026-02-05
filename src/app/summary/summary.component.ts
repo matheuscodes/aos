@@ -1,22 +1,17 @@
 import Plotly from 'plotly.js-dist'
-import { Component, Input, OnInit, ElementRef, ViewChild } from '@angular/core';
-
-import Purpose from '../../services/purpose';
+import { Component, Input, AfterViewInit, ElementRef, ViewChild } from '@angular/core';
 
 @Component({
   selector: 'app-summary',
   templateUrl: './summary.component.html',
   styleUrls: ['./summary.component.css']
 })
-export class SummaryComponent implements OnInit {
+export class SummaryComponent implements AfterViewInit {
   @ViewChild('summaryRadialChart', {static: false}) summaryRadialChart: ElementRef;
 
   @Input() everything: any;
 
   constructor() { }
-
-  ngOnInit() {
-  }
 
   ngAfterViewInit() {
     if(this.everything && this.summaryRadialChart) {
@@ -46,7 +41,7 @@ export class SummaryComponent implements OnInit {
       });
     });
 
-    var data = [{
+    const data = [{
 
       type: "sunburst",
 
@@ -68,7 +63,7 @@ export class SummaryComponent implements OnInit {
     }];
 
     console.log(data)
-    var layout = {
+    const layout = {
       height: 1024,
 
       margin: {l: 0, r: 0, b: 0, t:0},

@@ -1,5 +1,4 @@
-import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
-import { Chart } from 'chart.js';
+import { Component, ElementRef, ViewChild } from '@angular/core';
 import { DataService } from '../data.service';
 import Effort from '../../services/effort'
 
@@ -8,7 +7,7 @@ import Effort from '../../services/effort'
   templateUrl: './overview.component.html',
   styleUrls: ['./overview.component.css']
 })
-export class OverviewComponent implements OnInit {
+export class OverviewComponent {
   @ViewChild('revenueLineChart',{static: false}) chart: ElementRef;
 
   downloadedData: any
@@ -38,9 +37,6 @@ export class OverviewComponent implements OnInit {
 
   getYearly() {
     return this.dataService.getYearly();
-  }
-
-  ngOnInit() {
   }
 
   addQueuedEffort() {

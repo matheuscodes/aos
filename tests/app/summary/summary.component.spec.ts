@@ -101,26 +101,6 @@ describe('SummaryComponent', () => {
     });
   });
 
-  describe('ngOnInit', () => {
-    it('should be defined', () => {
-      expect(component.ngOnInit).toBeDefined();
-    });
-
-    it('should execute without errors', () => {
-      expect(() => component.ngOnInit()).not.toThrow();
-    });
-
-    it('should not throw when everything is undefined', () => {
-      component.everything = undefined;
-      expect(() => component.ngOnInit()).not.toThrow();
-    });
-
-    it('should not throw when everything is provided', () => {
-      component.everything = mockEverythingData;
-      expect(() => component.ngOnInit()).not.toThrow();
-    });
-  });
-
   describe('ngAfterViewInit', () => {
     beforeEach(() => {
       (window as any).Plotly = {
