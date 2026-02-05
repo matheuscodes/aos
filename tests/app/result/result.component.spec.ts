@@ -1,4 +1,4 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
 import { ResultComponent } from '../../../src/app/result/result.component';
 
 describe('ResultComponent', () => {
@@ -203,7 +203,7 @@ describe('ResultComponent', () => {
       expect(component.result).toBe(mockResultData);
     });
 
-    it('should handle multiple result changes', () => {
+    it('should handle multiple result changes', fakeAsync(() => {
       const result1 = { 
         uuid: 'r1', 
         title: 'Result 1', 
@@ -237,10 +237,11 @@ describe('ResultComponent', () => {
       fixture.detectChanges();
       expect(component.result).toBe(result1);
       
+      tick(100);
       component.result = result2 as any;
       fixture.detectChanges();
       expect(component.result).toBe(result2);
-    });
+    }));
   });
 
   describe('numeric properties', () => {

@@ -1,4 +1,4 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
 import { PurposeComponent } from '../../../src/app/purpose/purpose.component';
 
 describe('PurposeComponent', () => {
@@ -148,7 +148,7 @@ describe('PurposeComponent', () => {
       expect(component.purpose).toBe(mockPurposeData);
     });
 
-    it('should handle multiple purpose changes', () => {
+    it('should handle multiple purpose changes', fakeAsync(() => {
       const purpose1 = { uuid: 'p1', definition: 'Purpose 1' };
       const purpose2 = { uuid: 'p2', definition: 'Purpose 2' };
       
@@ -156,9 +156,10 @@ describe('PurposeComponent', () => {
       fixture.detectChanges();
       expect(component.purpose).toBe(purpose1);
       
+      tick(100);
       component.purpose = purpose2;
       fixture.detectChanges();
       expect(component.purpose).toBe(purpose2);
-    });
+    }));
   });
 });
