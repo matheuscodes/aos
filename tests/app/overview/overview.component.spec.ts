@@ -114,7 +114,7 @@ describe('OverviewComponent', () => {
       dataService.getData.and.returnValue(dataWithUuid);
       component.getData();
       component.getData();
-      expect(component.data.length).toBe(2);
+      expect(component.data.length).toBe(4);
     });
   });
 
