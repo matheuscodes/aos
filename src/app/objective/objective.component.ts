@@ -1,5 +1,6 @@
 import { Component, Input, AfterViewInit, ElementRef, ViewChild } from '@angular/core';
-import { Chart } from 'chart.js';
+// Using auto import for v4 which includes all necessary registrations
+import { Chart } from 'chart.js/auto';
 
 declare global {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -29,7 +30,8 @@ Array.prototype.accumulate = function(fn) {
 @Component({
   selector: 'app-objective',
   templateUrl: './objective.component.html',
-  styleUrls: ['./objective.component.css']
+  styleUrls: ['./objective.component.css'],
+  standalone: false
 })
 export class ObjectiveComponent implements AfterViewInit {
   @ViewChild('objectiveChart',{static: false}) chart: ElementRef;
@@ -47,57 +49,49 @@ export class ObjectiveComponent implements AfterViewInit {
       const completions = keys.map(i => this.objective.report.monthly[i].completion).accumulate(sum).map(relativiness(0.01))
       const dedications = keys.map(i => this.objective.report.monthly[i].dedication).accumulate(sum).map(relativiness(0.01))
       const ctx = this.chart.nativeElement.getContext('2d');
-      new Chart(ctx, {
-        // The type of chart we want to create
-        type: 'line',
-
-        // The data for our dataset
+      
+      // Build chart configuration for v4 API
+      const leftAxisConfig = {
+        type: 'linear',
+        position: 'left',
+        ticks: { min: 0 }
+      };
+      
+      const rightAxisConfig = {
+        type: 'linear', 
+        position: 'right',
+        grid: { display: false },
+        ticks: { min: 0 }
+      };
+      
+      const chartConfig = {
+        type: 'line' as const,
         data: {
           labels: keys,
           datasets: [{
             label: 'Time Spent',
             yAxisID: 'left-y-axis',
-            // backgroundColor: 'rgba(255, 99, 132,0.1)',
-            // borderColor: 'rgb(255, 99, 132)',
             data: time,
-            type: 'bar'
+            type: 'bar' as const
           },{
             label: 'Completion',
             yAxisID: 'right-y-axis',
-            // backgroundColor: 'rgba(255, 99, 132,0.1)',
-            // borderColor: 'rgb(255, 99, 132)',
             data: completions
           },{
             label: 'Dedications',
             yAxisID: 'right-y-axis',
-            // backgroundColor: 'rgba(255, 99, 132,0.1)',
-            // borderColor: 'rgb(255, 99, 132)',
             data: dedications
           }]
         },
         options: {
-            scales: {
-                yAxes: [{
-                    id: 'left-y-axis',
-                    type: 'linear',
-                    position: 'left',
-                    ticks: {
-                        min: 0,
-                    }
-                }, {
-                    id: 'right-y-axis',
-                    type: 'linear',
-                    position: 'right',
-                    gridLines: {
-                      display: false
-                    },
-                    ticks: {
-                        min: 0,
-                    }
-                }]
-            }
+          scales: {
+            'left-y-axis': leftAxisConfig,
+            'right-y-axis': rightAxisConfig
+          }
         }
-      });
+      };
+      
+      new Chart(ctx, chartConfig as any);
     }
   }
 }
