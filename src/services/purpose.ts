@@ -92,7 +92,6 @@ export default class Purpose {
   }
 
   completionTillMonth(month: string) {
-    let completion = 0;
     const latestCompletion = Object.keys(this.report.monthly).filter(key => key <= month).map(key => this.report.monthly[key].completion).reduce((a, b) => a + b, 0);
     if(latestCompletion) {
       return latestCompletion;

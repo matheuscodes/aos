@@ -33,7 +33,6 @@ export default class YearPlan {
   get report() {
     const epics = this.epics;
     const purposes = {};
-    const objectives = this.objectives;
     const report = {
       epics: [],
       purposes: [],

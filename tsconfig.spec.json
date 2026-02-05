@@ -1,27 +1,19 @@
 {
-  "compileOnSave": false,
+  "extends": "./tsconfig.json",
   "compilerOptions": {
-    "baseUrl": "./",
-    "outDir": "./dist/out-tsc",
-    "sourceMap": true,
-    "declaration": false,
-    "downlevelIteration": true,
-    "experimentalDecorators": true,
-    "module": "esnext",
-    "moduleResolution": "node",
-    "importHelpers": true,
-    "target": "ES2022",
-    "typeRoots": [
-      "node_modules/@types"
+    "outDir": "./dist/out-tsc/spec",
+    "types": [
+      "jasmine"
     ],
-    "lib": [
-      "es2018",
-      "dom"
-    ],
-    "useDefineForClassFields": false
+    "skipLibCheck": true
   },
-  "angularCompilerOptions": {
-    "fullTemplateTypeCheck": true,
-    "strictInjectionParameters": true
-  }
+  "files": [
+    "src/test.ts",
+    "src/polyfills.ts"
+  ],
+  "include": [
+    "tests/**/*.spec.ts",
+    "src/**/*.spec.ts",
+    "src/**/*.d.ts"
+  ]
 }
