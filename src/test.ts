@@ -21,3 +21,12 @@ import '../tests/app/overview/overview.component.spec';
 import '../tests/app/purpose/purpose.component.spec';
 import '../tests/app/result/result.component.spec';
 import '../tests/app/summary/summary.component.spec';
+
+// Service tests
+import '../tests/services/effort.spec';
+import '../tests/services/efforts.spec';
+import '../tests/services/objective.spec';
+import '../tests/services/result.spec';
+import '../tests/services/epic.spec';
+import '../tests/services/purpose.spec';
+import '../tests/services/year-plan.spec';
