@@ -4,7 +4,8 @@ import { Component, Input, AfterViewInit, ElementRef, ViewChild } from '@angular
 @Component({
   selector: 'app-summary',
   templateUrl: './summary.component.html',
-  styleUrls: ['./summary.component.css']
+  styleUrls: ['./summary.component.css'],
+  standalone: false
 })
 export class SummaryComponent implements AfterViewInit {
   @ViewChild('summaryRadialChart', {static: false}) summaryRadialChart: ElementRef;

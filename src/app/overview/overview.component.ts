@@ -5,7 +5,8 @@ import Effort from '../../services/effort'
 @Component({
   selector: 'app-overview',
   templateUrl: './overview.component.html',
-  styleUrls: ['./overview.component.css']
+  styleUrls: ['./overview.component.css'],
+  standalone: false
 })
 export class OverviewComponent {
   @ViewChild('revenueLineChart',{static: false}) chart: ElementRef;
