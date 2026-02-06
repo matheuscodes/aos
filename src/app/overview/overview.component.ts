@@ -1,12 +1,17 @@
-import { Component, ElementRef, ViewChild } from '@angular/core';
+import { Component, ElementRef, ViewChild, inject } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { DataService } from '../data.service';
-import Effort from '../../services/effort'
+import Effort from '../../services/effort';
+import { SummaryComponent } from '../summary/summary.component';
+import { PurposeComponent } from '../purpose/purpose.component';
+import { ObjectiveComponent } from '../objective/objective.component';
 
 @Component({
   selector: 'app-overview',
   templateUrl: './overview.component.html',
   styleUrls: ['./overview.component.css'],
-  standalone: false
+  standalone: true,
+  imports: [CommonModule, SummaryComponent, PurposeComponent, ObjectiveComponent]
 })
 export class OverviewComponent {
   @ViewChild('revenueLineChart',{static: false}) chart: ElementRef;
@@ -17,9 +22,9 @@ export class OverviewComponent {
 
   data: any[] = []
 
-  constructor(
-    private dataService: DataService
-  ) {
+  private dataService = inject(DataService);
+
+  constructor() {
     this.queuedEfforts = []
   }
 

@@ -10,9 +10,11 @@
     <div class="card-body">
       <h2>Epics</h2>
       <div class="accordion" id="epics">
-        <div *ngFor = "let e of purpose.epics | keyvalue">
-          <app-epic [epic]="e.value"></app-epic>
-        </div>
+        @for (e of purpose.epics | keyvalue; track e.key) {
+          <div>
+            <app-epic [epic]="e.value"></app-epic>
+          </div>
+        }
       </div>
     </div>
   </div>

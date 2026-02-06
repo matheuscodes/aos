@@ -10,12 +10,16 @@
     <div class="card-body">
       <canvas #epicChart></canvas>
       <h3>Notes</h3>
-      <p *ngFor = "let note of (epic.notes || '').split('\n')">{{note}}</p>
+      @for (note of (epic.notes || '').split('\n'); track note) {
+        <p>{{note}}</p>
+      }
       <h3>Objectives</h3>
       <div class="accordion" id="objectives">
-        <div *ngFor = "let o of objectives">
-          <app-objective [objective]="o"></app-objective>
-        </div>
+        @for (o of objectives; track o.uuid) {
+          <div>
+            <app-objective [objective]="o"></app-objective>
+          </div>
+        }
       </div>
     </div>
   </div>

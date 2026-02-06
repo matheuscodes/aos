@@ -20,9 +20,11 @@
         <tr>
           <td>
             <div class="accordion" id="results">
-              <div *ngFor = "let r of objective.results | keyvalue">
-                <app-result [result]="r.value"></app-result>
-              </div>
+              @for (r of objective.results | keyvalue; track r.key) {
+                <div>
+                  <app-result [result]="r.value"></app-result>
+                </div>
+              }
             </div>
           </td>
           <td>
@@ -47,17 +49,19 @@
                 </tr>
               </thead>
               <tbody>
-                <tr *ngFor = "let e of objective.efforts.table">
-                  <td>{{e.effort.date.toJSON().substring(0,10)}}</td>
-                  <td>{{e.effort.time}}</td>
-                  <td>{{e.result.definition}}</td>
-                  <td>{{e.effort.modifier}}</td>
-                  <td>{{e.effort.comment}}</td>
-                  <td>{{e.effort.time_spent}} minutes</td>
-                  <td>{{e.effort.money_spent}} €</td>
-                  <td>{{e.effort.thought_spent}} cog load</td>
-                  <td>{{e.effort.thew_spent}} kcal</td>
-                </tr>
+                @for (e of objective.efforts.table; track e.effort.date) {
+                  <tr>
+                    <td>{{e.effort.date.toJSON().substring(0,10)}}</td>
+                    <td>{{e.effort.time}}</td>
+                    <td>{{e.result.definition}}</td>
+                    <td>{{e.effort.modifier}}</td>
+                    <td>{{e.effort.comment}}</td>
+                    <td>{{e.effort.time_spent}} minutes</td>
+                    <td>{{e.effort.money_spent}} €</td>
+                    <td>{{e.effort.thought_spent}} cog load</td>
+                    <td>{{e.effort.thew_spent}} kcal</td>
+                  </tr>
+                }
               </tbody>
             </table>
           </td>

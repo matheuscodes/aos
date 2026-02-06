@@ -13,29 +13,36 @@
   <div class="tab-content" id="overview-tab-content">
     <div class="tab-pane fade show active" id="summary" role="tabpanel">
       <div class="card-body">
-          <app-summary [everything]="getDataArray()" *ngIf="getDataArray().length > 0"></app-summary>
+          @if (getDataArray().length > 0) {
+            <app-summary [everything]="getDataArray()"></app-summary>
+          }
       </div>
     </div>
     <div class="tab-pane fade" id="long-term" role="tabpanel">
       <div class="card-body">
         <div class="accordion" id="purposes">
-          <div *ngFor = "let p of getData() | keyvalue">
-            <app-purpose [purpose]="p.value"></app-purpose>
-          </div>
+          @for (p of getData() | keyvalue; track p.key) {
+            <div>
+              <app-purpose [purpose]="p.value"></app-purpose>
+            </div>
+          }
         </div>
       </div>
     </div>
     <div class="tab-pane fade" id="yearly" role="tabpanel">
       <div class="card-body">
         <ul class="nav nav-tabs" id="yearly-tab" role="tablist">
-          <li *ngFor = "let yearly of getYearly() | keyvalue" class="nav-item">
-            <a class="nav-link" id="{{yearly.key}}-tab" data-toggle="tab" href="#year-{{yearly.key}}" role="tab">{{yearly.key}}</a>
-          </li>
+          @for (yearly of getYearly() | keyvalue; track yearly.key) {
+            <li class="nav-item">
+              <a class="nav-link" id="{{yearly.key}}-tab" data-toggle="tab" href="#year-{{yearly.key}}" role="tab">{{yearly.key}}</a>
+            </li>
+          }
         </ul>
         <div class="tab-content" id="yearly-tab-content">
-          <div *ngFor = "let yearly of getYearly() | keyvalue" class="tab-pane fade" id="year-{{yearly.key}}" role="tabpanel">
+          @for (yearly of getYearly() | keyvalue; track yearly.key) {
+            <div class="tab-pane fade" id="year-{{yearly.key}}" role="tabpanel">
             <!-- Button trigger modal -->
-            <button style="margin:10pt; width:calc(100% - 20pt)" type="button" class="btn btn-primary" data-toggle="modal" [attr.data-target]="'#modal-'+yearly.key">
+            <button style="margin:10pt; width:calc(100% - 20pt)" type="button" class="btn btn-primary" data-toggle="modal" [attr.data-target]="'#modal-' + $any(yearly.key)">
               Log new efforts
             </button>
 
@@ -61,7 +68,8 @@
                         </tr>
                       </thead>
                       <tbody>
-                        <tr *ngFor = "let e of queuedEfforts">
+                        @for (e of queuedEfforts; track $index) {
+                          <tr>
                           <td>
                             <div class="input-group mb-3">
                               <input type="text" class="form-control" placeholder="Date" (change)="e.effort.date = $event.target.value" pattern="^\d{4}-([0]\d|1[0-2])-([0-2]\d|3[01])$">
@@ -80,19 +88,25 @@
                             <div class="input-group mb-3">
                               <select class="custom-select" id="objective-select-{{yearly.key}}" (change)="selectObjective($event, e, yearly.value.objectives)">
                                 <option selected>Objective</option>
-                                <option *ngFor = "let o of yearly.value.objectives" [value]="o.uuid" >
-                                  {{o.title}}
-                                </option>
+                                @for (o of yearly.value.objectives; track o.uuid) {
+                                  <option [value]="o.uuid">
+                                    {{o.title}}
+                                  </option>
+                                }
                               </select>
                             </div>
-                            <div class="input-group mb-3" *ngIf="e.objective">
-                              <select class="custom-select" id="objective-select-{{yearly.key}}" (change)="selectResult($event, e, e.objective.results)">
-                                <option selected>Result</option>
-                                <option *ngFor = "let r of e.objective.results | keyvalue" [value]="r.value.uuid" >
-                                  {{r.value.definition}}
-                                </option>
-                              </select>
-                            </div>
+                            @if (e.objective) {
+                              <div class="input-group mb-3">
+                                <select class="custom-select" id="objective-select-{{yearly.key}}" (change)="selectResult($event, e, e.objective.results)">
+                                  <option selected>Result</option>
+                                  @for (r of e.objective.results | keyvalue; track r.key) {
+                                    <option [value]="r.value.uuid">
+                                      {{r.value.definition}}
+                                    </option>
+                                  }
+                                </select>
+                              </div>
+                            }
                           </td>
                           <td>
                             <div class="input-group input-group-sm mb-3">
@@ -143,6 +157,7 @@
                             </div>
                           </td>
                         </tr>
+                        }
                       </tbody>
                     </table>
                   </div>
@@ -165,13 +180,15 @@
                 </tr>
               </thead>
               <tbody>
-                <tr *ngFor = "let e of yearly.value.report.objectives">
-                  <td>{{e.objective.title}}</td>
-                  <td>{{(e.Q1.completion*100).toFixed(2)}}%</td>
-                  <td>{{(e.Q2.completion*100).toFixed(2)}}% ({{((e.Q2.completion - e.Q1.completion)*100).toFixed(2)}}%)</td>
-                  <td>{{(e.Q3.completion*100).toFixed(2)}}% ({{((e.Q3.completion - e.Q2.completion)*100).toFixed(2)}}%)</td>
-                  <td>{{(e.Q4.completion*100).toFixed(2)}}% ({{((e.Q4.completion - e.Q3.completion)*100).toFixed(2)}}%)</td>
-                </tr>
+                @for (e of yearly.value.report.objectives; track e.objective.uuid) {
+                  <tr>
+                    <td>{{e.objective.title}}</td>
+                    <td>{{(e.Q1.completion*100).toFixed(2)}}%</td>
+                    <td>{{(e.Q2.completion*100).toFixed(2)}}% ({{((e.Q2.completion - e.Q1.completion)*100).toFixed(2)}}%)</td>
+                    <td>{{(e.Q3.completion*100).toFixed(2)}}% ({{((e.Q3.completion - e.Q2.completion)*100).toFixed(2)}}%)</td>
+                    <td>{{(e.Q4.completion*100).toFixed(2)}}% ({{((e.Q4.completion - e.Q3.completion)*100).toFixed(2)}}%)</td>
+                  </tr>
+                }
               </tbody>
             </table>
             <table class="table">
@@ -187,15 +204,17 @@
                 </tr>
               </thead>
               <tbody>
-                <tr *ngFor = "let e of yearly.value.report.epics">
-                  <td>{{e.epic.title}}</td>
-                  <td>{{(e.previous.completion*100).toFixed(2)}}%</td>
-                  <td>{{(e.Q1.completion*100).toFixed(2)}}% ({{((e.Q1.completion - e.previous.completion)*100).toFixed(2)}}%)</td>
-                  <td>{{(e.Q2.completion*100).toFixed(2)}}% ({{((e.Q2.completion - e.Q1.completion)*100).toFixed(2)}}%)</td>
-                  <td>{{(e.Q3.completion*100).toFixed(2)}}% ({{((e.Q3.completion - e.Q2.completion)*100).toFixed(2)}}%)</td>
-                  <td>{{(e.Q4.completion*100).toFixed(2)}}% ({{((e.Q4.completion - e.Q3.completion)*100).toFixed(2)}}%)</td>
-                  <td>{{((e.Q4.completion - e.previous.completion)*100).toFixed(2)}}%</td>
-                </tr>
+                @for (e of yearly.value.report.epics; track e.epic.uuid) {
+                  <tr>
+                    <td>{{e.epic.title}}</td>
+                    <td>{{(e.previous.completion*100).toFixed(2)}}%</td>
+                    <td>{{(e.Q1.completion*100).toFixed(2)}}% ({{((e.Q1.completion - e.previous.completion)*100).toFixed(2)}}%)</td>
+                    <td>{{(e.Q2.completion*100).toFixed(2)}}% ({{((e.Q2.completion - e.Q1.completion)*100).toFixed(2)}}%)</td>
+                    <td>{{(e.Q3.completion*100).toFixed(2)}}% ({{((e.Q3.completion - e.Q2.completion)*100).toFixed(2)}}%)</td>
+                    <td>{{(e.Q4.completion*100).toFixed(2)}}% ({{((e.Q4.completion - e.Q3.completion)*100).toFixed(2)}}%)</td>
+                    <td>{{((e.Q4.completion - e.previous.completion)*100).toFixed(2)}}%</td>
+                  </tr>
+                }
               </tbody>
             </table>
             <table class="table">
@@ -211,24 +230,29 @@
                 </tr>
               </thead>
               <tbody>
-                <tr *ngFor = "let e of yearly.value.report.purposes">
-                  <td>{{e.purpose.definition}}</td>
-                  <td>{{(e.previous.completion*100).toFixed(2)}}%</td>
-                  <td>{{(e.Q1.completion*100).toFixed(2)}}% ({{((e.Q1.completion - e.previous.completion)*100).toFixed(2)}}%)</td>
-                  <td>{{(e.Q2.completion*100).toFixed(2)}}% ({{((e.Q2.completion - e.Q1.completion)*100).toFixed(2)}}%)</td>
-                  <td>{{(e.Q3.completion*100).toFixed(2)}}% ({{((e.Q3.completion - e.Q2.completion)*100).toFixed(2)}}%)</td>
-                  <td>{{(e.Q4.completion*100).toFixed(2)}}% ({{((e.Q4.completion - e.Q3.completion)*100).toFixed(2)}}%)</td>
-                  <td>{{((e.Q4.completion - e.previous.completion)*100).toFixed(2)}}%</td>
-                </tr>
+                @for (e of yearly.value.report.purposes; track e.purpose.uuid) {
+                  <tr>
+                    <td>{{e.purpose.definition}}</td>
+                    <td>{{(e.previous.completion*100).toFixed(2)}}%</td>
+                    <td>{{(e.Q1.completion*100).toFixed(2)}}% ({{((e.Q1.completion - e.previous.completion)*100).toFixed(2)}}%)</td>
+                    <td>{{(e.Q2.completion*100).toFixed(2)}}% ({{((e.Q2.completion - e.Q1.completion)*100).toFixed(2)}}%)</td>
+                    <td>{{(e.Q3.completion*100).toFixed(2)}}% ({{((e.Q3.completion - e.Q2.completion)*100).toFixed(2)}}%)</td>
+                    <td>{{(e.Q4.completion*100).toFixed(2)}}% ({{((e.Q4.completion - e.Q3.completion)*100).toFixed(2)}}%)</td>
+                    <td>{{((e.Q4.completion - e.previous.completion)*100).toFixed(2)}}%</td>
+                  </tr>
+                }
               </tbody>
             </table>
             <h3>Objectives</h3>
             <div class="accordion" id="objectives">
-              <div *ngFor = "let o of yearly.value.objectives">
-                <app-objective [objective]="o"></app-objective>
-              </div>
+              @for (o of yearly.value.objectives; track o.uuid) {
+                <div>
+                  <app-objective [objective]="o"></app-objective>
+                </div>
+              }
             </div>
           </div>
+          }
           <div class="tab-pane fade show active" id="year-none" role="tabpanel">
             Select a year.
           </div>

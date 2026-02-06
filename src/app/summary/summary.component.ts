@@ -1,11 +1,13 @@
 import Plotly from 'plotly.js-dist'
 import { Component, Input, AfterViewInit, ElementRef, ViewChild } from '@angular/core';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-summary',
   templateUrl: './summary.component.html',
   styleUrls: ['./summary.component.css'],
-  standalone: false
+  standalone: true,
+  imports: [CommonModule]
 })
 export class SummaryComponent implements AfterViewInit {
   @ViewChild('summaryRadialChart', {static: false}) summaryRadialChart: ElementRef;

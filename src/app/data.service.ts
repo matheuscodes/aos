@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { HttpClient,  HttpHeaders } from '@angular/common/http';
 
 import Purpose from '../services/purpose';
@@ -16,7 +16,9 @@ export class DataService {
   yearly;
   purposes: {[key: string]: Purpose};
 
-  constructor(private http: HttpClient) {
+  private http = inject(HttpClient);
+
+  constructor() {
     this.yearly = {};
     this.purposesUrl = "http://localhost:3001/api/purposes";
     this.httpOptions = {

@@ -1,6 +1,8 @@
 import { Component, Input, OnInit, AfterViewInit, ElementRef, ViewChild } from '@angular/core';
+import { CommonModule } from '@angular/common';
 // Using auto import for v4 which includes all necessary registrations
 import { Chart } from 'chart.js/auto';
+import { ObjectiveComponent } from '../objective/objective.component';
 
 function sum(a,b) {return a+b}
 function relativiness(reference) {
@@ -22,7 +24,8 @@ Array.prototype.accumulate = function(fn) {
   selector: 'app-epic',
   templateUrl: './epic.component.html',
   styleUrls: ['./epic.component.css'],
-  standalone: false
+  standalone: true,
+  imports: [CommonModule, ObjectiveComponent]
 })
 export class EpicComponent implements OnInit, AfterViewInit {
   @ViewChild('epicChart',{static: false}) chart: ElementRef;
