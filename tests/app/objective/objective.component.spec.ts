@@ -55,7 +55,7 @@ describe('ObjectiveComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ ObjectiveComponent ]
+      imports: [ ObjectiveComponent ]
     })
     .compileComponents();
 

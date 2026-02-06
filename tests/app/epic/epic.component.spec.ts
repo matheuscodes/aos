@@ -49,7 +49,7 @@ describe('EpicComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ EpicComponent ]
+      imports: [ EpicComponent ]
     })
     .compileComponents();
 

@@ -35,8 +35,7 @@ describe('OverviewComponent', () => {
     ]);
 
     await TestBed.configureTestingModule({
-      declarations: [ OverviewComponent ],
-      imports: [ HttpClientTestingModule ],
+      imports: [ OverviewComponent, HttpClientTestingModule ],
       providers: [
         { provide: DataService, useValue: dataServiceSpy }
       ]
