@@ -1,0 +1,6 @@
+{
+  "uuid": "epic-003",
+  "title": "DevOps Setup",
+  "purpose_uuid": "purpose-002",
+  "notes": "Configure CI/CD pipelines and deployment"
+}

@@ -1,0 +1,8 @@
+{
+  "uuid": "result-002",
+  "definition": "Data loads from backend API",
+  "objective_uuid": "objective-001",
+  "target": 100,
+  "initial": 50,
+  "time_estimate": 180
+}

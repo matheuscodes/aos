@@ -1,0 +1,8 @@
+{
+  "uuid": "result-003",
+  "definition": "Charts display with correct data",
+  "objective_uuid": "objective-002",
+  "target": 100,
+  "initial": 0,
+  "time_estimate": 360
+}
