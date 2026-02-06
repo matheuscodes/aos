@@ -30,10 +30,12 @@ export class OverviewComponent {
 
   getData() {
     const data = this.dataService.getData();
-    Object.keys(data).forEach(i => {
-      if(!this.data.map(i => i.uuid).includes(i))
-        this.data.push(data[i])
-    });
+    if (data) {
+      Object.keys(data).forEach(i => {
+        if(!this.data.map(i => i.uuid).includes(i))
+          this.data.push(data[i])
+      });
+    }
     return data;
   }
 

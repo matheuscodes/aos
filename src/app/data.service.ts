@@ -14,12 +14,13 @@ export class DataService {
   purposesUrl: string;
 
   yearly;
-  purposes: {[key: string]: Purpose};
+  purposes: {[key: string]: Purpose} = {};
 
   private http = inject(HttpClient);
 
   constructor() {
     this.yearly = {};
+    this.purposes = {};
     this.purposesUrl = "http://localhost:3001/api/purposes";
     this.httpOptions = {
       headers: new HttpHeaders({
@@ -64,12 +65,16 @@ export class DataService {
   refresh() {
     this.purposes = {};
     this.yearly = {};
+    console.log('DataService: Starting refresh, fetching from:', this.purposesUrl);
     this.http.get<any>(this.purposesUrl)
              .subscribe(response => {
+               console.log('DataService: Received response:', response);
                const data = response.purposes;
+               console.log('DataService: Processing purposes, count:', Object.keys(data).length);
                Object.keys(data).forEach(key => {
                  this.purposes[key] = new Purpose(data[key]);
                })
+               console.log('DataService: Purposes loaded:', Object.keys(this.purposes));
                Object.keys(this.purposes).forEach(p => {
                  Object.keys(this.purposes[p].epics).forEach(e => {
                    Object.keys(this.purposes[p].epics[e].objectives).forEach(o => {
@@ -84,6 +89,7 @@ export class DataService {
                    });
                  });
                });
+               console.log('DataService: Yearly data:', Object.keys(this.yearly));
              });
   }
 }
