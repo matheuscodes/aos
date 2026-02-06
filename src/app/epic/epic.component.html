@@ -10,7 +10,7 @@
     <div class="card-body">
       <canvas #epicChart></canvas>
       <h3>Notes</h3>
-      @for (note of (epic.notes || '').split('\n'); track note) {
+      @for (note of (epic.notes || '').split('\n'); track $index) {
         <p>{{note}}</p>
       }
       <h3>Objectives</h3>
