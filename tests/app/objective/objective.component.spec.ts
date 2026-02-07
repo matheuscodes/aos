@@ -55,7 +55,7 @@ describe('ObjectiveComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ ObjectiveComponent ]
+      imports: [ ObjectiveComponent ]
     })
     .compileComponents();
 
@@ -103,7 +103,7 @@ describe('ObjectiveComponent', () => {
     beforeEach(() => {
       const mockCanvas = document.createElement('canvas');
       const mockContext = mockCanvas.getContext('2d');
-      
+
       component.chart = {
         nativeElement: {
           getContext: jasmine.createSpy('getContext').and.returnValue(mockContext)

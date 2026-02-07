@@ -23,7 +23,7 @@ describe('PurposeComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ PurposeComponent ]
+      imports: [ PurposeComponent ]
     })
     .compileComponents();
 
