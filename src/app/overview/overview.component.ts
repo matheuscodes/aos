@@ -1,6 +1,78 @@
 import { Component, ElementRef, ViewChild } from '@angular/core';
 import { DataService } from '../data.service';
 import Effort from '../../services/effort'
+import Epic from '../../services/epic'
+import Purpose from '../../services/purpose'
+import Objective from '../../services/objective'
+import Result from '../../services/result'
+import { Report } from '../../services/report'
+
+// type PurposeType = {
+//                  "uuid": string;
+//                  "definition": string;
+//                }
+// type EpicType = {
+//               "uuid": string;
+//               "title": string;
+//               "purpose_uuid": string;
+//             }
+// type ObjectiveType = {
+//                    "uuid": string;
+//                    "title": string;
+//                    "time_planned": number;
+//                    "due_date": string;
+//                    "epic_uuid": string;
+//                  }
+//
+// type EffortType =     {
+//                     "date": string;
+//                     "time": string;
+//                     "comment": string;
+//                     "modifier": number;
+//                     "time_spent": number;
+//                     "money_spent": number;
+//                     "thought_spent": number;
+//                     "thew_spent": number;
+//                   }
+// type ResultType = {
+//                 "uuid": string;
+//                 "definition": string;
+//                 "target": number;
+//                 "initial": number;
+//                 "time_estimate": number;
+//                 "efforts": Effort[],
+//                 "objective_uuid": string;
+//               }
+
+type ReportType = {
+  objective: Objective;
+  epic: Epic;
+  purpose: Purpose;
+  previous: any;
+  Q1: any;
+  Q2: any;
+  Q3: any;
+  Q4: any;
+}
+
+type YearlyType = {
+  banana: {
+    objectives: Objective[];
+    report: {
+      purposes: ReportType[];
+      epics: ReportType[];
+      objectives: ReportType[];
+      previous: number;
+    };
+    year: string;
+  }
+};
+
+type QueuedEffortType = {
+  result?: Result;
+  objective?: Objective;
+  effort: Partial<Effort>;
+}
 
 @Component({
     selector: 'app-overview',
@@ -13,7 +85,7 @@ export class OverviewComponent {
 
   downloadedData: any
 
-  queuedEfforts: any[]
+  queuedEfforts: QueuedEffortType[]
 
   data: any[] = []
 
@@ -35,8 +107,7 @@ export class OverviewComponent {
   getDataArray() {
     return this.data;
   }
-
-  getYearly() {
+  getYearly(): YearlyType {
     return this.dataService.getYearly();
   }
 
