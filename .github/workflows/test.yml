@@ -7,28 +7,9 @@ on:
     branches: [ main, master, develop ]
 
 jobs:
-  lint:
-    runs-on: ubuntu-latest
-    name: Lint Code
-
-    steps:
-    - uses: actions/checkout@v4
-
-    - name: Setup Node.js
-      uses: actions/setup-node@v4
-      with:
-        node-version: '18'
-        cache: 'npm'
-
-    - name: Install dependencies
-      run: npm ci
-
-    - name: Run ESLint
-      run: npm run lint
-
   test:
     runs-on: ubuntu-latest
-    name: Run Tests
+    name: Run Lint and Tests
     needs: lint
 
     steps:
@@ -37,11 +18,14 @@ jobs:
     - name: Setup Node.js
       uses: actions/setup-node@v4
       with:
-        node-version: '18'
+        node-version-file: '.node-version'
         cache: 'npm'
 
     - name: Install dependencies
       run: npm ci
+
+    - name: Run ESLint
+      run: npm run lint
 
     - name: Run tests with coverage
       run: npm run test:coverage
@@ -54,6 +38,6 @@ jobs:
         fail_ci_if_error: false
 
     - name: SonarQube Scan
-      uses: SonarSource/sonarqube-scan-action@a31c9398be7ace6bbfaf30c0bd5d415f843d45e9
+      uses: SonarSource/sonarqube-scan-action@v7
       env:
         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
