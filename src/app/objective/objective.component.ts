@@ -1,6 +1,5 @@
 import { Component, Input, AfterViewInit, ElementRef, ViewChild } from '@angular/core';
-// Using auto import for v4 which includes all necessary registrations
-import { Chart } from 'chart.js/auto';
+import { Chart } from 'chart.js';
 
 declare global {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -31,7 +30,6 @@ Array.prototype.accumulate = function(fn) {
   selector: 'app-objective',
   templateUrl: './objective.component.html',
   styleUrls: ['./objective.component.css'],
-  standalone: false
 })
 export class ObjectiveComponent implements AfterViewInit {
   @ViewChild('objectiveChart',{static: false}) chart: ElementRef;
@@ -49,21 +47,21 @@ export class ObjectiveComponent implements AfterViewInit {
       const completions = keys.map(i => this.objective.report.monthly[i].completion).accumulate(sum).map(relativiness(0.01))
       const dedications = keys.map(i => this.objective.report.monthly[i].dedication).accumulate(sum).map(relativiness(0.01))
       const ctx = this.chart.nativeElement.getContext('2d');
-      
+
       // Build chart configuration for v4 API
       const leftAxisConfig = {
         type: 'linear',
         position: 'left',
         ticks: { min: 0 }
       };
-      
+
       const rightAxisConfig = {
-        type: 'linear', 
+        type: 'linear',
         position: 'right',
         grid: { display: false },
         ticks: { min: 0 }
       };
-      
+
       const chartConfig = {
         type: 'line' as const,
         data: {
@@ -90,7 +88,7 @@ export class ObjectiveComponent implements AfterViewInit {
           }
         }
       };
-      
+
       new Chart(ctx, chartConfig as any);
     }
   }
