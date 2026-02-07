@@ -21,7 +21,7 @@
     <div class="tab-pane fade" id="long-term" role="tabpanel">
       <div class="card-body">
         <div class="accordion" id="purposes">
-          @for (p of getData() | keyvalue; track p) {
+          @for (p of getData() | keyvalue; track p.key) {
             <div>
               <app-purpose [purpose]="p.value"></app-purpose>
             </div>

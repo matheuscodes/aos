@@ -5,7 +5,6 @@ import { Component, Input, AfterViewInit, ElementRef, ViewChild } from '@angular
     selector: 'app-summary',
     templateUrl: './summary.component.html',
     styleUrls: ['./summary.component.css'],
-    standalone: false
 })
 export class SummaryComponent implements AfterViewInit {
   @ViewChild('summaryRadialChart', {static: false}) summaryRadialChart: ElementRef;
@@ -25,21 +24,24 @@ export class SummaryComponent implements AfterViewInit {
     const labels = [];
     const parents = [];
     this.everything.forEach(purpose => {
+      console.log("wtf",purpose)
       ids.push(purpose.uuid);
       labels.push(purpose.definition);
       parents.push("");
-      Object.keys(purpose.epics).forEach(eKey => {
-        const epic = purpose.epics[eKey];
-        ids.push(epic.uuid);
-        labels.push(epic.title);
-        parents.push(purpose.uuid);
-        Object.keys(epic.objectives).forEach(oKey => {
-          const objective = epic.objectives[oKey];
-          ids.push(objective.uuid);
-          labels.push(objective.title);
-          parents.push(epic.uuid);
+      if(purpose.epics) {
+        Object.keys(purpose.epics).forEach(eKey => {
+          const epic = purpose.epics[eKey];
+          ids.push(epic.uuid);
+          labels.push(epic.title);
+          parents.push(purpose.uuid);
+          Object.keys(epic.objectives).forEach(oKey => {
+            const objective = epic.objectives[oKey];
+            ids.push(objective.uuid);
+            labels.push(objective.title);
+            parents.push(epic.uuid);
+          });
         });
-      });
+      }
     });
 
     const data = [{

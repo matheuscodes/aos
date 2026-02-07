@@ -1,11 +1,15 @@
-import { Component, ElementRef, ViewChild } from '@angular/core';
+import { Component, ElementRef, ViewChild, inject } from '@angular/core';
 import { DataService } from '../data.service';
 import Effort from '../../services/effort'
 import Epic from '../../services/epic'
 import Purpose from '../../services/purpose'
 import Objective from '../../services/objective'
 import Result from '../../services/result'
-import { Report } from '../../services/report'
+
+import { KeyValuePipe } from '@angular/common';
+import { PurposeComponent } from '../purpose/purpose.component';
+import { ObjectiveComponent } from '../objective/objective.component';
+import { SummaryComponent } from '../summary/summary.component';
 
 type ReportType = {
   objective: Objective;
@@ -41,33 +45,42 @@ type QueuedEffortType = {
     selector: 'app-overview',
     templateUrl: './overview.component.html',
     styleUrls: ['./overview.component.css'],
-    standalone: false
+    imports: [
+      KeyValuePipe,
+      ObjectiveComponent,
+      PurposeComponent,
+      SummaryComponent,
+    ],
 })
 export class OverviewComponent {
-  @ViewChild('revenueLineChart',{static: false}) chart: ElementRef;
+    @ViewChild('revenueLineChart',{static: false}) chart: ElementRef;
 
-  downloadedData: any
+    downloadedData: any
 
-  queuedEfforts: QueuedEffortType[]
+    queuedEfforts: QueuedEffortType[]
 
-  data: any[] = []
+    data: any = []
 
-  constructor(
-    private dataService: DataService
-  ) {
-    this.queuedEfforts = []
-  }
+    private dataService = inject(DataService);
 
-  getData() {
-    const data = this.dataService.getData();
-    Object.keys(data).forEach(i => {
-      if(!this.data.map(i => i.uuid).includes(i))
-        this.data.push(data[i])
-    });
-    return data;
-  }
+
+    constructor() {
+      this.queuedEfforts = []
+    }
+
+    getData() {
+      const data = this.dataService.getData()();
+      if (Object.keys(data)) {
+        Object.keys(data).forEach(i => {
+          if(!this.data.map(i => i.uuid).includes(i))
+            this.data.push(data[i])
+        });
+      }
+      return data;
+    }
 
   getDataArray() {
+    this.getData();
     return this.data;
   }
   getYearly(): YearlyType {

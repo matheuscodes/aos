@@ -4,7 +4,6 @@ import { Component, Input } from '@angular/core';
     selector: 'app-result',
     templateUrl: './result.component.html',
     styleUrls: ['./result.component.css'],
-    standalone: false
 })
 export class ResultComponent {
 

@@ -1,6 +1,9 @@
 import { Component, Input, AfterViewInit, ElementRef, ViewChild } from '@angular/core';
 import { Chart } from 'chart.js';
 
+import { KeyValuePipe } from '@angular/common';
+import { ResultComponent } from '../result/result.component';
+
 declare global {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     interface Array<T> {
@@ -30,7 +33,10 @@ Array.prototype.accumulate = function(fn) {
     selector: 'app-objective',
     templateUrl: './objective.component.html',
     styleUrls: ['./objective.component.css'],
-    standalone: false
+    imports: [
+      KeyValuePipe,
+      ResultComponent,
+    ],
 })
 export class ObjectiveComponent implements AfterViewInit {
   @ViewChild('objectiveChart',{static: false}) chart: ElementRef;
