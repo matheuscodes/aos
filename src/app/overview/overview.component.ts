@@ -3,9 +3,10 @@ import { DataService } from '../data.service';
 import Effort from '../../services/effort'
 
 @Component({
-  selector: 'app-overview',
-  templateUrl: './overview.component.html',
-  styleUrls: ['./overview.component.css']
+    selector: 'app-overview',
+    templateUrl: './overview.component.html',
+    styleUrls: ['./overview.component.css'],
+    standalone: false
 })
 export class OverviewComponent {
   @ViewChild('revenueLineChart',{static: false}) chart: ElementRef;

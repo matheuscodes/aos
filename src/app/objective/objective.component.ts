@@ -27,9 +27,10 @@ Array.prototype.accumulate = function(fn) {
 }
 
 @Component({
-  selector: 'app-objective',
-  templateUrl: './objective.component.html',
-  styleUrls: ['./objective.component.css']
+    selector: 'app-objective',
+    templateUrl: './objective.component.html',
+    styleUrls: ['./objective.component.css'],
+    standalone: false
 })
 export class ObjectiveComponent implements AfterViewInit {
   @ViewChild('objectiveChart',{static: false}) chart: ElementRef;

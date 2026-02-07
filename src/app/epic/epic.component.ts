@@ -18,9 +18,10 @@ Array.prototype.accumulate = function(fn) {
 }
 
 @Component({
-  selector: 'app-epic',
-  templateUrl: './epic.component.html',
-  styleUrls: ['./epic.component.css']
+    selector: 'app-epic',
+    templateUrl: './epic.component.html',
+    styleUrls: ['./epic.component.css'],
+    standalone: false
 })
 export class EpicComponent implements OnInit, AfterViewInit {
   @ViewChild('epicChart',{static: false}) chart: ElementRef;
