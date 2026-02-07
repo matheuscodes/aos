@@ -7,43 +7,6 @@ import Objective from '../../services/objective'
 import Result from '../../services/result'
 import { Report } from '../../services/report'
 
-// type PurposeType = {
-//                  "uuid": string;
-//                  "definition": string;
-//                }
-// type EpicType = {
-//               "uuid": string;
-//               "title": string;
-//               "purpose_uuid": string;
-//             }
-// type ObjectiveType = {
-//                    "uuid": string;
-//                    "title": string;
-//                    "time_planned": number;
-//                    "due_date": string;
-//                    "epic_uuid": string;
-//                  }
-//
-// type EffortType =     {
-//                     "date": string;
-//                     "time": string;
-//                     "comment": string;
-//                     "modifier": number;
-//                     "time_spent": number;
-//                     "money_spent": number;
-//                     "thought_spent": number;
-//                     "thew_spent": number;
-//                   }
-// type ResultType = {
-//                 "uuid": string;
-//                 "definition": string;
-//                 "target": number;
-//                 "initial": number;
-//                 "time_estimate": number;
-//                 "efforts": Effort[],
-//                 "objective_uuid": string;
-//               }
-
 type ReportType = {
   objective: Objective;
   epic: Epic;
@@ -56,7 +19,7 @@ type ReportType = {
 }
 
 type YearlyType = {
-  banana: {
+  [key: string]: {
     objectives: Objective[];
     report: {
       purposes: ReportType[];
@@ -69,9 +32,9 @@ type YearlyType = {
 };
 
 type QueuedEffortType = {
-  result?: Result;
-  objective?: Objective;
-  effort: Partial<Effort>;
+  result?: Partial<Result>;
+  objective?: Partial<Objective>;
+  effort?: Partial<Effort>;
 }
 
 @Component({

@@ -261,7 +261,7 @@ describe('OverviewComponent', () => {
 
     it('should call dataService.clearCache', () => {
       const validEffort = {
-        effort: { date: '2024-01-01' },
+        effort: { date: new Date() },
         result: { addEffort: jasmine.createSpy('addEffort') }
       };
       component.queuedEfforts = [validEffort];
@@ -278,7 +278,7 @@ describe('OverviewComponent', () => {
     it('should add effort to result', () => {
       const addEffortSpy = jasmine.createSpy('addEffort');
       const validEffort = {
-        effort: { date: '2024-01-01' },
+        effort: { date: new Date() },
         result: { addEffort: addEffortSpy }
       };
       component.queuedEfforts = [validEffort];
@@ -288,7 +288,7 @@ describe('OverviewComponent', () => {
 
     it('should clear queuedEfforts on success', () => {
       const validEffort = {
-        effort: { date: '2024-01-01' },
+        effort: { date: new Date() },
         result: { addEffort: jasmine.createSpy('addEffort') }
       };
       component.queuedEfforts = [validEffort];
@@ -309,7 +309,7 @@ describe('OverviewComponent', () => {
 
     it('should handle mixed valid and invalid efforts', () => {
       const validEffort = {
-        effort: { date: '2024-01-01' },
+        effort: { date: new Date() },
         result: { addEffort: jasmine.createSpy('addEffort') }
       };
       const invalidEffort = {

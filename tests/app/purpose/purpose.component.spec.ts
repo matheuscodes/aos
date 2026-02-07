@@ -151,13 +151,15 @@ describe('PurposeComponent', () => {
     it('should handle multiple purpose changes', () => {
       const purpose1 = { uuid: 'p1', definition: 'Purpose 1' };
       const purpose2 = { uuid: 'p2', definition: 'Purpose 2' };
-      
-      component.purpose = purpose1;
+
+      fixture.componentRef.setInput('purpose', purpose1);
       fixture.detectChanges();
+
       expect(component.purpose).toBe(purpose1);
-      
-      component.purpose = purpose2;
+
+      fixture.componentRef.setInput('purpose', purpose2);
       fixture.detectChanges();
+
       expect(component.purpose).toBe(purpose2);
     });
   });
