@@ -1,7 +1,8 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { OverviewComponent } from '../../../src/app/overview/overview.component';
 import { DataService } from '../../../src/app/data.service';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 describe('OverviewComponent', () => {
   let component: OverviewComponent;
@@ -35,12 +36,14 @@ describe('OverviewComponent', () => {
     ]);
 
     await TestBed.configureTestingModule({
-      declarations: [ OverviewComponent ],
-      imports: [ HttpClientTestingModule ],
-      providers: [
-        { provide: DataService, useValue: dataServiceSpy }
-      ]
-    })
+    declarations: [OverviewComponent],
+    imports: [],
+    providers: [
+        { provide: DataService, useValue: dataServiceSpy },
+        provideHttpClient(withInterceptorsFromDi()),
+        provideHttpClientTesting()
+    ]
+})
     .compileComponents();
 
     fixture = TestBed.createComponent(OverviewComponent);

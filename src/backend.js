@@ -87,7 +87,7 @@ refresh();
 
 application.use(cors())
 
-application.use('/', express.static('./dist/app'))
+application.use('/', express.static('./dist/app/browser'))
 
 application.get('/api/purposes', (req, res) => {
   res.send(JSON.stringify({
