@@ -49,7 +49,7 @@ describe('EpicComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ EpicComponent ]
+      imports: [ EpicComponent ]
     })
     .compileComponents();
 
@@ -115,7 +115,7 @@ describe('EpicComponent', () => {
     it('should extract year from due_date correctly', () => {
       component.epic = mockEpicData;
       component.ngOnInit();
-      const years = component.objectives.map(obj => 
+      const years = component.objectives.map(obj =>
         parseInt(obj.due_date.toJSON().slice(0, 4))
       );
       expect(years).toEqual([2025, 2024, 2023]);
@@ -126,7 +126,7 @@ describe('EpicComponent', () => {
     beforeEach(() => {
       const mockCanvas = document.createElement('canvas');
       const mockContext = mockCanvas.getContext('2d');
-      
+
       component.chart = {
         nativeElement: {
           getContext: jasmine.createSpy('getContext').and.returnValue(mockContext)

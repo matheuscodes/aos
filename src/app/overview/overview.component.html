@@ -13,222 +13,245 @@
   <div class="tab-content" id="overview-tab-content">
     <div class="tab-pane fade show active" id="summary" role="tabpanel">
       <div class="card-body">
-          <app-summary [everything]="getDataArray()" *ngIf="getDataArray().length > 0"></app-summary>
+        @if (getDataArray().length > 0) {
+          <app-summary [everything]="getDataArray()"></app-summary>
+        }
       </div>
     </div>
     <div class="tab-pane fade" id="long-term" role="tabpanel">
       <div class="card-body">
         <div class="accordion" id="purposes">
-          <div *ngFor = "let p of getData() | keyvalue">
-            <app-purpose [purpose]="p.value"></app-purpose>
-          </div>
+          @for (p of getData() | keyvalue; track p.key) {
+            <div>
+              <app-purpose [purpose]="p.value"></app-purpose>
+            </div>
+          }
         </div>
       </div>
     </div>
     <div class="tab-pane fade" id="yearly" role="tabpanel">
       <div class="card-body">
         <ul class="nav nav-tabs" id="yearly-tab" role="tablist">
-          <li *ngFor = "let yearly of getYearly() | keyvalue" class="nav-item">
-            <a class="nav-link" id="{{yearly.key}}-tab" data-toggle="tab" href="#year-{{yearly.key}}" role="tab">{{yearly.key}}</a>
-          </li>
+          @for (yearly of getYearly() | keyvalue; track yearly) {
+            <li class="nav-item">
+              <a class="nav-link" id="{{yearly.key}}-tab" data-toggle="tab" href="#year-{{yearly.key}}" role="tab">{{yearly.key}}</a>
+            </li>
+          }
         </ul>
         <div class="tab-content" id="yearly-tab-content">
-          <div *ngFor = "let yearly of getYearly() | keyvalue" class="tab-pane fade" id="year-{{yearly.key}}" role="tabpanel">
-            <!-- Button trigger modal -->
-            <button style="margin:10pt; width:calc(100% - 20pt)" type="button" class="btn btn-primary" data-toggle="modal" [attr.data-target]="'#modal-'+yearly.key">
-              Log new efforts
-            </button>
-
-            <!-- Modal -->
-            <div class="modal fade" id="modal-{{yearly.key}}" tabindex="-1" role="dialog">
-              <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-xl" role="document">
-                <div class="modal-content">
-                  <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalCenterTitle">Log new efforts</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                      <span aria-hidden="true">&times;</span>
-                    </button>
-                  </div>
-                  <div class="modal-body">
-                    <table class="table">
-                      <thead class="thead-light">
-                        <tr>
-                          <th scope="col" width="15%">Date/Time</th>
-                          <th scope="col">Result</th>
-                          <th scope="col">Modifier</th>
-                          <th scope="col">Comment</th>
-                          <th scope="col" width="25%">Spent</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        <tr *ngFor = "let e of queuedEfforts">
-                          <td>
-                            <div class="input-group mb-3">
-                              <input type="text" class="form-control" placeholder="Date" (change)="e.effort.date = $event.target.value" pattern="^\d{4}-([0]\d|1[0-2])-([0-2]\d|3[01])$">
-                              <div class="input-group-append">
-                                <span class="input-group-text" id="basic-addon2">📅</span>
-                              </div>
-                            </div>
-                            <div class="input-group mb-3">
-                              <input type="text" class="form-control" placeholder="Time" (change)="e.effort.time = $event.target.value" pattern="^(0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$">
-                              <div class="input-group-append">
-                                <span class="input-group-text" id="basic-addon2">⏰</span>
-                              </div>
-                            </div>
-                          </td>
-                          <td>
-                            <div class="input-group mb-3">
-                              <select class="custom-select" id="objective-select-{{yearly.key}}" (change)="selectObjective($event, e, yearly.value.objectives)">
-                                <option selected>Objective</option>
-                                <option *ngFor = "let o of yearly.value.objectives" [value]="o.uuid" >
-                                  {{o.title}}
-                                </option>
-                              </select>
-                            </div>
-                            <div class="input-group mb-3" *ngIf="e.objective">
-                              <select class="custom-select" id="objective-select-{{yearly.key}}" (change)="selectResult($event, e, e.objective.results)">
-                                <option selected>Result</option>
-                                <option *ngFor = "let r of e.objective.results | keyvalue" [value]="r.value.uuid" >
-                                  {{r.value.definition}}
-                                </option>
-                              </select>
-                            </div>
-                          </td>
-                          <td>
-                            <div class="input-group input-group-sm mb-3">
-                              <input type="text" class="form-control" style="height:unset" type="number" step="any" (change)="e.effort.modifier = $event.target.value">
-                            </div>
-                          </td>
-                          <td>
-                            <div class="input-group">
-                              <textarea class="form-control" (change)="e.effort.comment = $event.target.value"></textarea>
-                            </div>
-                          </td>
-                          <td>
-                            <div class="input-group input-group-sm mb-3">
-                              <div class="input-group-prepend">
-                                <span class="input-group-text"><img src="assets/noun_Time_2896455.svg" height="24pt"/></span>
-                              </div>
-                              <input type="text" class="form-control" style="height:unset" type="number" (change)="e.effort.time_spent = $event.target.value">
-                              <div class="input-group-append">
-                                <span class="input-group-text">minutes</span>
-                              </div>
-                            </div>
-                            <div class="input-group input-group-sm mb-3">
-                              <div class="input-group-prepend">
-                                <span class="input-group-text"><img src="assets/noun_Money_1687804.svg" height="24pt"/></span>
-                              </div>
-                              <input type="text" class="form-control" style="height:unset" type="number" (change)="e.effort.money_spent = $event.target.value">
-                              <div class="input-group-append">
-                                <span class="input-group-text">.00 €</span>
-                              </div>
-                            </div>
-                            <div class="input-group input-group-sm mb-3">
-                              <div class="input-group-prepend">
-                                <span class="input-group-text"><img src="assets/noun_Mental Health_1061782.svg" height="24pt"/></span>
-                              </div>
-                              <input type="text" class="form-control" style="height:unset" type="number" (change)="e.effort.thought_spent = $event.target.value">
-                              <div class="input-group-append">
-                                <span class="input-group-text">cog load</span>
-                              </div>
-                            </div>
-                            <div class="input-group input-group-sm mb-3">
-                              <div class="input-group-prepend">
-                                <span class="input-group-text"><img src="assets/noun_heart beat_1510475.svg" height="24pt"/></span>
-                              </div>
-                              <input type="text" class="form-control" style="height:unset" type="number" (change)="e.effort.thew_spent = $event.target.value">
-                              <div class="input-group-append">
-                                <span class="input-group-text">kcal</span>
-                              </div>
-                            </div>
-                          </td>
-                        </tr>
-                      </tbody>
-                    </table>
-                  </div>
-                  <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" (click)="addQueuedEffort()">Add Effort</button>
-                    <button type="button" class="btn btn-primary" data-dismiss="modal" (click)="saveEfforts()">Save Efforts</button>
+          @for (yearly of getYearly() | keyvalue; track yearly) {
+            <div class="tab-pane fade" id="year-{{yearly.key}}" role="tabpanel">
+              <!-- Button trigger modal -->
+              <button style="margin:10pt; width:calc(100% - 20pt)" type="button" class="btn btn-primary" data-toggle="modal" [attr.data-target]="'#modal-'+yearly.key">
+                Log new efforts
+              </button>
+              <!-- Modal -->
+              <div class="modal fade" id="modal-{{yearly.key}}" tabindex="-1" role="dialog">
+                <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-xl" role="document">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title" id="exampleModalCenterTitle">Log new efforts</h5>
+                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                    </div>
+                    <div class="modal-body">
+                      <table class="table">
+                        <thead class="thead-light">
+                          <tr>
+                            <th scope="col" width="15%">Date/Time</th>
+                            <th scope="col">Result</th>
+                            <th scope="col">Modifier</th>
+                            <th scope="col">Comment</th>
+                            <th scope="col" width="25%">Spent</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          @for (e of queuedEfforts; track e) {
+                            <tr>
+                              <td>
+                                <div class="input-group mb-3">
+                                  <input type="text" class="form-control" placeholder="Date" (change)="e.effort.date = $event.target.value" pattern="^\d{4}-([0]\d|1[0-2])-([0-2]\d|3[01])$">
+                                  <div class="input-group-append">
+                                    <span class="input-group-text" id="basic-addon2">📅</span>
+                                  </div>
+                                </div>
+                                <div class="input-group mb-3">
+                                  <input type="text" class="form-control" placeholder="Time" (change)="e.effort.time = $event.target.value" pattern="^(0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$">
+                                  <div class="input-group-append">
+                                    <span class="input-group-text" id="basic-addon2">⏰</span>
+                                  </div>
+                                </div>
+                              </td>
+                              <td>
+                                <div class="input-group mb-3">
+                                  <select class="custom-select" id="objective-select-{{yearly.key}}" (change)="selectObjective($event, e, yearly.value.objectives)">
+                                    <option selected>Objective</option>
+                                    @for (o of yearly.value.objectives; track o) {
+                                      <option [value]="o.uuid" >
+                                        {{o.title}}
+                                      </option>
+                                    }
+                                  </select>
+                                </div>
+                                @if (e.objective) {
+                                  <div class="input-group mb-3">
+                                    <select class="custom-select" id="objective-select-{{yearly.key}}" (change)="selectResult($event, e, e.objective.results)">
+                                      <option selected>Result</option>
+                                      @for (r of e.objective.results | keyvalue; track r) {
+                                        <option [value]="r.value.uuid" >
+                                          {{r.value.definition}}
+                                        </option>
+                                      }
+                                    </select>
+                                  </div>
+                                }
+                              </td>
+                              <td>
+                                <div class="input-group input-group-sm mb-3">
+                                  <input type="text" class="form-control" style="height:unset" type="number" step="any" (change)="e.effort.modifier = $event.target.value">
+                                </div>
+                              </td>
+                              <td>
+                                <div class="input-group">
+                                  <textarea class="form-control" (change)="e.effort.comment = $event.target.value"></textarea>
+                                </div>
+                              </td>
+                              <td>
+                                <div class="input-group input-group-sm mb-3">
+                                  <div class="input-group-prepend">
+                                    <span class="input-group-text"><img src="assets/noun_Time_2896455.svg" height="24pt"/></span>
+                                  </div>
+                                  <input type="text" class="form-control" style="height:unset" type="number" (change)="e.effort.time_spent = $event.target.value">
+                                  <div class="input-group-append">
+                                    <span class="input-group-text">minutes</span>
+                                  </div>
+                                </div>
+                                <div class="input-group input-group-sm mb-3">
+                                  <div class="input-group-prepend">
+                                    <span class="input-group-text"><img src="assets/noun_Money_1687804.svg" height="24pt"/></span>
+                                  </div>
+                                  <input type="text" class="form-control" style="height:unset" type="number" (change)="e.effort.money_spent = $event.target.value">
+                                  <div class="input-group-append">
+                                    <span class="input-group-text">.00 €</span>
+                                  </div>
+                                </div>
+                                <div class="input-group input-group-sm mb-3">
+                                  <div class="input-group-prepend">
+                                    <span class="input-group-text"><img src="assets/noun_Mental Health_1061782.svg" height="24pt"/></span>
+                                  </div>
+                                  <input type="text" class="form-control" style="height:unset" type="number" (change)="e.effort.thought_spent = $event.target.value">
+                                  <div class="input-group-append">
+                                    <span class="input-group-text">cog load</span>
+                                  </div>
+                                </div>
+                                <div class="input-group input-group-sm mb-3">
+                                  <div class="input-group-prepend">
+                                    <span class="input-group-text"><img src="assets/noun_heart beat_1510475.svg" height="24pt"/></span>
+                                  </div>
+                                  <input type="text" class="form-control" style="height:unset" type="number" (change)="e.effort.thew_spent = $event.target.value">
+                                  <div class="input-group-append">
+                                    <span class="input-group-text">kcal</span>
+                                  </div>
+                                </div>
+                              </td>
+                            </tr>
+                          }
+                        </tbody>
+                      </table>
+                    </div>
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-secondary" (click)="addQueuedEffort()">Add Effort</button>
+                      <button type="button" class="btn btn-primary" data-dismiss="modal" (click)="saveEfforts()">Save Efforts</button>
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
-            <h3>Impact</h3>
-            <table class="table">
-              <thead class="thead-light">
-                <tr>
-                  <th scope="col">Objective</th>
-                  <th scope="col">{{yearly.value.year}}/Q1</th>
-                  <th scope="col">{{yearly.value.year}}/Q2</th>
-                  <th scope="col">{{yearly.value.year}}/Q3</th>
-                  <th scope="col">{{yearly.value.year}}/Q4</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr *ngFor = "let e of yearly.value.report.objectives">
-                  <td>{{e.objective.title}}</td>
-                  <td>{{(e.Q1.completion*100).toFixed(2)}}%</td>
-                  <td>{{(e.Q2.completion*100).toFixed(2)}}% ({{((e.Q2.completion - e.Q1.completion)*100).toFixed(2)}}%)</td>
-                  <td>{{(e.Q3.completion*100).toFixed(2)}}% ({{((e.Q3.completion - e.Q2.completion)*100).toFixed(2)}}%)</td>
-                  <td>{{(e.Q4.completion*100).toFixed(2)}}% ({{((e.Q4.completion - e.Q3.completion)*100).toFixed(2)}}%)</td>
-                </tr>
-              </tbody>
-            </table>
-            <table class="table">
-              <thead class="thead-light">
-                <tr>
-                  <th scope="col">Epic</th>
-                  <th scope="col">Previous Year</th>
-                  <th scope="col">{{yearly.value.year}}/Q1</th>
-                  <th scope="col">{{yearly.value.year}}/Q2</th>
-                  <th scope="col">{{yearly.value.year}}/Q3</th>
-                  <th scope="col">{{yearly.value.year}}/Q4</th>
-                  <th scope="col">Total</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr *ngFor = "let e of yearly.value.report.epics">
-                  <td>{{e.epic.title}}</td>
-                  <td>{{(e.previous.completion*100).toFixed(2)}}%</td>
-                  <td>{{(e.Q1.completion*100).toFixed(2)}}% ({{((e.Q1.completion - e.previous.completion)*100).toFixed(2)}}%)</td>
-                  <td>{{(e.Q2.completion*100).toFixed(2)}}% ({{((e.Q2.completion - e.Q1.completion)*100).toFixed(2)}}%)</td>
-                  <td>{{(e.Q3.completion*100).toFixed(2)}}% ({{((e.Q3.completion - e.Q2.completion)*100).toFixed(2)}}%)</td>
-                  <td>{{(e.Q4.completion*100).toFixed(2)}}% ({{((e.Q4.completion - e.Q3.completion)*100).toFixed(2)}}%)</td>
-                  <td>{{((e.Q4.completion - e.previous.completion)*100).toFixed(2)}}%</td>
-                </tr>
-              </tbody>
-            </table>
-            <table class="table">
-              <thead class="thead-light">
-                <tr>
-                  <th scope="col">Purpose</th>
-                  <th scope="col">Previous Year</th>
-                  <th scope="col">{{yearly.value.year}}/Q1</th>
-                  <th scope="col">{{yearly.value.year}}/Q2</th>
-                  <th scope="col">{{yearly.value.year}}/Q3</th>
-                  <th scope="col">{{yearly.value.year}}/Q4</th>
-                  <th scope="col">Total</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr *ngFor = "let e of yearly.value.report.purposes">
-                  <td>{{e.purpose.definition}}</td>
-                  <td>{{(e.previous.completion*100).toFixed(2)}}%</td>
-                  <td>{{(e.Q1.completion*100).toFixed(2)}}% ({{((e.Q1.completion - e.previous.completion)*100).toFixed(2)}}%)</td>
-                  <td>{{(e.Q2.completion*100).toFixed(2)}}% ({{((e.Q2.completion - e.Q1.completion)*100).toFixed(2)}}%)</td>
-                  <td>{{(e.Q3.completion*100).toFixed(2)}}% ({{((e.Q3.completion - e.Q2.completion)*100).toFixed(2)}}%)</td>
-                  <td>{{(e.Q4.completion*100).toFixed(2)}}% ({{((e.Q4.completion - e.Q3.completion)*100).toFixed(2)}}%)</td>
-                  <td>{{((e.Q4.completion - e.previous.completion)*100).toFixed(2)}}%</td>
-                </tr>
-              </tbody>
-            </table>
-            <h3>Objectives</h3>
-            <div class="accordion" id="objectives">
-              <div *ngFor = "let o of yearly.value.objectives">
-                <app-objective [objective]="o"></app-objective>
+              <h3>Impact</h3>
+              <table class="table">
+                <thead class="thead-light">
+                  <tr>
+                    <th scope="col">Objective</th>
+                    <th scope="col">{{yearly.value.year}}/Q1</th>
+                    <th scope="col">{{yearly.value.year}}/Q2</th>
+                    <th scope="col">{{yearly.value.year}}/Q3</th>
+                    <th scope="col">{{yearly.value.year}}/Q4</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  @for (e of yearly.value.report.objectives; track e) {
+                    <tr>
+                      <td>{{e.objective.title}}</td>
+                      <td>{{(e.Q1.completion*100).toFixed(2)}}%</td>
+                      <td>{{(e.Q2.completion*100).toFixed(2)}}% ({{((e.Q2.completion - e.Q1.completion)*100).toFixed(2)}}%)</td>
+                      <td>{{(e.Q3.completion*100).toFixed(2)}}% ({{((e.Q3.completion - e.Q2.completion)*100).toFixed(2)}}%)</td>
+                      <td>{{(e.Q4.completion*100).toFixed(2)}}% ({{((e.Q4.completion - e.Q3.completion)*100).toFixed(2)}}%)</td>
+                    </tr>
+                  }
+                </tbody>
+              </table>
+              <table class="table">
+                <thead class="thead-light">
+                  <tr>
+                    <th scope="col">Epic</th>
+                    <th scope="col">Previous Year</th>
+                    <th scope="col">{{yearly.value.year}}/Q1</th>
+                    <th scope="col">{{yearly.value.year}}/Q2</th>
+                    <th scope="col">{{yearly.value.year}}/Q3</th>
+                    <th scope="col">{{yearly.value.year}}/Q4</th>
+                    <th scope="col">Total</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  @for (e of yearly.value.report.epics; track e) {
+                    <tr>
+                      <td>{{e.epic.title}}</td>
+                      <td>{{(e.previous.completion*100).toFixed(2)}}%</td>
+                      <td>{{(e.Q1.completion*100).toFixed(2)}}% ({{((e.Q1.completion - e.previous.completion)*100).toFixed(2)}}%)</td>
+                      <td>{{(e.Q2.completion*100).toFixed(2)}}% ({{((e.Q2.completion - e.Q1.completion)*100).toFixed(2)}}%)</td>
+                      <td>{{(e.Q3.completion*100).toFixed(2)}}% ({{((e.Q3.completion - e.Q2.completion)*100).toFixed(2)}}%)</td>
+                      <td>{{(e.Q4.completion*100).toFixed(2)}}% ({{((e.Q4.completion - e.Q3.completion)*100).toFixed(2)}}%)</td>
+                      <td>{{((e.Q4.completion - e.previous.completion)*100).toFixed(2)}}%</td>
+                    </tr>
+                  }
+                </tbody>
+              </table>
+              <table class="table">
+                <thead class="thead-light">
+                  <tr>
+                    <th scope="col">Purpose</th>
+                    <th scope="col">Previous Year</th>
+                    <th scope="col">{{yearly.value.year}}/Q1</th>
+                    <th scope="col">{{yearly.value.year}}/Q2</th>
+                    <th scope="col">{{yearly.value.year}}/Q3</th>
+                    <th scope="col">{{yearly.value.year}}/Q4</th>
+                    <th scope="col">Total</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  @for (e of yearly.value.report.purposes; track e) {
+                    <tr>
+                      <td>{{e.purpose.definition}}</td>
+                      <td>{{(e.previous.completion*100).toFixed(2)}}%</td>
+                      <td>{{(e.Q1.completion*100).toFixed(2)}}% ({{((e.Q1.completion - e.previous.completion)*100).toFixed(2)}}%)</td>
+                      <td>{{(e.Q2.completion*100).toFixed(2)}}% ({{((e.Q2.completion - e.Q1.completion)*100).toFixed(2)}}%)</td>
+                      <td>{{(e.Q3.completion*100).toFixed(2)}}% ({{((e.Q3.completion - e.Q2.completion)*100).toFixed(2)}}%)</td>
+                      <td>{{(e.Q4.completion*100).toFixed(2)}}% ({{((e.Q4.completion - e.Q3.completion)*100).toFixed(2)}}%)</td>
+                      <td>{{((e.Q4.completion - e.previous.completion)*100).toFixed(2)}}%</td>
+                    </tr>
+                  }
+                </tbody>
+              </table>
+              <h3>Objectives</h3>
+              <div class="accordion" id="objectives">
+                @for (o of yearly.value.objectives; track o) {
+                  <div>
+                    <app-objective [objective]="o"></app-objective>
+                  </div>
+                }
               </div>
             </div>
-          </div>
+          }
           <div class="tab-pane fade show active" id="year-none" role="tabpanel">
             Select a year.
           </div>

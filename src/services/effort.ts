@@ -1,16 +1,16 @@
 export default class Effort {
-  date: Date;
-  time: string;
-  comment: string;
-  modifier: number;
-  time_spent: number; //minutes
-  money_spent: number;
-  thought_spent: number;
-  thew_spent: number;
+  date?: Date;
+  time?: string;
+  comment?: string;
+  modifier?: number;
+  time_spent?: number; //minutes
+  money_spent?: number;
+  thought_spent?: number;
+  thew_spent?: number;
 
-  cached_parent: any;
+  cached_parent?: any;
 
-  constructor(data: any, parent: any) {
+  constructor(data: any, parent?: any) {
     this.date = new Date(data.date);
     if(this.date.toString() == "Invalid Date") throw new Error('Invalid Date');
     this.time = data.time;
@@ -26,7 +26,7 @@ export default class Effort {
     }
   }
 
-  get parent() {
+  get parent(): any | undefined {
     return this.cached_parent;
   }
 }

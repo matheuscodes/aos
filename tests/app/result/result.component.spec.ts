@@ -30,7 +30,7 @@ describe('ResultComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ ResultComponent ]
+      imports: [ ResultComponent ]
     })
     .compileComponents();
 
@@ -204,9 +204,9 @@ describe('ResultComponent', () => {
     });
 
     it('should handle multiple result changes', () => {
-      const result1 = { 
-        uuid: 'r1', 
-        title: 'Result 1', 
+      const result1 = {
+        uuid: 'r1',
+        title: 'Result 1',
         target: 50,
         definition: 'Def 1',
         completion: 0.5,
@@ -218,9 +218,9 @@ describe('ResultComponent', () => {
         initial: 0,
         current: 25
       };
-      const result2 = { 
-        uuid: 'r2', 
-        title: 'Result 2', 
+      const result2 = {
+        uuid: 'r2',
+        title: 'Result 2',
         target: 100,
         definition: 'Def 2',
         completion: 0.7,
@@ -232,13 +232,15 @@ describe('ResultComponent', () => {
         initial: 0,
         current: 70
       };
-      
-      component.result = result1 as any;
+
+      fixture.componentRef.setInput('result', result1);
       fixture.detectChanges();
+
       expect(component.result).toBe(result1);
-      
-      component.result = result2 as any;
+
+      fixture.componentRef.setInput('result', result2);
       fixture.detectChanges();
+
       expect(component.result).toBe(result2);
     });
   });

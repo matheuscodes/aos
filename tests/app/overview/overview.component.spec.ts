@@ -1,7 +1,10 @@
+import { WritableSignal, signal } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { OverviewComponent } from '../../../src/app/overview/overview.component';
 import { DataService } from '../../../src/app/data.service';
+import Purpose from '../../../src/services/purpose';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 describe('OverviewComponent', () => {
   let component: OverviewComponent;
@@ -35,12 +38,13 @@ describe('OverviewComponent', () => {
     ]);
 
     await TestBed.configureTestingModule({
-      declarations: [ OverviewComponent ],
-      imports: [ HttpClientTestingModule ],
-      providers: [
-        { provide: DataService, useValue: dataServiceSpy }
-      ]
-    })
+    imports: [OverviewComponent],
+    providers: [
+        { provide: DataService, useValue: dataServiceSpy },
+        provideHttpClient(withInterceptorsFromDi()),
+        provideHttpClientTesting()
+    ]
+})
     .compileComponents();
 
     fixture = TestBed.createComponent(OverviewComponent);
@@ -82,25 +86,25 @@ describe('OverviewComponent', () => {
 
   describe('getData', () => {
     it('should call dataService.getData', () => {
-      dataService.getData.and.returnValue(mockData);
+      dataService.getData.and.returnValue((() => mockData) as WritableSignal<{[key:string]:Purpose}>);
       const result = component.getData();
       expect(dataService.getData).toHaveBeenCalled();
     });
 
     it('should return data from dataService', () => {
-      dataService.getData.and.returnValue(mockData);
+      dataService.getData.and.returnValue((() => mockData) as WritableSignal<{[key:string]:Purpose}>);
       const result = component.getData();
       expect(result).toBe(mockData);
     });
 
     it('should add new items to data array', () => {
-      dataService.getData.and.returnValue(mockData);
+      dataService.getData.and.returnValue((() => mockData) as WritableSignal<{[key:string]:Purpose}>);
       component.getData();
       expect(component.data.length).toBe(2);
     });
 
     it('should not add duplicate items to data array', () => {
-      dataService.getData.and.returnValue(mockData);
+      dataService.getData.and.returnValue((() => mockData) as WritableSignal<{[key:string]:Purpose}>);
       component.getData();
       component.getData();
       expect(component.data.length).toBe(2);
@@ -111,7 +115,7 @@ describe('OverviewComponent', () => {
         'purpose-1': { uuid: 'uuid-1', definition: 'Test 1' },
         'purpose-2': { uuid: 'uuid-2', definition: 'Test 2' }
       };
-      dataService.getData.and.returnValue(dataWithUuid);
+      dataService.getData.and.returnValue((() => dataWithUuid) as WritableSignal<{[key:string]:Purpose}>);
       component.getData();
       component.getData();
       expect(component.data.length).toBe(4);
@@ -120,17 +124,19 @@ describe('OverviewComponent', () => {
 
   describe('getDataArray', () => {
     it('should return data array', () => {
+      dataService.getData.and.returnValue((() => ({})) as WritableSignal<{[key:string]:Purpose}>);
       const result = component.getDataArray();
       expect(result).toBe(component.data);
     });
 
     it('should return empty array initially', () => {
+      dataService.getData.and.returnValue((() => ({})) as WritableSignal<{[key:string]:Purpose}>);
       const result = component.getDataArray();
       expect(result).toEqual([]);
     });
 
     it('should return populated data array after getData call', () => {
-      dataService.getData.and.returnValue(mockData);
+      dataService.getData.and.returnValue((() => mockData) as WritableSignal<{[key:string]:Purpose}>);
       component.getData();
       const result = component.getDataArray();
       expect(result.length).toBe(2);
@@ -258,7 +264,7 @@ describe('OverviewComponent', () => {
 
     it('should call dataService.clearCache', () => {
       const validEffort = {
-        effort: { date: '2024-01-01' },
+        effort: { date: new Date() },
         result: { addEffort: jasmine.createSpy('addEffort') }
       };
       component.queuedEfforts = [validEffort];
@@ -275,7 +281,7 @@ describe('OverviewComponent', () => {
     it('should add effort to result', () => {
       const addEffortSpy = jasmine.createSpy('addEffort');
       const validEffort = {
-        effort: { date: '2024-01-01' },
+        effort: { date: new Date() },
         result: { addEffort: addEffortSpy }
       };
       component.queuedEfforts = [validEffort];
@@ -285,7 +291,7 @@ describe('OverviewComponent', () => {
 
     it('should clear queuedEfforts on success', () => {
       const validEffort = {
-        effort: { date: '2024-01-01' },
+        effort: { date: new Date() },
         result: { addEffort: jasmine.createSpy('addEffort') }
       };
       component.queuedEfforts = [validEffort];
@@ -306,7 +312,7 @@ describe('OverviewComponent', () => {
 
     it('should handle mixed valid and invalid efforts', () => {
       const validEffort = {
-        effort: { date: '2024-01-01' },
+        effort: { date: new Date() },
         result: { addEffort: jasmine.createSpy('addEffort') }
       };
       const invalidEffort = {

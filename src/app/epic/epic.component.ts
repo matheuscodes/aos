@@ -1,6 +1,8 @@
 import { Component, Input, OnInit, AfterViewInit, ElementRef, ViewChild } from '@angular/core';
 import { Chart } from 'chart.js';
 
+import { ObjectiveComponent } from '../objective/objective.component';
+
 function sum(a,b) {return a+b}
 function relativiness(reference) {
   return function(a) {return a/reference}
@@ -18,9 +20,12 @@ Array.prototype.accumulate = function(fn) {
 }
 
 @Component({
-  selector: 'app-epic',
-  templateUrl: './epic.component.html',
-  styleUrls: ['./epic.component.css']
+    selector: 'app-epic',
+    templateUrl: './epic.component.html',
+    styleUrls: ['./epic.component.css'],
+    imports: [
+      ObjectiveComponent,
+    ]
 })
 export class EpicComponent implements OnInit, AfterViewInit {
   @ViewChild('epicChart',{static: false}) chart: ElementRef;
@@ -32,7 +37,7 @@ export class EpicComponent implements OnInit, AfterViewInit {
   constructor() { }
 
   ngOnInit() {
-    if(this.epic) {
+    if(this.epic && this.epic.objectives) {
       this.objectives = Object.values(this.epic.objectives)
       this.objectives.sort((a: any,b: any) => {
         return parseInt(b.due_date.toJSON().slice(0,4)) - parseInt(a.due_date.toJSON().slice(0,4));
@@ -44,7 +49,7 @@ export class EpicComponent implements OnInit, AfterViewInit {
 
 
   createChart() {
-    const keys = Object.keys(this.epic.report.monthly).sort();
+    const keys = Object.keys(this.epic.report?.monthly || {}).sort();
     const time = keys.map(i => this.epic.report.monthly[i].total_time).map(minToHour)
     const completions = keys.map(i => this.epic.report.monthly[i].completion).accumulate(sum).map(relativiness(0.01))
     const dedications = keys.map(i => this.epic.report.monthly[i].dedication).accumulate(sum).map(relativiness(0.01))
