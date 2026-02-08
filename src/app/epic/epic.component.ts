@@ -49,7 +49,7 @@ export class EpicComponent implements OnInit, AfterViewInit {
 
 
   createChart() {
-    const keys = Object.keys(this.epic.report?.monthly || {}).sort((a, b) => a.localeCompare(b)));
+    const keys = Object.keys(this.epic.report?.monthly || {}).sort((a, b) => a.localeCompare(b));
     const time = keys.map(i => this.epic.report.monthly[i].total_time).map(minToHour)
     const completions = keys.map(i => this.epic.report.monthly[i].completion).accumulate(sum).map(relativiness(0.01))
     const dedications = keys.map(i => this.epic.report.monthly[i].dedication).accumulate(sum).map(relativiness(0.01))
