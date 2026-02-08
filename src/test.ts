@@ -15,6 +15,7 @@ getTestBed().initTestEnvironment(
 
 // Explicitly import tests from tests directory
 import '../tests/app/app.component.spec';
+import '../tests/app/data.service.spec';
 import '../tests/app/epic/epic.component.spec';
 import '../tests/app/objective/objective.component.spec';
 import '../tests/app/overview/overview.component.spec';
