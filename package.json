@@ -31,7 +31,7 @@
     "@angular/forms": "21.2.0",
     "@angular/platform-browser": "21.2.0",
     "@angular/platform-browser-dynamic": "21.2.0",
-    "@angular/router": "21.2.0",
+    "@angular/router": "21.2.5",
     "chart.js": "2.9.4",
     "cors": "2.8.6",
     "express": "5.2.1",
