@@ -1,5 +1,5 @@
 import { Component, Input, OnInit, AfterViewInit, ElementRef, ViewChild } from '@angular/core';
-import { Chart } from 'chart.js';
+import Chart from 'chart.js/auto';
 
 import { ObjectiveComponent } from '../objective/objective.component';
 

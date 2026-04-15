@@ -1,5 +1,5 @@
 import { Component, Input, AfterViewInit, ElementRef, ViewChild } from '@angular/core';
-import { Chart } from 'chart.js';
+import Chart from 'chart.js/auto';
 
 import { KeyValuePipe } from '@angular/common';
 import { ResultComponent } from '../result/result.component';
@@ -84,24 +84,19 @@ export class ObjectiveComponent implements AfterViewInit {
         },
         options: {
             scales: {
-                yAxes: [{
-                    id: 'left-y-axis',
+                'left-y-axis': {
                     type: 'linear',
                     position: 'left',
-                    ticks: {
-                        min: 0,
-                    }
-                }, {
-                    id: 'right-y-axis',
+                    beginAtZero: true
+                },
+                'right-y-axis': {
                     type: 'linear',
                     position: 'right',
-                    gridLines: {
+                    beginAtZero: true,
+                    grid: {
                       display: false
-                    },
-                    ticks: {
-                        min: 0,
                     }
-                }]
+                }
             }
         }
       });
